@@ -10,7 +10,7 @@
 
     <name>ruoyi</name>
     <url>http://www.ruoyi.vip</url>
-    <description>若依微服务系统</description>
+    <description>租研舍微服务系统</description>
 
     <properties>
         <ruoyi.version>3.6.4</ruoyi.version>
