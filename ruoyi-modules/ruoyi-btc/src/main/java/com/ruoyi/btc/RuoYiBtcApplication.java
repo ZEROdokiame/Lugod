@@ -15,6 +15,6 @@ public class RuoYiBtcApplication
     public static void main(String[] args)
     {
         SpringApplication.run(RuoYiBtcApplication.class, args);
-        System.out.println("(♥◠‿◠)ﾉﾞ  文件服务模块启动成功   ლ(´ڡ`ლ)ﾞ  \n");
+        System.out.println("(♥◠‿◠)ﾉﾞ  三方业务服务模块启动成功   ლ(´ڡ`ლ)ﾞ  \n");
     }
 }
