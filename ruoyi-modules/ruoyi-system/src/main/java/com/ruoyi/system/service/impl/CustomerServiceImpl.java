@@ -1,11 +1,17 @@
 package com.ruoyi.system.service.impl;
 
 import java.util.List;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.utils.DateUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.mapper.CustomerMapper;
-import com.ruoyi.system.domain.Customer;
+import com.ruoyi.common.core.domain.http.Customer;
 import com.ruoyi.system.service.ICustomerService;
 
 /**
@@ -15,10 +21,9 @@ import com.ruoyi.system.service.ICustomerService;
  * @date 2024-09-15
  */
 @Service
-public class CustomerServiceImpl implements ICustomerService 
-{
-    @Autowired
-    private CustomerMapper customerMapper;
+@RequiredArgsConstructor
+public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> implements IService<Customer>,ICustomerService {
+    private final CustomerMapper customerMapper;
 
     /**
      * 查询客户信息
@@ -92,5 +97,33 @@ public class CustomerServiceImpl implements ICustomerService
     public int deleteCustomerById(Long id)
     {
         return customerMapper.deleteCustomerById(id);
+    }
+
+    /**
+     * 通过手机号MD5查询
+     * @param phoneMD5
+     * @return
+     */
+    @Override
+    public R<Customer> selectByPhoneMd5(String phoneMD5) {
+        Customer one = getOne(new LambdaQueryWrapper<Customer>().eq(Customer::getPhoneMd5, phoneMD5));
+        if (one==null||one.getId()==null){
+            return R.fail();
+        }
+        return R.ok(one);
+    }
+
+    /**
+     * 通过手机号更新用户信息
+     * @param customer
+     * @return
+     */
+    @Override
+    public R updateByPhoneMd5(Customer customer) {
+        int update = customerMapper.update(customer, new UpdateWrapper<Customer>().lambda().eq(Customer::getPhoneMd5, customer.getPhoneMd5()));
+        if (update>0){
+            return R.ok();
+        }
+        return R.fail();
     }
 }

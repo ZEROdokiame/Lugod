@@ -33,7 +33,7 @@ public interface IChannelService
      * @param channel 渠道配置
      * @return 结果
      */
-    public int insertChannel(Channel channel);
+    public Long insertChannel(Channel channel);
 
     /**
      * 修改渠道配置

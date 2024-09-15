@@ -1,7 +1,10 @@
 package com.ruoyi.system.service;
 
 import java.util.List;
-import com.ruoyi.system.domain.Customer;
+
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.ruoyi.common.core.domain.R;
+import com.ruoyi.common.core.domain.http.Customer;
 
 /**
  * 客户信息Service接口
@@ -9,7 +12,7 @@ import com.ruoyi.system.domain.Customer;
  * @author ruoyi
  * @date 2024-09-15
  */
-public interface ICustomerService 
+public interface ICustomerService extends IService<Customer>
 {
     /**
      * 查询客户信息
@@ -58,4 +61,18 @@ public interface ICustomerService
      * @return 结果
      */
     public int deleteCustomerById(Long id);
+
+    /**
+     * 根据手机好MD5查询用户
+     * @param phoneMD5
+     * @return
+     */
+    R<Customer> selectByPhoneMd5(String phoneMD5);
+
+    /**
+     * 通过手机号更新用户信息
+     * @param customer
+     * @return
+     */
+    R updateByPhoneMd5(Customer customer);
 }

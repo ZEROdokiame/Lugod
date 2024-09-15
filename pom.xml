@@ -37,6 +37,7 @@
         <transmittable-thread-local.version>2.14.4</transmittable-thread-local.version>
         <mybatis-plus.version>3.5.2</mybatis-plus.version>
         <lombok.version>1.18.30</lombok.version>
+        <hutools.version>5.8.26</hutools.version>
     </properties>
 
     <!-- 依赖声明 -->
@@ -219,7 +220,7 @@
                 <version>${ruoyi.version}</version>
             </dependency>
             <dependency>
-            <groupId>com.baomidou</groupId>
+                <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>${mybatis-plus.version}</version>
             </dependency>
@@ -227,6 +228,11 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutools.version}</version>
             </dependency>
 
         </dependencies>

@@ -1,8 +1,11 @@
 package com.ruoyi.system.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.common.core.constant.CacheConstants;
 import com.ruoyi.common.core.utils.DateUtils;
 import com.ruoyi.common.core.utils.StringUtils;
+import com.ruoyi.common.redis.service.RedisService;
 import com.ruoyi.system.mapper.ChannelMapper;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,8 @@ public class ChannelServiceImpl implements IChannelService
 {
     @Autowired
     private ChannelMapper channelMapper;
+    @Autowired
+    private RedisService redisService;
 
     /**
      * 查询渠道配置
@@ -56,13 +61,18 @@ public class ChannelServiceImpl implements IChannelService
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int insertChannel(Channel channel)
+    public Long insertChannel(Channel channel)
     {
         if (StringUtils.isEmpty(channel.getChannelSign())) {
             channel.setChannelSign(RandomStringUtils.random(16, true, false));
         }
         channel.setCreateTime(DateUtils.getNowDate());
-        return channelMapper.insertChannel(channel);
+        Long i = channelMapper.insertChannel(channel);
+        //新增插入缓存
+        Channel channelById = channelMapper.selectChannelById(i);
+        redisService.setCacheObject(CacheConstants.CHANNEL_ID+i,channelById);
+        redisService.setCacheObject(CacheConstants.CHANNEL_SIGN+channel.getChannelSign(),channelById);
+        return i;
     }
 
     /**
@@ -76,7 +86,14 @@ public class ChannelServiceImpl implements IChannelService
     public int updateChannel(Channel channel)
     {
         channel.setUpdateTime(DateUtils.getNowDate());
-        return channelMapper.updateChannel(channel);
+        int i = channelMapper.updateChannel(channel);
+
+        Channel channelById = channelMapper.selectChannelById(channel.getId());
+        redisService.deleteObject(CacheConstants.CHANNEL_ID+channel.getId());
+        redisService.deleteObject(CacheConstants.CHANNEL_SIGN+channel.getChannelSign());
+        redisService.setCacheObject(CacheConstants.CHANNEL_ID+channel.getId(),channelById);
+        redisService.setCacheObject(CacheConstants.CHANNEL_SIGN+channel.getChannelSign(),channelById);
+        return i;
     }
 
     /**

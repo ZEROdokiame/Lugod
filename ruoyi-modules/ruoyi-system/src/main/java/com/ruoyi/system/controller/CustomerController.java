@@ -1,21 +1,16 @@
 package com.ruoyi.system.controller;
 
 import java.util.List;
-import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.common.core.constant.SecurityConstants;
+import com.ruoyi.common.core.domain.R;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.log.annotation.Log;
 import com.ruoyi.common.log.enums.BusinessType;
 import com.ruoyi.common.security.annotation.RequiresPermissions;
-import com.ruoyi.system.domain.Customer;
+import com.ruoyi.common.core.domain.http.Customer;
 import com.ruoyi.system.service.ICustomerService;
 import com.ruoyi.common.core.web.controller.BaseController;
 import com.ruoyi.common.core.web.domain.AjaxResult;
@@ -70,6 +65,40 @@ public class CustomerController extends BaseController
         return success(customerService.selectCustomerById(id));
     }
 
+    /**
+     * 通过手机号MD5查询用户信息
+     *
+     * @param phoneMD5 用户名
+     * @return 结果
+     */
+    @GetMapping("/getByMd5")
+    public R<Customer> getCustomerInfoByPhoneMd5(@RequestParam("phoneMD5")String phoneMD5){
+        return customerService.selectByPhoneMd5(phoneMD5);
+    }
+
+    /**
+     * 通过手机号MD5更新用户信息
+     *
+     * @param customer 用户
+     * @return 结果
+     */
+    @PostMapping("/updateByPhoneMd5")
+    public R updateByPhoneMd5(Customer customer ,@RequestHeader(SecurityConstants.FROM_SOURCE) String source){
+        return customerService.updateByPhoneMd5(customer);
+    }
+
+    /**
+     * 新增客户信息
+     * @return
+     */
+    @PostMapping("/customer/addNewCustomer")
+    public R add(@RequestBody Customer customer,@RequestHeader(SecurityConstants.FROM_SOURCE) String source){
+        boolean save = customerService.save(customer);
+        if (save){
+            return R.ok();
+        }
+        return R.fail();
+    }
     /**
      * 新增客户信息
      */

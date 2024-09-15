@@ -1,7 +1,9 @@
 package com.ruoyi.system.mapper;
 
 import java.util.List;
-import com.ruoyi.system.domain.Customer;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ruoyi.common.core.domain.http.Customer;
 
 /**
  * 客户信息Mapper接口
@@ -9,7 +11,7 @@ import com.ruoyi.system.domain.Customer;
  * @author ruoyi
  * @date 2024-09-15
  */
-public interface CustomerMapper 
+public interface CustomerMapper extends BaseMapper<Customer>
 {
     /**
      * 查询客户信息
