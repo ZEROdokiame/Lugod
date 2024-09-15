@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.CustomerApplyLogMapper">
+    
+    <resultMap type="com.ruoyi.system.domain.CustomerApplyLog" id="CustomerApplyLogResult">
+        <result property="id"    column="id"    />
+        <result property="customerId"    column="customer_id"    />
+        <result property="merchantId"    column="merchant_id"    />
+        <result property="channelId"    column="channel_id"    />
+        <result property="orderStatus"    column="order_status"    />
+        <result property="price"    column="price"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectCustomerApplyLogVo">
+        select id, customer_id, merchant_id, channel_id, order_status, price, create_time, update_time, remark from customer_apply_log
+    </sql>
+
+    <select id="selectCustomerApplyLogList" parameterType="com.ruoyi.system.domain.CustomerApplyLog" resultMap="CustomerApplyLogResult">
+        <include refid="selectCustomerApplyLogVo"/>
+        <where>  
+            <if test="customerId != null "> and customer_id = #{customerId}</if>
+            <if test="merchantId != null "> and merchant_id = #{merchantId}</if>
+            <if test="channelId != null "> and channel_id = #{channelId}</if>
+            <if test="orderStatus != null "> and order_status = #{orderStatus}</if>
+            <if test="price != null "> and price = #{price}</if>
+        </where>
+    </select>
+    
+    <select id="selectCustomerApplyLogById" parameterType="java.lang.Long" resultMap="CustomerApplyLogResult">
+        <include refid="selectCustomerApplyLogVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCustomerApplyLog" parameterType="com.ruoyi.system.domain.CustomerApplyLog" useGeneratedKeys="true" keyProperty="id">
+        insert into customer_apply_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">customer_id,</if>
+            <if test="merchantId != null">merchant_id,</if>
+            <if test="channelId != null">channel_id,</if>
+            <if test="orderStatus != null">order_status,</if>
+            <if test="price != null">price,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">#{customerId},</if>
+            <if test="merchantId != null">#{merchantId},</if>
+            <if test="channelId != null">#{channelId},</if>
+            <if test="orderStatus != null">#{orderStatus},</if>
+            <if test="price != null">#{price},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCustomerApplyLog" parameterType="com.ruoyi.system.domain.CustomerApplyLog">
+        update customer_apply_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="customerId != null">customer_id = #{customerId},</if>
+            <if test="merchantId != null">merchant_id = #{merchantId},</if>
+            <if test="channelId != null">channel_id = #{channelId},</if>
+            <if test="orderStatus != null">order_status = #{orderStatus},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCustomerApplyLogById" parameterType="java.lang.Long">
+        delete from customer_apply_log where id = #{id}
+    </delete>
+
+    <delete id="deleteCustomerApplyLogByIds" parameterType="java.lang.String">
+        delete from customer_apply_log where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
