@@ -13,7 +13,6 @@ import com.ruoyi.common.core.domain.http.Channel;
 import com.ruoyi.common.core.domain.http.Customer;
 import com.ruoyi.common.core.domain.http.CustomerApplyLog;
 import com.ruoyi.common.core.domain.http.Merchant;
-import com.ruoyi.common.core.utils.ProbitUtil;
 import com.ruoyi.common.core.utils.SecureUtils;
 import com.ruoyi.common.core.utils.StringUtils;
 import com.ruoyi.common.core.web.domain.AjaxResult;
