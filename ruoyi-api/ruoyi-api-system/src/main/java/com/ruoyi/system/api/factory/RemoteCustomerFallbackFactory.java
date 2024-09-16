@@ -2,7 +2,6 @@ package com.ruoyi.system.api.factory;
 
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.domain.http.Customer;
-import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.system.api.RemoteCustomerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;

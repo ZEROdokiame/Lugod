@@ -1,7 +1,10 @@
 package com.ruoyi.system.mapper;
 
 import java.util.List;
-import com.ruoyi.system.domain.Channel;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ruoyi.common.core.domain.http.Channel;
+import com.ruoyi.system.domain.CustomerApplyLog;
 
 /**
  * 渠道配置Mapper接口
@@ -9,7 +12,7 @@ import com.ruoyi.system.domain.Channel;
  * @author ruoyi
  * @date 2024-09-15
  */
-public interface ChannelMapper 
+public interface ChannelMapper extends BaseMapper<Channel>
 {
     /**
      * 查询渠道配置

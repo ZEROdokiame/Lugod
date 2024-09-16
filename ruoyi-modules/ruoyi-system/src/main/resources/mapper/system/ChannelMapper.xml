@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.system.mapper.ChannelMapper">
     
-    <resultMap type="com.ruoyi.system.domain.Channel" id="ChannelResult">
+    <resultMap type="com.ruoyi.common.core.domain.http.Channel" id="ChannelResult">
         <result property="id"    column="id"    />
         <result property="channelName"    column="channel_name"    />
         <result property="channelSign"    column="channel_sign"    />
@@ -24,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectChannelIdName">
         select id, channel_name, channel_sign  from channel
     </sql>
-    <select id="selectChannelList" parameterType="com.ruoyi.system.domain.Channel" resultMap="ChannelResult">
+    <select id="selectChannelList" parameterType="com.ruoyi.common.core.domain.http.Channel" resultMap="ChannelResult">
         <include refid="selectChannelVo"/>
         <where>  
             <if test="channelName != null  and channelName != ''"> and channel_name like concat('%', #{channelName}, '%')</if>
@@ -42,7 +42,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
 
-    <insert id="insertChannel" parameterType="com.ruoyi.system.domain.Channel" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertChannel" parameterType="com.ruoyi.common.core.domain.http.Channel" useGeneratedKeys="true" keyProperty="id">
         insert into channel
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="channelName != null">channel_name,</if>
@@ -70,7 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateChannel" parameterType="com.ruoyi.system.domain.Channel">
+    <update id="updateChannel" parameterType="com.ruoyi.common.core.domain.http.Channel">
         update channel
         <trim prefix="SET" suffixOverrides=",">
             <if test="channelName != null">channel_name = #{channelName},</if>

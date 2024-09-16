@@ -5,30 +5,38 @@ import com.alibaba.fastjson.JSONObject;
 import com.ruoyi.btc.domain.ComPublicHalfDto;
 import com.ruoyi.btc.domain.CustomerInfoDto;
 import com.ruoyi.btc.service.ISysPublicHalfService;
+import com.ruoyi.common.core.constant.CacheConstants;
 import com.ruoyi.common.core.constant.SecurityConstants;
 import com.ruoyi.common.core.domain.R;
+import com.ruoyi.common.core.domain.http.Channel;
 import com.ruoyi.common.core.domain.http.Customer;
+import com.ruoyi.common.core.domain.http.Merchant;
 import com.ruoyi.common.core.utils.SecureUtils;
 import com.ruoyi.common.core.utils.StringUtils;
 import com.ruoyi.common.core.web.domain.AjaxResult;
+import com.ruoyi.common.redis.service.RedisService;
+import com.ruoyi.system.api.RemoteCustomerApplyLogService;
 import com.ruoyi.system.api.RemoteCustomerService;
+import com.ruoyi.system.api.RemoteMerchantService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 本地文件存储
  * 
  * @author ruoyi
  */
-@Primary
 @Service
 @RequiredArgsConstructor
 public class SysPublicHalfServiceImpl implements ISysPublicHalfService
 {
     private final RemoteCustomerService remoteCustomerService;
+    private final RemoteMerchantService remoteMerchantService;
+    private final RemoteCustomerApplyLogService remoteCustomerApplyLogService;
+    private final RedisService redisService;
 
     /**
      * 半流程通用撞库
@@ -37,8 +45,13 @@ public class SysPublicHalfServiceImpl implements ISysPublicHalfService
     @Override
     public AjaxResult check(ComPublicHalfDto comPublicHalfDto) {
         //校验 IP地址是否正常 渠道标识是否存在 数据是否为空
+
         if (StringUtils.isEmpty(comPublicHalfDto.getChannelSignature())){
             return AjaxResult.error("渠道标识不能未空");
+        }
+        Channel channel = redisService.getCacheObject(CacheConstants.CHANNEL_SIGN + comPublicHalfDto.getChannelSignature());
+        if (channel==null||channel.getId()==null){
+            return AjaxResult.error("渠道不存在");
         }
         if (StringUtils.isEmpty(comPublicHalfDto.getData())){
             return AjaxResult.error("加密数据不能为空");
@@ -57,6 +70,7 @@ public class SysPublicHalfServiceImpl implements ISysPublicHalfService
         //转化字段未数据库中资质字段 并保存 用户未实名状态 一并保存用户申请记录 未申请状态
         Customer customer = new Customer();
         BeanUtil.copyProperties(customerInfoDto,customer);
+        customer.setChannelId(channel.getId());
         customer.setActurlName(customerInfoDto.getNameMd5());
         customer.setFirstLoginTime(new Date());
         customer.setLastLoginTime(new Date());
@@ -68,11 +82,51 @@ public class SysPublicHalfServiceImpl implements ISysPublicHalfService
         }else {
             remoteCustomerService.add(customer,SecurityConstants.INNER);
         }
-        //匹配资质 造轮子 返回多个符合的商户
-
-
+        //TODO 暂时不做 目前下游暂时不需要 匹配资质 造轮子 返回多个符合的商户
+        List<Merchant> merchants = matchMerchant(customer);
         //结束返回上游结果
-        return null;
+        Map<String,Boolean> re = new HashMap<>();
+        if (merchants.size()>0){
+            re.put("data",true);
+            return AjaxResult.success(re);
+        }
+        re.put("data",false);
+        return AjaxResult.success(re);
+    }
+
+    /**
+     * 获取前筛符合的商户
+     * @param customer
+     */
+    private List<Merchant> matchMerchant(Customer customer) {
+        R<List<Merchant>> listR = remoteMerchantService.merchantList(SecurityConstants.INNER);
+        if (listR.getCode()!=200){
+            return new ArrayList<>();
+        }
+        List<Merchant> merchants = new ArrayList<>();
+        for (Merchant merchant:listR.getData()) {
+            //限量判定
+            R<Integer> sum = remoteCustomerApplyLogService.sum(merchant.getId(), SecurityConstants.INNER);
+            if (merchant.getLimitType()==1&&merchant.getLimitNum()<=sum.getData()){
+                continue;
+            }
+
+            if (customer.getAge()<merchant.getAgeLimitStart()||customer.getAge()>merchant.getAgeLimitEnd()){
+                continue;
+            }
+            if (merchant.getChannelLimitType()==1||merchant.getChannelLimitType()==2){
+
+                List<Long> list = Arrays.asList(merchant.getChannelLimit().split(",")).stream().map(val->Long.parseLong(val)).collect(Collectors.toList());
+                if (merchant.getChannelLimitType()==1&& !list.contains(customer.getChannelId())){
+                    continue;
+                }
+                if (merchant.getChannelLimitType()==2&& list.contains(customer.getChannelId())){
+                    continue;
+                }
+            }
+            merchants.add(merchant);
+        }
+        return merchants;
     }
 
     /**

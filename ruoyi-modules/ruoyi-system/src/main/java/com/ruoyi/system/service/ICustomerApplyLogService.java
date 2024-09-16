@@ -1,6 +1,8 @@
 package com.ruoyi.system.service;
 
 import java.util.List;
+
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.ruoyi.system.domain.CustomerApplyLog;
 
 /**
@@ -9,7 +11,7 @@ import com.ruoyi.system.domain.CustomerApplyLog;
  * @author ruoyi
  * @date 2024-09-15
  */
-public interface ICustomerApplyLogService 
+public interface ICustomerApplyLogService extends IService<CustomerApplyLog>
 {
     /**
      * 查询客户申请记录
@@ -58,4 +60,11 @@ public interface ICustomerApplyLogService
      * @return 结果
      */
     public int deleteCustomerApplyLogById(Long id);
+
+    /**
+     * 获取当日商户已申请数
+     * @param merchantId
+     * @return
+     */
+    Integer getApplySum(Long merchantId);
 }

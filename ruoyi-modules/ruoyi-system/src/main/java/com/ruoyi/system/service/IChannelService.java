@@ -1,7 +1,7 @@
 package com.ruoyi.system.service;
 
 import java.util.List;
-import com.ruoyi.system.domain.Channel;
+import com.ruoyi.common.core.domain.http.Channel;
 
 /**
  * 渠道配置Service接口

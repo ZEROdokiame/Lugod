@@ -1,11 +1,19 @@
 package com.ruoyi.system.service.impl;
 
 import java.util.List;
+
+import cn.hutool.core.collection.CollectionUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ruoyi.common.core.domain.R;
+import com.ruoyi.common.core.domain.http.Customer;
 import com.ruoyi.common.core.utils.DateUtils;
+import com.ruoyi.system.mapper.CustomerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.mapper.MerchantMapper;
-import com.ruoyi.system.domain.Merchant;
+import com.ruoyi.common.core.domain.http.Merchant;
 import com.ruoyi.system.service.IMerchantService;
 
 /**
@@ -15,7 +23,7 @@ import com.ruoyi.system.service.IMerchantService;
  * @date 2024-09-15
  */
 @Service
-public class MerchantServiceImpl implements IMerchantService 
+public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> implements IService<Merchant>,IMerchantService
 {
     @Autowired
     private MerchantMapper merchantMapper;
@@ -92,5 +100,18 @@ public class MerchantServiceImpl implements IMerchantService
     public int deleteMerchantById(Long id)
     {
         return merchantMapper.deleteMerchantById(id);
+    }
+
+    /**
+     * 获取基本合适的商户
+     * @return
+     */
+    @Override
+    public R<List<Merchant>> getMerchantList() {
+        List<Merchant> merchants = merchantMapper.selectList(new LambdaQueryWrapper<Merchant>().eq(Merchant::getStatus, true));
+        if (CollectionUtil.isEmpty(merchants)){
+            return R.fail();
+        }
+        return R.ok(merchants);
     }
 }

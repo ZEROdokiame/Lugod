@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.system.mapper.MerchantMapper">
 
-    <resultMap type="com.ruoyi.system.domain.Merchant" id="MerchantResult">
+    <resultMap type="com.ruoyi.common.core.domain.http.Merchant" id="MerchantResult">
         <result property="id"    column="id"    />
         <result property="merchantType"    column="merchant_type"    />
         <result property="merchantName"    column="merchant_name"    />
@@ -58,7 +58,7 @@
         select id, merchant_type, merchant_name, merchant_describe, merchant_company, logo, status, limit_num, limit_type, channel_limit_type, age_limit_start, age_limit_end, phone_limit, social_security_no, social_security_low, social_security_high, car_no, car_have, guarantee_slip_low, guarantee_slip_centre, guarantee_slip_high, education_middle, education_high_school, education_polytechnic, education_junior_college, education_undergraduate_course, education_postgraduate, accumulation_fund_low, accumulation_fund_high, hourse_no, hourse_full_payment, hourse_mortgaging, office_worker, civil_servant, private_property_owners, self_employed_person, other_occupations, hua_bei_low, hua_bei_middle, hua_bei_high, bai_tiao_low, bai_tiao_middle, bai_tiao_high, zhi_ma, create_time, update_time, remark from merchant
     </sql>
 
-    <select id="selectMerchantList" parameterType="com.ruoyi.system.domain.Merchant" resultMap="MerchantResult">
+    <select id="selectMerchantList" parameterType="com.ruoyi.common.core.domain.http.Merchant" resultMap="MerchantResult">
         <include refid="selectMerchantVo"/>
         <where>
             <if test="merchantType != null "> and merchant_type = #{merchantType}</if>
@@ -112,7 +112,7 @@
         where id = #{id}
     </select>
 
-    <insert id="insertMerchant" parameterType="com.ruoyi.system.domain.Merchant" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertMerchant" parameterType="com.ruoyi.common.core.domain.http.Merchant" useGeneratedKeys="true" keyProperty="id">
         insert into merchant
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="merchantType != null">merchant_type,</if>
@@ -212,7 +212,7 @@
         </trim>
     </insert>
 
-    <update id="updateMerchant" parameterType="com.ruoyi.system.domain.Merchant">
+    <update id="updateMerchant" parameterType="com.ruoyi.common.core.domain.http.Merchant">
         update merchant
         <trim prefix="SET" suffixOverrides=",">
             <if test="merchantType != null">merchant_type = #{merchantType},</if>

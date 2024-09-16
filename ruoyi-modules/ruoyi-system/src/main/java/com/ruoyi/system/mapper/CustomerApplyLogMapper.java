@@ -1,6 +1,9 @@
 package com.ruoyi.system.mapper;
 
 import java.util.List;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ruoyi.common.core.domain.http.Merchant;
 import com.ruoyi.system.domain.CustomerApplyLog;
 
 /**
@@ -9,7 +12,7 @@ import com.ruoyi.system.domain.CustomerApplyLog;
  * @author ruoyi
  * @date 2024-09-15
  */
-public interface CustomerApplyLogMapper 
+public interface CustomerApplyLogMapper extends BaseMapper<CustomerApplyLog>
 {
     /**
      * 查询客户申请记录

@@ -1,7 +1,10 @@
 package com.ruoyi.system.mapper;
 
 import java.util.List;
-import com.ruoyi.system.domain.Merchant;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ruoyi.common.core.domain.http.Customer;
+import com.ruoyi.common.core.domain.http.Merchant;
 
 /**
  * 商户Mapper接口
@@ -9,7 +12,7 @@ import com.ruoyi.system.domain.Merchant;
  * @author ruoyi
  * @date 2024-09-15
  */
-public interface MerchantMapper 
+public interface MerchantMapper  extends BaseMapper<Merchant>
 {
     /**
      * 查询商户

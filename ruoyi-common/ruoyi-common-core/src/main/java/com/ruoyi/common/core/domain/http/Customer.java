@@ -22,6 +22,10 @@ public class Customer extends BaseEntity
     /** $column.columnComment */
     private Long id;
 
+    /**渠道ID**/
+    @Excel(name = "渠道ID")
+    private Long channelId;
+
     /** 年龄 */
     @Excel(name = "年龄")
     private Integer age;

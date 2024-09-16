@@ -11,7 +11,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import com.ruoyi.system.domain.Channel;
+import com.ruoyi.common.core.domain.http.Channel;
 import com.ruoyi.system.service.IChannelService;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,7 +1,11 @@
 package com.ruoyi.system.service;
 
 import java.util.List;
-import com.ruoyi.system.domain.Merchant;
+
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.ruoyi.common.core.domain.R;
+import com.ruoyi.common.core.domain.http.Customer;
+import com.ruoyi.common.core.domain.http.Merchant;
 
 /**
  * 商户Service接口
@@ -9,7 +13,7 @@ import com.ruoyi.system.domain.Merchant;
  * @author ruoyi
  * @date 2024-09-15
  */
-public interface IMerchantService 
+public interface IMerchantService extends IService<Merchant>
 {
     /**
      * 查询商户
@@ -58,4 +62,11 @@ public interface IMerchantService
      * @return 结果
      */
     public int deleteMerchantById(Long id);
+
+    /**
+     * 获取基本合适的商户
+     * @return
+     */
+    R<List<Merchant>> getMerchantList();
+
 }
