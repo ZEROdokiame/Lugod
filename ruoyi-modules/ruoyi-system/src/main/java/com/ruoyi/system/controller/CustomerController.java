@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.common.core.constant.SecurityConstants;
 import com.ruoyi.common.core.domain.R;
+import com.ruoyi.system.service.IMerchantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.log.annotation.Log;
@@ -29,6 +30,9 @@ public class CustomerController extends BaseController
 {
     @Autowired
     private ICustomerService customerService;
+
+    @Autowired
+    private IMerchantService merchantService;
 
     /**
      * 查询客户信息列表
@@ -104,7 +108,7 @@ public class CustomerController extends BaseController
      */
     @RequiresPermissions("system:customer:add")
     @Log(title = "客户信息", businessType = BusinessType.INSERT)
-    @PostMapping
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     public AjaxResult add(@RequestBody Customer customer)
     {
         return toAjax(customerService.insertCustomer(customer));
@@ -115,7 +119,7 @@ public class CustomerController extends BaseController
      */
     @RequiresPermissions("system:customer:edit")
     @Log(title = "客户信息", businessType = BusinessType.UPDATE)
-    @PutMapping
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public AjaxResult edit(@RequestBody Customer customer)
     {
         return toAjax(customerService.updateCustomer(customer));
@@ -135,5 +139,15 @@ public class CustomerController extends BaseController
     @GetMapping("/getCustomerToken")
     public String getCustomerToken(@RequestParam("phone") String phone) {
         return customerService.getCustomerToken(phone);
+    }
+
+    /**
+     * 获取商户下渠道列表
+     * @return
+     */
+    @RequestMapping(value = "/getAllMerchantList", method = RequestMethod.GET)
+    public AjaxResult getAllMerchantList()
+    {
+        return success(merchantService.findAllMerchantList());
     }
 }

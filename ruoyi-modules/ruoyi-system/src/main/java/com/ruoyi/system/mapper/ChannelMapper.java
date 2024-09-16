@@ -19,7 +19,7 @@ public interface ChannelMapper extends BaseMapper<Channel>
      * @param id 渠道配置主键
      * @return 渠道配置
      */
-    public Channel selectChannelById(Long id);
+    public Channel selectChannelById(Integer id);
 
     /**
      * 查询渠道配置列表
@@ -35,7 +35,7 @@ public interface ChannelMapper extends BaseMapper<Channel>
      * @param channel 渠道配置
      * @return 结果
      */
-    public Long insertChannel(Channel channel);
+    public int insertChannel(Channel channel);
 
     /**
      * 修改渠道配置

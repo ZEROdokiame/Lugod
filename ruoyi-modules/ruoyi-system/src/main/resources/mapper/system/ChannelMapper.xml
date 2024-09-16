@@ -8,6 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="id"    column="id"    />
         <result property="channelName"    column="channel_name"    />
         <result property="channelSign"    column="channel_sign"    />
+        <result property="channelType"    column="channel_type"    />
         <result property="score"    column="score"    />
         <result property="htmlName"    column="html_name"    />
         <result property="htmlLocation"    column="html_location"    />
@@ -19,7 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectChannelVo">
-        select id, channel_name, channel_sign, score, html_name, html_location, ips, period, create_time, update_time, remark from channel
+        select id, channel_name, channel_sign,channel_type, score, html_name, html_location, ips, period, create_time, update_time, remark from channel
     </sql>
     <sql id="selectChannelIdName">
         select id, channel_name, channel_sign  from channel
@@ -29,6 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="channelName != null  and channelName != ''"> and channel_name like concat('%', #{channelName}, '%')</if>
             <if test="channelSign != null  and channelSign != ''"> and channel_sign = #{channelSign}</if>
+            <if test="channelType != null  and channelType != ''"> and channel_type = #{channelType}</if>
             <if test="score != null "> and score = #{score}</if>
             <if test="htmlName != null  and htmlName != ''"> and html_name like concat('%', #{htmlName}, '%')</if>
             <if test="htmlLocation != null  and htmlLocation != ''"> and html_location = #{htmlLocation}</if>
@@ -37,7 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
     
-    <select id="selectChannelById" parameterType="java.lang.Long" resultMap="ChannelResult">
+    <select id="selectChannelById" parameterType="java.lang.Integer" resultMap="ChannelResult">
         <include refid="selectChannelVo"/>
         where id = #{id}
     </select>
@@ -47,6 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="channelName != null">channel_name,</if>
             <if test="channelSign != null">channel_sign,</if>
+            <if test="channelType != null">channel_type,</if>
             <if test="score != null">score,</if>
             <if test="htmlName != null">html_name,</if>
             <if test="htmlLocation != null">html_location,</if>
@@ -59,6 +62,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="channelName != null">#{channelName},</if>
             <if test="channelSign != null">#{channelSign},</if>
+            <if test="channelType != null">#{channelType},</if>
             <if test="score != null">#{score},</if>
             <if test="htmlName != null">#{htmlName},</if>
             <if test="htmlLocation != null">#{htmlLocation},</if>
@@ -75,6 +79,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="channelName != null">channel_name = #{channelName},</if>
             <if test="channelSign != null">channel_sign = #{channelSign},</if>
+            <if test="channelType != null">channel_type = #{channelType},</if>
             <if test="score != null">score = #{score},</if>
             <if test="htmlName != null">html_name = #{htmlName},</if>
             <if test="htmlLocation != null">html_location = #{htmlLocation},</if>

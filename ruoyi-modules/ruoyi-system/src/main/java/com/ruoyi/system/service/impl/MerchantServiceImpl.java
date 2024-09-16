@@ -114,4 +114,8 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
         }
         return R.ok(merchants);
     }
+
+    public List<Merchant> findAllMerchantList(){
+        return merchantMapper.findAllMerchantList();
+    }
 }

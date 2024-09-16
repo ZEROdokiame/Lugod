@@ -69,4 +69,10 @@ public interface IMerchantService extends IService<Merchant>
      */
     R<List<Merchant>> getMerchantList();
 
+    /**
+     * 获取所有的商户列表
+     * @return
+     */
+    public List<Merchant> findAllMerchantList();
+
 }

@@ -16,7 +16,7 @@ public class Channel extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /**  */
-    private Long id;
+    private Integer id;
 
     /** 渠道名称 */
     @Excel(name = "渠道名称")
@@ -25,6 +25,10 @@ public class Channel extends BaseEntity
     /** 渠道签名 */
     @Excel(name = "渠道签名")
     private String channelSign;
+
+    /** 渠道类型  1H5 2连登 3半流程 4全流程*/
+    @Excel(name = "渠道类型")
+    private String channelType;
 
     /** 扣量比 */
     @Excel(name = "扣量比")
@@ -46,12 +50,20 @@ public class Channel extends BaseEntity
     @Excel(name = "开启关闭时段")
     private String period;
 
-    public void setId(Long id)
+    public void setId(Integer id)
     {
         this.id = id;
     }
 
-    public Long getId()
+    public String getChannelType() {
+        return channelType;
+    }
+
+    public void setChannelType(String channelType) {
+        this.channelType = channelType;
+    }
+
+    public Integer getId()
     {
         return id;
     }
