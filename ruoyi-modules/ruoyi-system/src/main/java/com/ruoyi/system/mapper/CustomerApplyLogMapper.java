@@ -3,8 +3,7 @@ package com.ruoyi.system.mapper;
 import java.util.List;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.ruoyi.common.core.domain.http.Merchant;
-import com.ruoyi.system.domain.CustomerApplyLog;
+import com.ruoyi.common.core.domain.http.CustomerApplyLog;
 
 /**
  * 客户申请记录Mapper接口

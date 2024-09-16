@@ -6,14 +6,20 @@ import lombok.Data;
 public class CustomerInfoDto {
     //手机号码（Md5）
     private String phoneMd5;
+    //手机号
+    private String phone;
     //性别 0 男 1 女
     private Integer sex;
     //手机号码（Md5）
     private String nameMd5;
+    //姓名
+    private String name;
     //年龄
     private Integer age;
     //手身份证md5
     private String idCardMd5;
+    //身份证好
+    private String idCard;
     //所在城市
     private String city;
     //所在城市代码

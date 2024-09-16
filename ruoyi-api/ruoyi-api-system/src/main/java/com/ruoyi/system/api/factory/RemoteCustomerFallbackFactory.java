@@ -44,6 +44,11 @@ public class RemoteCustomerFallbackFactory implements FallbackFactory<RemoteCust
                 log.info("新增用户失败:{}",throwable.getMessage());
                 return R.fail("新增用户失败");
             }
+
+            @Override
+            public String getCustomerToken(String phone) {
+                return null;
+            }
         };
     }
 }

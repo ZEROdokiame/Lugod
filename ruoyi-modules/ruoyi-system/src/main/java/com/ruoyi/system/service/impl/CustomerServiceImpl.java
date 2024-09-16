@@ -6,13 +6,19 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ruoyi.common.core.constant.RedisConstant;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.utils.DateUtils;
+import com.ruoyi.common.core.utils.EncryptUtil;
+import com.ruoyi.common.redis.service.CustomerTokenService;
+import com.ruoyi.system.config.SystemConfig;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.mapper.CustomerMapper;
 import com.ruoyi.common.core.domain.http.Customer;
 import com.ruoyi.system.service.ICustomerService;
+import org.springframework.util.StringUtils;
 
 /**
  * 客户信息Service业务层处理
@@ -22,9 +28,11 @@ import com.ruoyi.system.service.ICustomerService;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> implements IService<Customer>,ICustomerService {
     private final CustomerMapper customerMapper;
-
+    private final SystemConfig systemConfig;
+    private final CustomerTokenService customerTokenService;
     /**
      * 查询客户信息
      * 
@@ -126,4 +134,19 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         }
         return R.fail();
     }
+
+    @Override
+    public String getCustomerToken(String phone) {
+        log.info("获取用户token,手机号:{},加密结果：{}", phone, EncryptUtil.AESencode(phone, systemConfig.getAESkey()));
+        Customer customer = this.getOne(new LambdaQueryWrapper<Customer>().eq(Customer::getPhone, EncryptUtil.AESencode(phone, systemConfig.getAESkey())));
+        log.info("获取用户token,用户信息:{}", customer);
+        //获取到用户登陆的token
+        String token = customerTokenService.getToken(customer.getId());
+        if (StringUtils.isEmpty(token)) {
+            //生成一个长60的token
+            token = customerTokenService.generateToken(customer.getId(), customer.getPhone(), "ANDROID", customer.getChannelId());
+        }
+        return token;
+    }
+
 }

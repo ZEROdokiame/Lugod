@@ -5,7 +5,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.ruoyi.btc.domain.ComPublicHalfDto;
 import com.ruoyi.btc.domain.CustomerInfoDto;
-import com.ruoyi.btc.service.ISysPublicHalfService;
+import com.ruoyi.btc.service.ISysPublicAllService;
 import com.ruoyi.common.core.constant.CacheConstants;
 import com.ruoyi.common.core.constant.SecurityConstants;
 import com.ruoyi.common.core.domain.R;
@@ -23,7 +23,6 @@ import com.ruoyi.system.api.RemoteCustomerService;
 import com.ruoyi.system.api.RemoteMerchantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -35,7 +34,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
-public class SysPublicHalfServiceImpl implements ISysPublicHalfService
+public class SysPublicAllServiceImpl implements ISysPublicAllService
 {
     private final RemoteCustomerService remoteCustomerService;
     private final RemoteMerchantService remoteMerchantService;
@@ -230,52 +229,21 @@ public class SysPublicHalfServiceImpl implements ISysPublicHalfService
         //匹配资质 造轮子 返回多个符合的商户
         List<Merchant> merchants = matchMerchant(customer);
         //TODO 取排序第一的
+
         //返回渠道绑定的注册页拼接token
         Map<String,Object> result = new HashMap<>();
         Map<String,Object> map = new HashMap<>();
-        if (CollectionUtil.isEmpty(merchants)){
-            map.put("url","");
-            map.put("regist",false);
-            result.put("data",map);
-            return AjaxResult.success(result);
-        }
-        String url = channel.getHtmlLocation() + "token="+remoteCustomerService.getCustomerToken(customer.getPhone());
-        map.put("url",url);
-        map.put("regist",true);
-        result.put("data",map);
+
+        //TODO 下游是H5承接不了上游全流程 暂时不做
         CustomerApplyLog customerApplyLog = new CustomerApplyLog();
         customerApplyLog.setCustomerId(customerInfoByPhoneMd5.getData().getId());
         customerApplyLog.setChannelId(channel.getId());
+        customerApplyLog.setMerchantId(merchants.get(0).getId());
         customerApplyLog.setOrderStatus(0l);
         remoteCustomerApplyLogService.add(customerApplyLog);
         //返回上游信息
         return AjaxResult.success(result);
     }
 
-    /**
-     * 渠道查询订单是否成功
-     * @param comPublicHalfDto
-     */
-    @Override
-    public AjaxResult checkOrder(String phoneMd5, String channelSign) {
-        //根据手机号MD5渠道标识 查询是否成功
-        R<Customer> customerInfoByPhoneMd5 = remoteCustomerService.getCustomerInfoByPhoneMd5(phoneMd5, SecurityConstants.INNER);
-        Channel channel = redisService.getCacheObject(CacheConstants.CHANNEL_ID + customerInfoByPhoneMd5.getData().getChannelId());
-        R<Boolean> booleanR = remoteCustomerApplyLogService.customerApply(customerInfoByPhoneMd5.getData().getId(), SecurityConstants.INNER);
-        //失败直接失败
-        if (!booleanR.getData()){
-            return AjaxResult.success("用户未申请","false");
-        }
-        //成功抽奖 按扣量比抽
-        //成功数
-        double succ = channel.getScore()*0.01;
-        //扣量数
-        double socre = 1-(channel.getScore()*0.01);
-        List<Double> drow = new ArrayList<>();
-        drow.add(succ);
-        drow.add(socre);
-        int draw = ProbitUtil.draw(drow);
-        //返回是否成功
-        return draw==0?AjaxResult.success("用户已申请",true):AjaxResult.success("用户未申请","false");
-    }
+
 }

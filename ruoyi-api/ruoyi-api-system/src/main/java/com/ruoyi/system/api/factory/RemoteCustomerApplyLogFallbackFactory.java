@@ -2,7 +2,9 @@ package com.ruoyi.system.api.factory;
 
 import com.ruoyi.common.core.constant.SecurityConstants;
 import com.ruoyi.common.core.domain.R;
+import com.ruoyi.common.core.domain.http.CustomerApplyLog;
 import com.ruoyi.common.core.domain.http.Merchant;
+import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.system.api.RemoteCustomerApplyLogService;
 import com.ruoyi.system.api.RemoteMerchantService;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +37,15 @@ public class RemoteCustomerApplyLogFallbackFactory implements FallbackFactory<Re
                 return R.fail("获取商户已申请数失败:" + throwable.getMessage());
             }
 
+            @Override
+            public R<Boolean> customerApply(Long customerID, String source) {
+                return null;
+            }
 
+            @Override
+            public AjaxResult add(CustomerApplyLog customerApplyLog) {
+                return null;
+            }
         };
     }
 }

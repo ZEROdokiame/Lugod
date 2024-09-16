@@ -3,7 +3,8 @@ package com.ruoyi.system.service;
 import java.util.List;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.ruoyi.system.domain.CustomerApplyLog;
+import com.ruoyi.common.core.domain.R;
+import com.ruoyi.common.core.domain.http.CustomerApplyLog;
 
 /**
  * 客户申请记录Service接口
@@ -67,4 +68,11 @@ public interface ICustomerApplyLogService extends IService<CustomerApplyLog>
      * @return
      */
     Integer getApplySum(Long merchantId);
+
+    /**
+     * 获取用户今日是否是否已申请
+     * @param customerID
+     * @return
+     */
+    R<Boolean> getCustomerApply(Long customerID);
 }

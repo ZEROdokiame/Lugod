@@ -131,4 +131,9 @@ public class CustomerController extends BaseController
     {
         return toAjax(customerService.deleteCustomerByIds(ids));
     }
+
+    @GetMapping("/getCustomerToken")
+    public String getCustomerToken(@RequestParam("phone") String phone) {
+        return customerService.getCustomerToken(phone);
+    }
 }

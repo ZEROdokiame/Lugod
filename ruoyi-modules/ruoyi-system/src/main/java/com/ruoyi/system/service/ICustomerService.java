@@ -75,4 +75,11 @@ public interface ICustomerService extends IService<Customer>
      * @return
      */
     R updateByPhoneMd5(Customer customer);
+
+    /**
+     * 获取用户tooken
+     * @param phone
+     * @return
+     */
+    String getCustomerToken(String phone);
 }

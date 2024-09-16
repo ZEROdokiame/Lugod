@@ -52,4 +52,11 @@ public interface RemoteCustomerService
     @PostMapping("/customer/addNewCustomer")
     public R add(@RequestBody Customer customer,@RequestHeader(SecurityConstants.FROM_SOURCE) String source);
 
+    /**
+     * 获取用户token
+     * @param phone
+     * @return
+     */
+    @GetMapping("/customer/getCustomerToken")
+    public String getCustomerToken(@RequestParam("phone") String phone);
 }

@@ -1,7 +1,6 @@
 package com.ruoyi.system.controller;
 
 import java.util.List;
-import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.common.core.constant.SecurityConstants;
@@ -11,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.log.annotation.Log;
 import com.ruoyi.common.log.enums.BusinessType;
 import com.ruoyi.common.security.annotation.RequiresPermissions;
-import com.ruoyi.system.domain.CustomerApplyLog;
+import com.ruoyi.common.core.domain.http.CustomerApplyLog;
 import com.ruoyi.system.service.ICustomerApplyLogService;
 import com.ruoyi.common.core.web.controller.BaseController;
 import com.ruoyi.common.core.web.domain.AjaxResult;
@@ -51,9 +50,22 @@ public class CustomerApplyLogController extends BaseController
      * @param source 请求来源
      * @return 结果
      */
-    @GetMapping("/log/sum")
+    @GetMapping("/sum")
     public R<Integer> sum(@PathVariable("merchantId") Long merchantId, @RequestHeader(SecurityConstants.FROM_SOURCE) String source){
         return R.ok(customerApplyLogService.getApplySum(merchantId));
+    }
+
+    /**
+     * 获取用户今日是否是否已申请
+     *
+     *
+     * @param customerID
+     * @param source 请求来源
+     * @return 结果
+     */
+    @GetMapping("/customerApply")
+    public R<Boolean> customerApply(@PathVariable("customerID") Long customerID,@RequestHeader(SecurityConstants.FROM_SOURCE) String source){
+        return customerApplyLogService.getCustomerApply(customerID);
     }
     /**
      * 导出客户申请记录列表

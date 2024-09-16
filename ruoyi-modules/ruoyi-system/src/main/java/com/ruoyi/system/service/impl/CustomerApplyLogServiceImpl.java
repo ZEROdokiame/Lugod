@@ -5,12 +5,13 @@ import java.util.List;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.utils.DateUtils;
 import com.ruoyi.common.core.utils.LocalDateTimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.mapper.CustomerApplyLogMapper;
-import com.ruoyi.system.domain.CustomerApplyLog;
+import com.ruoyi.common.core.domain.http.CustomerApplyLog;
 import com.ruoyi.system.service.ICustomerApplyLogService;
 
 /**
@@ -113,5 +114,21 @@ public class CustomerApplyLogServiceImpl extends ServiceImpl<CustomerApplyLogMap
                         .ge(CustomerApplyLog::getCreateTime, LocalDateTimeUtils.getDateFromLocalDateTime(LocalDateTimeUtils.getTodayStartTime()))
                         .le(CustomerApplyLog::getCreateTime, LocalDateTimeUtils.getDateFromLocalDateTime(LocalDateTimeUtils.getTodayEndTime())));
         return aLong.intValue();
+    }
+
+    /**
+     * 获取用户今日是否已申请
+     * @param customerID
+     * @return
+     */
+    @Override
+    public R<Boolean> getCustomerApply(Long customerID) {
+        Long aLong = customerApplyLogMapper.selectCount(
+                new LambdaQueryWrapper<CustomerApplyLog>()
+                        .isNotNull(CustomerApplyLog::getMerchantId)
+                        .eq(CustomerApplyLog::getOrderStatus, 0)
+                        .ge(CustomerApplyLog::getCreateTime, LocalDateTimeUtils.getDateFromLocalDateTime(LocalDateTimeUtils.getTodayStartTime()))
+                        .le(CustomerApplyLog::getCreateTime, LocalDateTimeUtils.getDateFromLocalDateTime(LocalDateTimeUtils.getTodayEndTime())));
+        return R.ok(aLong>0);
     }
 }
