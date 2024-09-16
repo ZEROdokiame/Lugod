@@ -15,8 +15,8 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created with IntelliJ IDEA.
  *
- * @Author: 黎宇
- * @Date: 2023/08/06/15:05
+ * @Author:
+ * @Date: 18点29分
  * @Description: 用户token管理
  */
 
@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 @RequiredArgsConstructor
 public class CustomerTokenService {
+
     private final RedisService redisService;
     /**
      * token过期时间
