@@ -39,7 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
     
-    <select id="selectChannelById" parameterType="java.lang.Integer" resultMap="ChannelResult">
+    <select id="selectChannelById" parameterType="java.lang.Long" resultMap="ChannelResult">
         <include refid="selectChannelVo"/>
         where id = #{id}
     </select>

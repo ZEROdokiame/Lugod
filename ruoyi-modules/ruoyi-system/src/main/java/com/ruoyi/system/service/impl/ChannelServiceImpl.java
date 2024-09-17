@@ -38,7 +38,7 @@ public class ChannelServiceImpl implements IChannelService
      * @return 渠道配置
      */
     @Override
-    public Channel selectChannelById(Integer id)
+    public Channel selectChannelById(Long id)
     {
         return channelMapper.selectChannelById(id);
     }
@@ -63,14 +63,14 @@ public class ChannelServiceImpl implements IChannelService
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int insertChannel(Channel channel)
+    public long insertChannel(Channel channel)
     {
         if (StringUtils.isEmpty(channel.getChannelSign())) {
             channel.setChannelSign(RandomStringUtils.random(16, true, false));
         }
         channel.setCreateTime(DateUtils.getNowDate());
         channel.setUpdateTime(DateUtils.getNowDate());
-        int i = channelMapper.insertChannel(channel);
+        long i = channelMapper.insertChannel(channel);
         //新增插入缓存
         Channel channelById = channelMapper.selectChannelById(i);
         redisService.setCacheObject(CacheConstants.CHANNEL_ID+i,channelById);

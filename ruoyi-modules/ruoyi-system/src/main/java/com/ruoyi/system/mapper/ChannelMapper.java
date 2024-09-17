@@ -19,7 +19,7 @@ public interface ChannelMapper extends BaseMapper<Channel>
      * @param id 渠道配置主键
      * @return 渠道配置
      */
-    public Channel selectChannelById(Integer id);
+    public Channel selectChannelById(Long id);
 
     /**
      * 查询渠道配置列表

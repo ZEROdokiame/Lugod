@@ -57,7 +57,7 @@ public class ChannelController extends BaseController
      */
     @RequiresPermissions("system:channel:query")
     @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Integer id)
+    public AjaxResult getInfo(@PathVariable("id") Long id)
     {
         return success(channelService.selectChannelById(id));
     }
