@@ -96,7 +96,7 @@ public class CustomerController extends BaseController
      * 新增客户信息
      * @return
      */
-    @PostMapping("/customer/addNewCustomer")
+    @PostMapping("/addNewCustomer")
     public R add(@RequestBody Customer customer,@RequestHeader(SecurityConstants.FROM_SOURCE) String source){
         boolean save = customerService.save(customer);
         if (save){

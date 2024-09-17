@@ -22,31 +22,29 @@ public class PublicHalfController{
     /**
      * 通用半流程撞库
      */
-    @PostMapping("check")
+    @PostMapping("/check")
     public AjaxResult upload(@RequestBody ComPublicHalfDto comPublicHalfDto)
     {
-        sysPublicHalfService.check(comPublicHalfDto);
-        return null;
+        return sysPublicHalfService.check(comPublicHalfDto);
     }
 
     /**
      * 通用半流程撞库
      */
-    @PostMapping("input")
+    @PostMapping("/input")
     public AjaxResult input(@RequestBody ComPublicHalfDto comPublicHalfDto)
     {
-        sysPublicHalfService.input(comPublicHalfDto);
-        return null;
+        return sysPublicHalfService.input(comPublicHalfDto);
     }
 
 
     /**
      * 通用半流程撞库
      */
-    @GetMapping("checkOrder")
+    @GetMapping("/checkOrder")
     public AjaxResult checkOrder(@RequestParam("phoneMD5")String phoneMd5,@RequestParam("channelSign")String channelSign)
     {
-        sysPublicHalfService.checkOrder(phoneMd5,channelSign);
-        return null;
+
+        return sysPublicHalfService.checkOrder(phoneMd5,channelSign);
     }
 }

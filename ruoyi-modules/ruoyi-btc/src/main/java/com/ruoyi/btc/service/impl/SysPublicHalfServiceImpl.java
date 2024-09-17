@@ -278,4 +278,29 @@ public class SysPublicHalfServiceImpl implements ISysPublicHalfService
         //返回是否成功
         return draw==0?AjaxResult.success("用户已申请",true):AjaxResult.success("用户未申请","false");
     }
+
+    public static void main(String[] args) {
+        CustomerInfoDto customerInfoDto = new CustomerInfoDto();
+        customerInfoDto.setPhoneMd5("331d17d1ca8a091410e3238fab16a863");
+        customerInfoDto.setPhone("15205600635");
+        customerInfoDto.setSex(0);
+        customerInfoDto.setNameMd5("331d17d1ca8a091410e3238fab16a863");
+        customerInfoDto.setName("朱三");
+        customerInfoDto.setAge(18);
+        customerInfoDto.setIdCardMd5("331d17d1ca8a091410e3238fab16a863");
+        customerInfoDto.setIdCard("341202199306023511");
+        customerInfoDto.setCity("重庆");
+        customerInfoDto.setCityCode(1000);
+        customerInfoDto.setSocialSecurity(1);
+        customerInfoDto.setAccumulationFund(1);
+        customerInfoDto.setCar(1);
+        customerInfoDto.setHourse(1);
+        customerInfoDto.setGuarantee(1);
+        customerInfoDto.setZhiMa(600);
+        customerInfoDto.setCareer(1);
+        customerInfoDto.setCreditCard(1);
+        customerInfoDto.setEducation(1);
+        customerInfoDto.setMonthlyIncome(5000);
+        System.out.println(JSONObject.toJSONString(customerInfoDto));
+    }
 }

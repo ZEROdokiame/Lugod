@@ -1,6 +1,9 @@
 package com.ruoyi.common.core.domain.http;
 
 import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -20,6 +23,7 @@ public class Customer extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** $column.columnComment */
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**渠道ID**/

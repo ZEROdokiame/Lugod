@@ -2,6 +2,8 @@ package com.ruoyi.common.core.domain.http;
 
 import java.math.BigDecimal;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -20,6 +22,7 @@ public class CustomerApplyLog extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** $column.columnComment */
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /** 用户id */

@@ -1,5 +1,7 @@
 package com.ruoyi.common.core.domain.http;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import com.ruoyi.common.core.annotation.Excel;
 import com.ruoyi.common.core.web.domain.BaseEntity;
@@ -16,6 +18,7 @@ public class Channel extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /**  */
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /** 渠道名称 */

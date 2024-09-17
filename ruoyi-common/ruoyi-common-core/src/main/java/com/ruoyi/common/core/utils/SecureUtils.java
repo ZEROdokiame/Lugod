@@ -323,6 +323,12 @@ public class SecureUtils {
             return null;
         }
 
+        public static void main(String[] args) {
+
+            String s = "{\"accumulationFund\":1,\"age\":18,\"car\":1,\"career\":1,\"city\":\"重庆\",\"cityCode\":1000,\"creditCard\":1,\"education\":1,\"guarantee\":1,\"hourse\":1,\"idCardMd5\":\"331d17d1ca8a091410e3238fab16a863\",\"monthlyIncome\":5000,\"nameMd5\":\"331d17d1ca8a091410e3238fab16a863\",\"phoneMd5\":\"331d17d1ca8a091410e3238fab16a863\",\"sex\":0,\"socialSecurity\":1,\"zhiMa\":600}";
+            String s1 = "{\"accumulationFund\":1,\"age\":18,\"car\":1,\"career\":1,\"city\":\"重庆\",\"cityCode\":1000,\"creditCard\":1,\"education\":1,\"guarantee\":1,\"hourse\":1,\"idCard\":\"341202199306023511\",\"idCardMd5\":\"331d17d1ca8a091410e3238fab16a863\",\"monthlyIncome\":5000,\"name\":\"朱三\",\"nameMd5\":\"331d17d1ca8a091410e3238fab16a863\",\"phone\":\"15205600635\",\"phoneMd5\":\"331d17d1ca8a091410e3238fab16a863\",\"sex\":0,\"socialSecurity\":1,\"zhiMa\":600}";
+            System.out.println(AesEncode(s,"LwLjtU1Bt8dcxxjY"));
+        }
         /**
          * 解密
          *
