@@ -2,6 +2,7 @@ package com.ruoyi.system.service;
 
 import java.util.List;
 import com.ruoyi.common.core.domain.http.Channel;
+import com.ruoyi.common.core.web.domain.AjaxResult;
 
 /**
  * 渠道配置Service接口
@@ -64,4 +65,11 @@ public interface IChannelService
      * @return
      */
     public List<Channel> findAllChannelList();
+
+    /**
+     * 根据渠道标识获取渠道
+     * @param sign
+     * @return
+     */
+    AjaxResult getChannelBySign(String sign);
 }

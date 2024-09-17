@@ -6,6 +6,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.domain.http.Customer;
 import com.ruoyi.common.core.domain.http.Merchant;
+import com.ruoyi.common.core.web.domain.AjaxResult;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 商户Service接口
@@ -69,4 +72,10 @@ public interface IMerchantService extends IService<Merchant>
      */
     R<List<Merchant>> getMerchantList();
 
+    /**
+     * H5获取合适产品
+     * @param request
+     * @return
+     */
+    AjaxResult getMatchMerchantList(HttpServletRequest request);
 }

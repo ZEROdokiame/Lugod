@@ -1,6 +1,7 @@
 package com.ruoyi.system.controller;
 
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.common.core.constant.SecurityConstants;
@@ -121,5 +122,14 @@ public class MerchantController extends BaseController
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(merchantService.deleteMerchantByIds(ids));
+    }
+
+
+    /**
+     * 获取合适的产品
+     */
+    @GetMapping("/getMatchMerchant")
+    public AjaxResult getMatchMerchantList(HttpServletRequest request){
+        return merchantService.getMatchMerchantList(request);
     }
 }

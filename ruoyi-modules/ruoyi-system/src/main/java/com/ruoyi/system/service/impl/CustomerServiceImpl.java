@@ -1,16 +1,23 @@
 package com.ruoyi.system.service.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.core.constant.RedisConstant;
+import com.ruoyi.common.core.constant.SecurityConstants;
 import com.ruoyi.common.core.domain.R;
+import com.ruoyi.common.core.domain.http.Merchant;
 import com.ruoyi.common.core.utils.DateUtils;
 import com.ruoyi.common.core.utils.EncryptUtil;
+import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.common.redis.service.CustomerTokenService;
+import com.ruoyi.common.redis.service.RedisService;
 import com.ruoyi.system.config.SystemConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +26,8 @@ import com.ruoyi.system.mapper.CustomerMapper;
 import com.ruoyi.common.core.domain.http.Customer;
 import com.ruoyi.system.service.ICustomerService;
 import org.springframework.util.StringUtils;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 客户信息Service业务层处理
@@ -33,6 +42,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
     private final CustomerMapper customerMapper;
     private final SystemConfig systemConfig;
     private final CustomerTokenService customerTokenService;
+    private final RedisService redisService;
     /**
      * 查询客户信息
      * 
@@ -148,5 +158,45 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         }
         return token;
     }
+
+    /**
+     * H5用户登陆
+     * @param phone
+     * @param code
+     * @return
+     */
+    @Override
+    public AjaxResult customerLogin(String phone, Integer code) {
+        Boolean aBoolean = redisService.hasKey(RedisConstant.H5_LOGIN_CACHE + phone);
+        if (!aBoolean){
+            return AjaxResult.error("验证码不存在");
+        }
+        int cacheCode = redisService.getCacheObject(RedisConstant.H5_LOGIN_CACHE + phone);
+        if (cacheCode!=code){
+            return AjaxResult.success("验证码错误");
+        }
+        String customerToken = getCustomerToken(phone);
+
+        return AjaxResult.success("登录成功",customerToken);
+    }
+
+    /**
+     * 保存用户留资信息
+     * @param customer
+     * @param request
+     * @return
+     */
+    @Override
+    public AjaxResult saveCustomerInfo(Customer customer, HttpServletRequest request) {
+        String authorization = request.getHeader("Authorization");
+        Long customerId = customerTokenService.getCustomerId(authorization, false);
+        if (customerId==null){
+            return AjaxResult.error("用户不存在或未登录");
+        }
+        customer.setId(customerId);
+        updateById(customer);
+        return AjaxResult.success("保存成功");
+    }
+
 
 }

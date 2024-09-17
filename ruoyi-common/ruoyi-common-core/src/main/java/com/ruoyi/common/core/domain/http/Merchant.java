@@ -48,6 +48,9 @@ public class Merchant extends BaseEntity
     @Excel(name = "定量数")
     private Integer limitNum;
 
+    /**注册地址**/
+    private String hitUrl;
+
     /** 是否定量 0否 1是 */
     @Excel(name = "是否定量 0否 1是")
     private Integer limitType;

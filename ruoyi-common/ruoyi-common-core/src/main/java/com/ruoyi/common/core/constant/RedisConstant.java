@@ -24,4 +24,9 @@ public class RedisConstant {
      * app用户设备标识
      */
     public final static String APP_DEVICE_IDENTIFICATION = CacheConstants.PROJET + ":app:app:device:identification:";
+
+    /**
+     * H5登录验证码
+     */
+    public final static String H5_LOGIN_CACHE = CacheConstants.PROJET+"H5:login:cache:";
 }

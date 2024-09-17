@@ -2,9 +2,11 @@ package com.ruoyi.system.service.impl;
 
 import java.util.List;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ruoyi.common.core.constant.CacheConstants;
 import com.ruoyi.common.core.utils.DateUtils;
 import com.ruoyi.common.core.utils.StringUtils;
+import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.common.redis.service.RedisService;
 import com.ruoyi.system.mapper.ChannelMapper;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -127,5 +129,19 @@ public class ChannelServiceImpl implements IChannelService
     @Cacheable(value = "channel",key = "'channel:all'")
     public List<Channel> findAllChannelList(){
         return channelMapper.findAllChannelList();
+    }
+
+    /**
+     * 根据渠道标识获取渠道
+     * @param sign
+     * @return
+     */
+    @Override
+    public AjaxResult getChannelBySign(String sign) {
+        Channel channel = channelMapper.selectOne(new LambdaQueryWrapper<Channel>().eq(Channel::getChannelSign, sign));
+        if (channel==null||channel.getChannelSign()==null){
+            return AjaxResult.error("渠道异常");
+        }
+        return AjaxResult.success("获取成功",channel.getChannelType());
     }
 }

@@ -5,6 +5,9 @@ import java.util.List;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.domain.http.Customer;
+import com.ruoyi.common.core.web.domain.AjaxResult;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 客户信息Service接口
@@ -82,4 +85,20 @@ public interface ICustomerService extends IService<Customer>
      * @return
      */
     String getCustomerToken(String phone);
+
+    /**
+     * h5用户登录
+     * @param phone
+     * @param code
+     * @return
+     */
+    AjaxResult customerLogin(String phone, Integer code);
+
+    /**
+     * 保存用户留资信息
+     * @param customer
+     * @param request
+     * @return
+     */
+    AjaxResult saveCustomerInfo(Customer customer, HttpServletRequest request);
 }

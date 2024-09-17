@@ -1,20 +1,32 @@
 package com.ruoyi.system.service.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ruoyi.common.core.constant.SecurityConstants;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.domain.http.Customer;
 import com.ruoyi.common.core.utils.DateUtils;
+import com.ruoyi.common.core.web.domain.AjaxResult;
+import com.ruoyi.common.redis.service.CustomerTokenService;
+import com.ruoyi.system.domain.dto.MerchantListDto;
+import com.ruoyi.system.mapper.CustomerApplyLogMapper;
 import com.ruoyi.system.mapper.CustomerMapper;
+import com.ruoyi.system.service.ICustomerApplyLogService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.mapper.MerchantMapper;
 import com.ruoyi.common.core.domain.http.Merchant;
 import com.ruoyi.system.service.IMerchantService;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 商户Service业务层处理
@@ -23,10 +35,13 @@ import com.ruoyi.system.service.IMerchantService;
  * @date 2024-09-15
  */
 @Service
+@RequiredArgsConstructor
 public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> implements IService<Merchant>,IMerchantService
 {
-    @Autowired
-    private MerchantMapper merchantMapper;
+    private final MerchantMapper merchantMapper;
+    private final CustomerTokenService customerTokenService;
+    private final ICustomerApplyLogService customerApplyLogService;
+    private final CustomerMapper customerMapper;
 
     /**
      * 查询商户
@@ -113,5 +128,60 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
             return R.fail();
         }
         return R.ok(merchants);
+    }
+
+    @Override
+    public AjaxResult getMatchMerchantList(HttpServletRequest request) {
+        String authorization = request.getHeader("Authorization");
+        Long customerId = customerTokenService.getCustomerId(authorization, false);
+        if (customerId==null){
+            return AjaxResult.error("用户不存在或未登录");
+        }
+        Customer customer = customerMapper.selectById(customerId);
+        List<Merchant> merchants = matchMerchant(customer);
+        List<MerchantListDto> merchantListDtos = new ArrayList<>();
+        for (Merchant merchant:merchants) {
+            MerchantListDto merchantListDto = new MerchantListDto();
+            merchantListDto.setMerchantName(merchant.getMerchantName());
+            merchantListDto.setMerchantDescribe(merchant.getMerchantDescribe());
+            merchantListDto.setMerchantUrl(merchant.getHitUrl());
+            merchantListDtos.add(merchantListDto);
+        }
+        return AjaxResult.success(merchantListDtos);
+    }
+
+    /**
+     * 获取前筛符合的商户
+     * @param customer
+     */
+    private List<Merchant> matchMerchant(Customer customer) {
+        R<List<Merchant>> listR = getMerchantList();
+        if (listR.getCode()!=200){
+            return new ArrayList<>();
+        }
+        List<Merchant> merchants = new ArrayList<>();
+        for (Merchant merchant:listR.getData()) {
+            //限量判定
+            Integer sum = customerApplyLogService.getApplySum(merchant.getId());
+            if (merchant.getLimitType()==1&&merchant.getLimitNum()<=sum){
+                continue;
+            }
+
+            if (customer.getAge()<merchant.getAgeLimitStart()||customer.getAge()>merchant.getAgeLimitEnd()){
+                continue;
+            }
+            if (merchant.getChannelLimitType()==1||merchant.getChannelLimitType()==2){
+
+                List<Long> list = Arrays.asList(merchant.getChannelLimit().split(",")).stream().map(val->Long.parseLong(val)).collect(Collectors.toList());
+                if (merchant.getChannelLimitType()==1&& !list.contains(customer.getChannelId())){
+                    continue;
+                }
+                if (merchant.getChannelLimitType()==2&& list.contains(customer.getChannelId())){
+                    continue;
+                }
+            }
+            merchants.add(merchant);
+        }
+        return merchants;
     }
 }

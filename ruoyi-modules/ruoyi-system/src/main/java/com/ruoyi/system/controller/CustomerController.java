@@ -1,6 +1,7 @@
 package com.ruoyi.system.controller;
 
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.common.core.constant.SecurityConstants;
@@ -132,8 +133,32 @@ public class CustomerController extends BaseController
         return toAjax(customerService.deleteCustomerByIds(ids));
     }
 
+    /**
+     * 获取用户token
+     * @param phone
+     * @return
+     */
     @GetMapping("/getCustomerToken")
     public String getCustomerToken(@RequestParam("phone") String phone) {
         return customerService.getCustomerToken(phone);
     }
+
+
+    /**
+     * H5用户登录
+     */
+    @GetMapping("/customerLogin")
+    public AjaxResult customerLogin(@RequestParam("phone")String phone,@RequestParam("code")Integer code){
+        return customerService.customerLogin(phone,code);
+    }
+
+    /**
+     * H5保存用户留资信息
+     */
+    @PostMapping("saveCustomerInfo")
+    public AjaxResult saveCustomerInfo(@RequestBody Customer customer, HttpServletRequest request){
+        return customerService.saveCustomerInfo(customer,request);
+    }
+
+
 }
