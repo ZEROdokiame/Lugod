@@ -61,4 +61,11 @@ public interface MerchantMapper  extends BaseMapper<Merchant>
      * @return 结果
      */
     public int deleteMerchantByIds(Long[] ids);
-}
+
+    /**
+     * 获取商户列表
+     * @return
+     */
+    public List<Merchant> findAllMerchantList();
+
+    }

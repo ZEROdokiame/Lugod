@@ -96,7 +96,7 @@ public class MerchantController extends BaseController
      */
     @RequiresPermissions("system:merchant:add")
     @Log(title = "商户", businessType = BusinessType.INSERT)
-    @PostMapping
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     public AjaxResult add(@RequestBody Merchant merchant)
     {
         return toAjax(merchantService.insertMerchant(merchant));
@@ -107,7 +107,7 @@ public class MerchantController extends BaseController
      */
     @RequiresPermissions("system:merchant:edit")
     @Log(title = "商户", businessType = BusinessType.UPDATE)
-    @PutMapping
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public AjaxResult edit(@RequestBody Merchant merchant)
     {
         return toAjax(merchantService.updateMerchant(merchant));

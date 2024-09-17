@@ -54,8 +54,15 @@
         <result property="remark"    column="remark"    />
     </resultMap>
 
+    <resultMap type="com.ruoyi.common.core.domain.http.Merchant" id="MerchantIdNameResult">
+        <result property="id"    column="id"    />
+        <result property="merchantName"    column="merchant_name"    />
+    </resultMap>
     <sql id="selectMerchantVo">
         select id, merchant_type, merchant_name, merchant_describe, merchant_company, logo, status, limit_num, limit_type, channel_limit_type, age_limit_start, age_limit_end, phone_limit, social_security_no, social_security_low, social_security_high, car_no, car_have, guarantee_slip_low, guarantee_slip_centre, guarantee_slip_high, education_middle, education_high_school, education_polytechnic, education_junior_college, education_undergraduate_course, education_postgraduate, accumulation_fund_low, accumulation_fund_high, hourse_no, hourse_full_payment, hourse_mortgaging, office_worker, civil_servant, private_property_owners, self_employed_person, other_occupations, hua_bei_low, hua_bei_middle, hua_bei_high, bai_tiao_low, bai_tiao_middle, bai_tiao_high, zhi_ma, create_time, update_time, remark from merchant
+    </sql>
+    <sql id="findAllMerchant">
+        select id, merchant_name  from merchant
     </sql>
 
     <select id="selectMerchantList" parameterType="com.ruoyi.common.core.domain.http.Merchant" resultMap="MerchantResult">
@@ -275,4 +282,8 @@
             #{id}
         </foreach>
     </delete>
+
+    <select id="findAllMerchantList"  resultMap="MerchantIdNameResult">
+        <include refid="findAllMerchant"/>
+    </select>
 </mapper>

@@ -78,4 +78,10 @@ public interface IMerchantService extends IService<Merchant>
      * @return
      */
     AjaxResult getMatchMerchantList(HttpServletRequest request);
+    /**
+     * 获取所有的商户列表
+     * @return
+     */
+    public List<Merchant> findAllMerchantList();
+
 }

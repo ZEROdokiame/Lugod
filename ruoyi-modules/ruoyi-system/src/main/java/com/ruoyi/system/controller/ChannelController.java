@@ -57,7 +57,7 @@ public class ChannelController extends BaseController
      */
     @RequiresPermissions("system:channel:query")
     @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id)
+    public AjaxResult getInfo(@PathVariable("id") Integer id)
     {
         return success(channelService.selectChannelById(id));
     }
@@ -67,7 +67,7 @@ public class ChannelController extends BaseController
      */
     @RequiresPermissions("system:channel:add")
     @Log(title = "渠道配置", businessType = BusinessType.INSERT)
-    @PostMapping
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     public AjaxResult add(@RequestBody Channel channel)
     {
         return toAjax(channelService.insertChannel(channel));
@@ -78,7 +78,7 @@ public class ChannelController extends BaseController
      */
     @RequiresPermissions("system:channel:edit")
     @Log(title = "渠道配置", businessType = BusinessType.UPDATE)
-    @PutMapping
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public AjaxResult edit(@RequestBody Channel channel)
     {
         return toAjax(channelService.updateChannel(channel));

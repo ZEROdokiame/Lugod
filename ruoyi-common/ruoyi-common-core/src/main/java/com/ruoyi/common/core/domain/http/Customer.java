@@ -122,4 +122,5 @@ public class Customer extends BaseEntity
     @Excel(name = "芝麻分")
     private Integer zhiMa;
 
+
 }

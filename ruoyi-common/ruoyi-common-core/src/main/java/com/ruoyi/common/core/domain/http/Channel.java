@@ -26,8 +26,8 @@ public class Channel extends BaseEntity
     @Excel(name = "渠道签名")
     private String channelSign;
 
-    /** 渠道名称 */
-    @Excel(name = "渠道名称")
+    /** 渠道类型  1H5 2连登 3半流程 4全流程*/
+    @Excel(name = "渠道类型")
     private String channelType;
 
     /** 扣量比 */

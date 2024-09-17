@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.system.mapper.CustomerMapper">
-    
+
     <resultMap type="com.ruoyi.common.core.domain.http.Customer" id="CustomerResult">
         <result property="id"    column="id"    />
+        <result property="channelId"    column="channel_id"    />
         <result property="age"    column="age"    />
         <result property="sex"    column="sex"    />
         <result property="name"    column="name"    />
@@ -19,48 +20,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="lastLoginTime"    column="last_login_time"    />
         <result property="lastLoginIp"    column="last_login_ip"    />
         <result property="status"    column="status"    />
-        <result property="socialSecurityNo"    column="social_security_no"    />
-        <result property="socialSecurityLow"    column="social_security_low"    />
-        <result property="socialSecurityHigh"    column="social_security_high"    />
-        <result property="carNo"    column="car_no"    />
-        <result property="carHave"    column="car_have"    />
-        <result property="guaranteeSlipLow"    column="guarantee_slip_low"    />
-        <result property="guaranteeSlipCentre"    column="guarantee_slip_centre"    />
-        <result property="guaranteeSlipHigh"    column="guarantee_slip_high"    />
-        <result property="educationMiddle"    column="education_middle"    />
-        <result property="educationHighSchool"    column="education_high_school"    />
-        <result property="educationPolytechnic"    column="education_polytechnic"    />
-        <result property="educationJuniorCollege"    column="education_junior_college"    />
-        <result property="educationUndergraduateCourse"    column="education_undergraduate_course"    />
-        <result property="educationPostgraduate"    column="education_postgraduate"    />
-        <result property="accumulationFundLow"    column="accumulation_fund_low"    />
-        <result property="accumulationFundHigh"    column="accumulation_fund_high"    />
-        <result property="hourseNo"    column="hourse_no"    />
-        <result property="hourseFullPayment"    column="hourse_full_payment"    />
-        <result property="hourseMortgaging"    column="hourse_mortgaging"    />
-        <result property="officeWorker"    column="office_worker"    />
-        <result property="civilServant"    column="civil_servant"    />
-        <result property="privatePropertyOwners"    column="private_property_owners"    />
-        <result property="selfEmployedPerson"    column="self_employed_person"    />
-        <result property="otherOccupations"    column="other_occupations"    />
-        <result property="huaBeiLow"    column="hua_bei_low"    />
-        <result property="huaBeiMiddle"    column="hua_bei_middle"    />
-        <result property="huaBeiHigh"    column="hua_bei_high"    />
-        <result property="baiTiaoLow"    column="bai_tiao_low"    />
-        <result property="baiTiaoMiddle"    column="bai_tiao_middle"    />
-        <result property="baiTiaoHigh"    column="bai_tiao_high"    />
+        <result property="socialSecurity"    column="social_security"    />
+        <result property="car"    column="car"    />
+        <result property="guaranteeSlip"    column="guarantee_slip"    />
+        <result property="education"    column="education"    />
+        <result property="accumulationFund"    column="accumulation_fund"    />
+        <result property="hourse"    column="hourse"    />
+        <result property="career"    column="career"    />
+        <result property="huaBei"    column="hua_bei"    />
+        <result property="baiTiao"    column="bai_tiao"    />
         <result property="zhiMa"    column="zhi_ma"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
     </resultMap>
 
     <sql id="selectCustomerVo">
-        select id, age, sex, name, acturl_name, phone, phone_md5, is_auth, city, city_code, first_login_time, last_login_time, last_login_ip, status, social_security_no, social_security_low, social_security_high, car_no, car_have, guarantee_slip_low, guarantee_slip_centre, guarantee_slip_high, education_middle, education_high_school, education_polytechnic, education_junior_college, education_undergraduate_course, education_postgraduate, accumulation_fund_low, accumulation_fund_high, hourse_no, hourse_full_payment, hourse_mortgaging, office_worker, civil_servant, private_property_owners, self_employed_person, other_occupations, hua_bei_low, hua_bei_middle, hua_bei_high, bai_tiao_low, bai_tiao_middle, bai_tiao_high, zhi_ma, create_time, update_time from customer
+        select id, channel_id, age, sex, name, acturl_name, phone, phone_md5, is_auth, city, city_code, first_login_time, last_login_time, last_login_ip, status, social_security, car, guarantee_slip, education, accumulation_fund, hourse, career, hua_bei, bai_tiao, zhi_ma, create_time, update_time from customer
     </sql>
 
     <select id="selectCustomerList" parameterType="com.ruoyi.common.core.domain.http.Customer" resultMap="CustomerResult">
         <include refid="selectCustomerVo"/>
-        <where>  
+        <where>
+            <if test="channelId != null "> and channel_id = #{channelId}</if>
             <if test="age != null "> and age = #{age}</if>
             <if test="sex != null "> and sex = #{sex}</if>
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
@@ -74,40 +55,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="lastLoginTime != null "> and last_login_time = #{lastLoginTime}</if>
             <if test="lastLoginIp != null "> and last_login_ip = #{lastLoginIp}</if>
             <if test="status != null "> and status = #{status}</if>
-            <if test="socialSecurityNo != null "> and social_security_no = #{socialSecurityNo}</if>
-            <if test="socialSecurityLow != null "> and social_security_low = #{socialSecurityLow}</if>
-            <if test="socialSecurityHigh != null "> and social_security_high = #{socialSecurityHigh}</if>
-            <if test="carNo != null "> and car_no = #{carNo}</if>
-            <if test="carHave != null "> and car_have = #{carHave}</if>
-            <if test="guaranteeSlipLow != null "> and guarantee_slip_low = #{guaranteeSlipLow}</if>
-            <if test="guaranteeSlipCentre != null "> and guarantee_slip_centre = #{guaranteeSlipCentre}</if>
-            <if test="guaranteeSlipHigh != null "> and guarantee_slip_high = #{guaranteeSlipHigh}</if>
-            <if test="educationMiddle != null "> and education_middle = #{educationMiddle}</if>
-            <if test="educationHighSchool != null "> and education_high_school = #{educationHighSchool}</if>
-            <if test="educationPolytechnic != null "> and education_polytechnic = #{educationPolytechnic}</if>
-            <if test="educationJuniorCollege != null "> and education_junior_college = #{educationJuniorCollege}</if>
-            <if test="educationUndergraduateCourse != null "> and education_undergraduate_course = #{educationUndergraduateCourse}</if>
-            <if test="educationPostgraduate != null "> and education_postgraduate = #{educationPostgraduate}</if>
-            <if test="accumulationFundLow != null "> and accumulation_fund_low = #{accumulationFundLow}</if>
-            <if test="accumulationFundHigh != null "> and accumulation_fund_high = #{accumulationFundHigh}</if>
-            <if test="hourseNo != null "> and hourse_no = #{hourseNo}</if>
-            <if test="hourseFullPayment != null "> and hourse_full_payment = #{hourseFullPayment}</if>
-            <if test="hourseMortgaging != null "> and hourse_mortgaging = #{hourseMortgaging}</if>
-            <if test="officeWorker != null "> and office_worker = #{officeWorker}</if>
-            <if test="civilServant != null "> and civil_servant = #{civilServant}</if>
-            <if test="privatePropertyOwners != null "> and private_property_owners = #{privatePropertyOwners}</if>
-            <if test="selfEmployedPerson != null "> and self_employed_person = #{selfEmployedPerson}</if>
-            <if test="otherOccupations != null "> and other_occupations = #{otherOccupations}</if>
-            <if test="huaBeiLow != null "> and hua_bei_low = #{huaBeiLow}</if>
-            <if test="huaBeiMiddle != null "> and hua_bei_middle = #{huaBeiMiddle}</if>
-            <if test="huaBeiHigh != null "> and hua_bei_high = #{huaBeiHigh}</if>
-            <if test="baiTiaoLow != null "> and bai_tiao_low = #{baiTiaoLow}</if>
-            <if test="baiTiaoMiddle != null "> and bai_tiao_middle = #{baiTiaoMiddle}</if>
-            <if test="baiTiaoHigh != null "> and bai_tiao_high = #{baiTiaoHigh}</if>
+            <if test="socialSecurity != null "> and social_security = #{socialSecurity}</if>
+            <if test="car != null "> and car = #{car}</if>
+            <if test="guaranteeSlip != null "> and guarantee_slip = #{guaranteeSlip}</if>
+            <if test="education != null "> and education = #{education}</if>
+            <if test="accumulationFund != null "> and accumulation_fund = #{accumulationFund}</if>
+            <if test="hourse != null "> and hourse = #{hourse}</if>
+            <if test="career != null "> and career = #{career}</if>
+            <if test="huaBei != null "> and hua_bei = #{huaBei}</if>
+            <if test="baiTiao != null "> and bai_tiao = #{baiTiao}</if>
             <if test="zhiMa != null "> and zhi_ma = #{zhiMa}</if>
         </where>
     </select>
-    
+
     <select id="selectCustomerById" parameterType="java.lang.Long" resultMap="CustomerResult">
         <include refid="selectCustomerVo"/>
         where id = #{id}
@@ -116,6 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertCustomer" parameterType="com.ruoyi.common.core.domain.http.Customer" useGeneratedKeys="true" keyProperty="id">
         insert into customer
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="channelId != null">channel_id,</if>
             <if test="age != null">age,</if>
             <if test="sex != null">sex,</if>
             <if test="name != null">name,</if>
@@ -129,41 +90,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="lastLoginTime != null">last_login_time,</if>
             <if test="lastLoginIp != null">last_login_ip,</if>
             <if test="status != null">status,</if>
-            <if test="socialSecurityNo != null">social_security_no,</if>
-            <if test="socialSecurityLow != null">social_security_low,</if>
-            <if test="socialSecurityHigh != null">social_security_high,</if>
-            <if test="carNo != null">car_no,</if>
-            <if test="carHave != null">car_have,</if>
-            <if test="guaranteeSlipLow != null">guarantee_slip_low,</if>
-            <if test="guaranteeSlipCentre != null">guarantee_slip_centre,</if>
-            <if test="guaranteeSlipHigh != null">guarantee_slip_high,</if>
-            <if test="educationMiddle != null">education_middle,</if>
-            <if test="educationHighSchool != null">education_high_school,</if>
-            <if test="educationPolytechnic != null">education_polytechnic,</if>
-            <if test="educationJuniorCollege != null">education_junior_college,</if>
-            <if test="educationUndergraduateCourse != null">education_undergraduate_course,</if>
-            <if test="educationPostgraduate != null">education_postgraduate,</if>
-            <if test="accumulationFundLow != null">accumulation_fund_low,</if>
-            <if test="accumulationFundHigh != null">accumulation_fund_high,</if>
-            <if test="hourseNo != null">hourse_no,</if>
-            <if test="hourseFullPayment != null">hourse_full_payment,</if>
-            <if test="hourseMortgaging != null">hourse_mortgaging,</if>
-            <if test="officeWorker != null">office_worker,</if>
-            <if test="civilServant != null">civil_servant,</if>
-            <if test="privatePropertyOwners != null">private_property_owners,</if>
-            <if test="selfEmployedPerson != null">self_employed_person,</if>
-            <if test="otherOccupations != null">other_occupations,</if>
-            <if test="huaBeiLow != null">hua_bei_low,</if>
-            <if test="huaBeiMiddle != null">hua_bei_middle,</if>
-            <if test="huaBeiHigh != null">hua_bei_high,</if>
-            <if test="baiTiaoLow != null">bai_tiao_low,</if>
-            <if test="baiTiaoMiddle != null">bai_tiao_middle,</if>
-            <if test="baiTiaoHigh != null">bai_tiao_high,</if>
+            <if test="socialSecurity != null">social_security,</if>
+            <if test="car != null">car,</if>
+            <if test="guaranteeSlip != null">guarantee_slip,</if>
+            <if test="education != null">education,</if>
+            <if test="accumulationFund != null">accumulation_fund,</if>
+            <if test="hourse != null">hourse,</if>
+            <if test="career != null">career,</if>
+            <if test="huaBei != null">hua_bei,</if>
+            <if test="baiTiao != null">bai_tiao,</if>
             <if test="zhiMa != null">zhi_ma,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateTime != null">update_time,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="channelId != null">#{channelId},</if>
             <if test="age != null">#{age},</if>
             <if test="sex != null">#{sex},</if>
             <if test="name != null">#{name},</if>
@@ -177,45 +118,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="lastLoginTime != null">#{lastLoginTime},</if>
             <if test="lastLoginIp != null">#{lastLoginIp},</if>
             <if test="status != null">#{status},</if>
-            <if test="socialSecurityNo != null">#{socialSecurityNo},</if>
-            <if test="socialSecurityLow != null">#{socialSecurityLow},</if>
-            <if test="socialSecurityHigh != null">#{socialSecurityHigh},</if>
-            <if test="carNo != null">#{carNo},</if>
-            <if test="carHave != null">#{carHave},</if>
-            <if test="guaranteeSlipLow != null">#{guaranteeSlipLow},</if>
-            <if test="guaranteeSlipCentre != null">#{guaranteeSlipCentre},</if>
-            <if test="guaranteeSlipHigh != null">#{guaranteeSlipHigh},</if>
-            <if test="educationMiddle != null">#{educationMiddle},</if>
-            <if test="educationHighSchool != null">#{educationHighSchool},</if>
-            <if test="educationPolytechnic != null">#{educationPolytechnic},</if>
-            <if test="educationJuniorCollege != null">#{educationJuniorCollege},</if>
-            <if test="educationUndergraduateCourse != null">#{educationUndergraduateCourse},</if>
-            <if test="educationPostgraduate != null">#{educationPostgraduate},</if>
-            <if test="accumulationFundLow != null">#{accumulationFundLow},</if>
-            <if test="accumulationFundHigh != null">#{accumulationFundHigh},</if>
-            <if test="hourseNo != null">#{hourseNo},</if>
-            <if test="hourseFullPayment != null">#{hourseFullPayment},</if>
-            <if test="hourseMortgaging != null">#{hourseMortgaging},</if>
-            <if test="officeWorker != null">#{officeWorker},</if>
-            <if test="civilServant != null">#{civilServant},</if>
-            <if test="privatePropertyOwners != null">#{privatePropertyOwners},</if>
-            <if test="selfEmployedPerson != null">#{selfEmployedPerson},</if>
-            <if test="otherOccupations != null">#{otherOccupations},</if>
-            <if test="huaBeiLow != null">#{huaBeiLow},</if>
-            <if test="huaBeiMiddle != null">#{huaBeiMiddle},</if>
-            <if test="huaBeiHigh != null">#{huaBeiHigh},</if>
-            <if test="baiTiaoLow != null">#{baiTiaoLow},</if>
-            <if test="baiTiaoMiddle != null">#{baiTiaoMiddle},</if>
-            <if test="baiTiaoHigh != null">#{baiTiaoHigh},</if>
+            <if test="socialSecurity != null">#{socialSecurity},</if>
+            <if test="car != null">#{car},</if>
+            <if test="guaranteeSlip != null">#{guaranteeSlip},</if>
+            <if test="education != null">#{education},</if>
+            <if test="accumulationFund != null">#{accumulationFund},</if>
+            <if test="hourse != null">#{hourse},</if>
+            <if test="career != null">#{career},</if>
+            <if test="huaBei != null">#{huaBei},</if>
+            <if test="baiTiao != null">#{baiTiao},</if>
             <if test="zhiMa != null">#{zhiMa},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateCustomer" parameterType="com.ruoyi.common.core.domain.http.Customer">
         update customer
         <trim prefix="SET" suffixOverrides=",">
+            <if test="channelId != null">channel_id = #{channelId},</if>
             <if test="age != null">age = #{age},</if>
             <if test="sex != null">sex = #{sex},</if>
             <if test="name != null">name = #{name},</if>
@@ -229,36 +150,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="lastLoginTime != null">last_login_time = #{lastLoginTime},</if>
             <if test="lastLoginIp != null">last_login_ip = #{lastLoginIp},</if>
             <if test="status != null">status = #{status},</if>
-            <if test="socialSecurityNo != null">social_security_no = #{socialSecurityNo},</if>
-            <if test="socialSecurityLow != null">social_security_low = #{socialSecurityLow},</if>
-            <if test="socialSecurityHigh != null">social_security_high = #{socialSecurityHigh},</if>
-            <if test="carNo != null">car_no = #{carNo},</if>
-            <if test="carHave != null">car_have = #{carHave},</if>
-            <if test="guaranteeSlipLow != null">guarantee_slip_low = #{guaranteeSlipLow},</if>
-            <if test="guaranteeSlipCentre != null">guarantee_slip_centre = #{guaranteeSlipCentre},</if>
-            <if test="guaranteeSlipHigh != null">guarantee_slip_high = #{guaranteeSlipHigh},</if>
-            <if test="educationMiddle != null">education_middle = #{educationMiddle},</if>
-            <if test="educationHighSchool != null">education_high_school = #{educationHighSchool},</if>
-            <if test="educationPolytechnic != null">education_polytechnic = #{educationPolytechnic},</if>
-            <if test="educationJuniorCollege != null">education_junior_college = #{educationJuniorCollege},</if>
-            <if test="educationUndergraduateCourse != null">education_undergraduate_course = #{educationUndergraduateCourse},</if>
-            <if test="educationPostgraduate != null">education_postgraduate = #{educationPostgraduate},</if>
-            <if test="accumulationFundLow != null">accumulation_fund_low = #{accumulationFundLow},</if>
-            <if test="accumulationFundHigh != null">accumulation_fund_high = #{accumulationFundHigh},</if>
-            <if test="hourseNo != null">hourse_no = #{hourseNo},</if>
-            <if test="hourseFullPayment != null">hourse_full_payment = #{hourseFullPayment},</if>
-            <if test="hourseMortgaging != null">hourse_mortgaging = #{hourseMortgaging},</if>
-            <if test="officeWorker != null">office_worker = #{officeWorker},</if>
-            <if test="civilServant != null">civil_servant = #{civilServant},</if>
-            <if test="privatePropertyOwners != null">private_property_owners = #{privatePropertyOwners},</if>
-            <if test="selfEmployedPerson != null">self_employed_person = #{selfEmployedPerson},</if>
-            <if test="otherOccupations != null">other_occupations = #{otherOccupations},</if>
-            <if test="huaBeiLow != null">hua_bei_low = #{huaBeiLow},</if>
-            <if test="huaBeiMiddle != null">hua_bei_middle = #{huaBeiMiddle},</if>
-            <if test="huaBeiHigh != null">hua_bei_high = #{huaBeiHigh},</if>
-            <if test="baiTiaoLow != null">bai_tiao_low = #{baiTiaoLow},</if>
-            <if test="baiTiaoMiddle != null">bai_tiao_middle = #{baiTiaoMiddle},</if>
-            <if test="baiTiaoHigh != null">bai_tiao_high = #{baiTiaoHigh},</if>
+            <if test="socialSecurity != null">social_security = #{socialSecurity},</if>
+            <if test="car != null">car = #{car},</if>
+            <if test="guaranteeSlip != null">guarantee_slip = #{guaranteeSlip},</if>
+            <if test="education != null">education = #{education},</if>
+            <if test="accumulationFund != null">accumulation_fund = #{accumulationFund},</if>
+            <if test="hourse != null">hourse = #{hourse},</if>
+            <if test="career != null">career = #{career},</if>
+            <if test="huaBei != null">hua_bei = #{huaBei},</if>
+            <if test="baiTiao != null">bai_tiao = #{baiTiao},</if>
             <if test="zhiMa != null">zhi_ma = #{zhiMa},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
@@ -271,7 +171,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteCustomerByIds" parameterType="java.lang.String">
-        delete from customer where id in 
+        delete from customer where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
