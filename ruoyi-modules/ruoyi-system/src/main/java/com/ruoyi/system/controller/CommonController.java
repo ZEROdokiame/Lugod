@@ -36,7 +36,7 @@ public class CommonController extends BaseController
      * @param phone
      * @return
      */
-    @GetMapping("/getChannelBySign")
+    @GetMapping("/sendSms")
     public AjaxResult getChannelBySign(@RequestParam("phone")String phone, HttpServletRequest request){
         return commonService.sendSms(phone);
     }

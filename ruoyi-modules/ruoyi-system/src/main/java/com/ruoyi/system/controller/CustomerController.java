@@ -159,7 +159,7 @@ public class CustomerController extends BaseController
     /**
      * H5保存用户留资信息
      */
-    @PostMapping("saveCustomerInfo")
+    @PostMapping("/saveCustomerInfo")
     public AjaxResult saveCustomerInfo(@RequestBody Customer customer, HttpServletRequest request){
         return customerService.saveCustomerInfo(customer,request);
     }
