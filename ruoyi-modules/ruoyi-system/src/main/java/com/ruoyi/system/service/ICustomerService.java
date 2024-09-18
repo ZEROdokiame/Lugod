@@ -90,9 +90,10 @@ public interface ICustomerService extends IService<Customer>
      * h5用户登录
      * @param phone
      * @param code
+     * @param request
      * @return
      */
-    AjaxResult customerLogin(String phone, Integer code);
+    AjaxResult customerLogin(String phone, Integer code,HttpServletRequest request);
 
     /**
      * 保存用户留资信息

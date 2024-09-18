@@ -152,8 +152,8 @@ public class CustomerController extends BaseController
      * H5用户登录
      */
     @GetMapping("/customerLogin")
-    public AjaxResult customerLogin(@RequestParam("phone")String phone,@RequestParam("code")Integer code){
-        return customerService.customerLogin(phone,code);
+    public AjaxResult customerLogin(@RequestParam("phone")String phone,@RequestParam("code")Integer code,HttpServletRequest request){
+        return customerService.customerLogin(phone,code,request);
     }
 
     /**

@@ -9,6 +9,7 @@ import com.ruoyi.common.core.utils.StringUtils;
 import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.common.redis.service.RedisService;
 import com.ruoyi.system.mapper.ChannelMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -17,6 +18,8 @@ import com.ruoyi.common.core.domain.http.Channel;
 import com.ruoyi.system.service.IChannelService;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
+
 /**
  * 渠道配置Service业务层处理
  * 
@@ -24,12 +27,23 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 2024-09-15
  */
 @Service
+@Slf4j
 public class ChannelServiceImpl implements IChannelService 
 {
     @Autowired
     private ChannelMapper channelMapper;
     @Autowired
     private RedisService redisService;
+
+    @PostConstruct
+    public void init(){
+        log.info("初始化渠道数据开始");
+        List<Channel> channels = channelMapper.selectList(new LambdaQueryWrapper<Channel>());
+        for (Channel channel:channels) {
+            redisService.setCacheObject(CacheConstants.CHANNEL_ID+channel.getId(),channel);
+            redisService.setCacheObject(CacheConstants.CHANNEL_SIGN+channel.getChannelSign(),channel);
+        }
+    }
 
     /**
      * 查询渠道配置

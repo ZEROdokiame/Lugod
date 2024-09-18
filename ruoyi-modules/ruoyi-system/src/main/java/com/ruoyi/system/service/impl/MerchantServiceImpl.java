@@ -167,14 +167,14 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
         for (Merchant merchant:listR.getData()) {
             //限量判定
             Integer sum = customerApplyLogService.getApplySum(merchant.getId());
-            if (merchant.getLimitType()==1&&merchant.getLimitNum()<=sum){
+            if (merchant.getLimitType()!=null&&merchant.getLimitType()==1&&merchant.getLimitNum()<=sum){
                 continue;
             }
 
-            if (customer.getAge()<merchant.getAgeLimitStart()||customer.getAge()>merchant.getAgeLimitEnd()){
+            if (merchant.getAgeLimitStart()!=null&&merchant.getAgeLimitEnd()!=null&&(customer.getAge()<merchant.getAgeLimitStart()||customer.getAge()>merchant.getAgeLimitEnd())){
                 continue;
             }
-            if (merchant.getChannelLimitType()==1||merchant.getChannelLimitType()==2){
+            if (merchant.getChannelLimitType()!=null&&(merchant.getChannelLimitType()==1||merchant.getChannelLimitType()==2)){
 
                 List<Long> list = Arrays.asList(merchant.getChannelLimit().split(",")).stream().map(val->Long.parseLong(val)).collect(Collectors.toList());
                 if (merchant.getChannelLimitType()==1&& !list.contains(customer.getChannelId())){

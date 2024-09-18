@@ -38,6 +38,9 @@ public class Customer extends BaseEntity
     @Excel(name = "0 男 1 女")
     private Integer sex;
 
+    @Excel(name="身份证号")
+    private String idCard;
+
     /** 昵称 */
     @Excel(name = "昵称")
     private String name;

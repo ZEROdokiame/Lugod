@@ -1,23 +1,23 @@
 package com.ruoyi.system.service.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 
+import cn.hutool.core.util.IdcardUtil;
+import cn.hutool.crypto.digest.MD5;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ruoyi.common.core.constant.CacheConstants;
 import com.ruoyi.common.core.constant.RedisConstant;
-import com.ruoyi.common.core.constant.SecurityConstants;
 import com.ruoyi.common.core.domain.R;
-import com.ruoyi.common.core.domain.http.Merchant;
+import com.ruoyi.common.core.domain.http.Channel;
 import com.ruoyi.common.core.utils.DateUtils;
 import com.ruoyi.common.core.utils.EncryptUtil;
 import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.common.redis.service.CustomerTokenService;
 import com.ruoyi.common.redis.service.RedisService;
+import com.ruoyi.common.security.service.TokenService;
 import com.ruoyi.system.config.SystemConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +43,8 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
     private final SystemConfig systemConfig;
     private final CustomerTokenService customerTokenService;
     private final RedisService redisService;
+    private final TokenService tokenService;
+
     /**
      * 查询客户信息
      * 
@@ -154,7 +156,33 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         String token = customerTokenService.getToken(customer.getId());
         if (StringUtils.isEmpty(token)) {
             //生成一个长60的token
-            token = customerTokenService.generateToken(customer.getId(), customer.getPhone(), "ANDROID", customer.getChannelId());
+            //token = customerTokenService.generateToken(customer.getId(), customer.getPhone(), "ANDROID", customer.getChannelId());
+            token = tokenService.createTokenApp(customer.getId(),customer.getChannelId());
+        }
+        return token;
+    }
+
+    /**
+     * 注册并返回token
+     * @param phone
+     * @return
+     */
+    public String registAndretrunToken(String phone,Long channelId){
+        Customer customer = new Customer();
+        customer.setChannelId(channelId);
+        customer.setPhone(EncryptUtil.AESencode(phone, systemConfig.getAESkey()));
+        customer.setPhoneMd5(MD5.create().digestHex(phone).toLowerCase(Locale.ROOT));
+        customer.setIsAuth(false);
+        customer.setFirstLoginTime(new Date());
+        customer.setLastLoginTime(new Date());
+        customer.setStatus(1);
+        customer.setCreateTime(new Date());
+        customerMapper.insert(customer);
+        String token = customerTokenService.getToken(customer.getId());
+        if (StringUtils.isEmpty(token)) {
+            //生成一个长60的token
+            //token = customerTokenService.generateToken(customer.getId(), customer.getPhone(), "ANDROID", customer.getChannelId());
+            token = tokenService.createTokenApp(customer.getId(),channelId);
         }
         return token;
     }
@@ -163,10 +191,16 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
      * H5用户登陆
      * @param phone
      * @param code
+     * @param request
      * @return
      */
     @Override
-    public AjaxResult customerLogin(String phone, Integer code) {
+    public AjaxResult customerLogin(String phone, Integer code, HttpServletRequest request) {
+        String sign = request.getHeader("sign");
+        if (StringUtils.isEmpty(sign)){
+            return AjaxResult.error("渠道标识不存在");
+        }
+        Channel channel = redisService.getCacheObject(CacheConstants.CHANNEL_SIGN+sign);
         Boolean aBoolean = redisService.hasKey(RedisConstant.H5_LOGIN_CACHE + phone);
         if (!aBoolean){
             return AjaxResult.error("验证码不存在");
@@ -175,7 +209,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         if (cacheCode!=code){
             return AjaxResult.success("验证码错误");
         }
-        String customerToken = getCustomerToken(phone);
+        String customerToken = registAndretrunToken(phone,channel.getId());
 
         return AjaxResult.success("登录成功",customerToken);
     }
@@ -190,10 +224,32 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
     public AjaxResult saveCustomerInfo(Customer customer, HttpServletRequest request) {
         String authorization = request.getHeader("Authorization");
         Long customerId = customerTokenService.getCustomerId(authorization, false);
+        String sign = request.getHeader("sign");
+        if (StringUtils.isEmpty(sign)){
+            return AjaxResult.error("渠道标识不存在");
+        }
+        Channel channel = redisService.getCacheObject(CacheConstants.CHANNEL_SIGN+sign);
         if (customerId==null){
             return AjaxResult.error("用户不存在或未登录");
         }
+        if (StringUtils.isEmpty(customer.getIdCard())){
+            return AjaxResult.error("身份证好不能为空");
+        }
+        boolean validCard = IdcardUtil.isValidCard(customer.getIdCard());
+        if (validCard){
+            return AjaxResult.error("身份证号码异常");
+        }
+        if (StringUtils.isEmpty(customer.getActurlName())){
+            return AjaxResult.error("姓名不能为空");
+        }
+        int ageByIdCard = IdcardUtil.getAgeByIdCard(customer.getIdCard());
+        customer.setAge(ageByIdCard);
+        int genderByIdCard = IdcardUtil.getGenderByIdCard(customer.getIdCard());
+        customer.setSex(genderByIdCard==0?1:0);
         customer.setId(customerId);
+        customer.setChannelId(channel.getId());
+        customer.setIsAuth(true);
+        customer.setStatus(1);
         updateById(customer);
         return AjaxResult.success("保存成功");
     }

@@ -225,7 +225,7 @@ public class SysPublicHalfServiceImpl implements ISysPublicHalfService
         if (customerInfoByPhoneMd5.getCode()==200){
             remoteCustomerService.updateByPhoneMd5(customer,SecurityConstants.INNER);
         }else {
-           return AjaxResult.error("今日未撞库");
+            remoteCustomerService.add(customer,SecurityConstants.INNER);
         }
         //匹配资质 造轮子 返回多个符合的商户
         List<Merchant> merchants = matchMerchant(customer);
