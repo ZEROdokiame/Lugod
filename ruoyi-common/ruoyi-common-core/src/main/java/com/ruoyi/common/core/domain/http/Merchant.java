@@ -82,6 +82,10 @@ public class Merchant extends BaseEntity
     @Excel(name = "手机号禁入号段英文逗号分隔")
     private String phoneLimit;
 
+    /** 标签 */
+    @Excel(name = "标签")
+    private String label;
+
     /** 无社保 */
     @Excel(name = "无社保")
     private Boolean socialSecurityNo;

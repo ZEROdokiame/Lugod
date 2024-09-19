@@ -130,4 +130,9 @@ public class Customer extends BaseEntity
     private Integer zhiMa;
 
 
+    /** 月收入 */
+    @Excel(name = "月收入")
+    private Integer income;
+
+
 }
