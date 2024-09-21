@@ -51,24 +51,47 @@ public class Merchant extends BaseEntity
     @Excel(name = "定量数")
     private Integer limitNum;
 
-    /**注册地址**/
-    private String hitUrl;
-
     /** 是否定量 0否 1是 */
     @Excel(name = "是否定量 0否 1是")
     private Integer limitType;
 
-    /** 渠道限制类型 0不限 1准入 2禁入 */
-    @Excel(name = "渠道限制类型 0不限 1准入 2禁入")
-    private Integer channelLimitType;
+
+    /**  是否开启余额监控 0否 1是 */
+    @Excel(name = " 是否开启余额监控 0否 1是")
+    private Integer isBalanceMonitoring;
+
+    /** 余额监控余额 */
+    @Excel(name = "余额")
+    private Integer balanceMonitoring ;
+
 
     /** 渠道限制ID */
     @Excel(name = "渠道限制ID")
     private String channelLimit;
 
+    /** 是否通过 0否 1是 */
+    @Excel(name = "是否通过 0否 1是")
+    private Integer ispass;
+
     /** 渠道限制类型 0不限 1满足其一 2满足全部 */
     @Excel(name = "渠道限制类型 0不限 1满足其一 2满足全部")
     private Integer customerInfoFilterType;
+
+    /** 渠道限制类型 0不限 1准入 2禁入 */
+    @Excel(name = "渠道限制类型 0不限 1准入 2禁入")
+    private Integer channelLimitType;
+
+    /** 执行时段 */
+    @Excel(name = "执行时段")
+    private String period;
+
+    /**撞库地址**/
+    @Excel(name = "撞库地址")
+    private String hitUrl;
+
+    /**注册地址**/
+    @Excel(name = "注册地址")
+    private String registUrl;
 
     /** 年龄限制开始 */
     @Excel(name = "年龄限制开始")
