@@ -4,6 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.system.mapper.MerchantMapper">
 
+
     <resultMap type="com.ruoyi.common.core.domain.http.Merchant" id="MerchantResult">
         <result property="id"    column="id"    />
         <result property="merchantType"    column="merchant_type"    />
@@ -26,6 +27,7 @@
         <result property="ageLimitEnd"    column="age_limit_end"    />
         <result property="phoneLimit"    column="phone_limit"    />
         <result property="label"    column="label"    />
+        <result property="merchantAuth"    column="merchant_auth"    />
         <result property="socialSecurityNo"    column="social_security_no"    />
         <result property="socialSecurityLow"    column="social_security_low"    />
         <result property="socialSecurityHigh"    column="social_security_high"    />
@@ -67,7 +69,7 @@
         <result property="merchantName"    column="merchant_name"    />
     </resultMap>
     <sql id="selectMerchantVo">
-        select id, merchant_type, merchant_name, merchant_describe, merchant_company, logo, status, limit_num, limit_type,is_balance_monitoring,balance_monitoring,ispass, customer_info_filter_type,channel_limit_type,period,hit_url,regist_url,age_limit_start, age_limit_end, phone_limit,label, social_security_no, social_security_low, social_security_high, car_no, car_have, guarantee_slip_low, guarantee_slip_centre, guarantee_slip_high, education_middle, education_high_school, education_polytechnic, education_junior_college, education_undergraduate_course, education_postgraduate, accumulation_fund_low, accumulation_fund_high, hourse_no, hourse_full_payment, hourse_mortgaging, office_worker, civil_servant, private_property_owners, self_employed_person, other_occupations, hua_bei_low, hua_bei_middle, hua_bei_high, bai_tiao_low, bai_tiao_middle, bai_tiao_high, zhi_ma, create_time, update_time, remark from merchant
+        select id, merchant_type, merchant_name, merchant_describe, merchant_company, logo, status, limit_num, limit_type,is_balance_monitoring,balance_monitoring,ispass, customer_info_filter_type,channel_limit_type,period,hit_url,regist_url,age_limit_start, age_limit_end, phone_limit,label,merchant_auth, social_security_no, social_security_low, social_security_high, car_no, car_have, guarantee_slip_low, guarantee_slip_centre, guarantee_slip_high, education_middle, education_high_school, education_polytechnic, education_junior_college, education_undergraduate_course, education_postgraduate, accumulation_fund_low, accumulation_fund_high, hourse_no, hourse_full_payment, hourse_mortgaging, office_worker, civil_servant, private_property_owners, self_employed_person, other_occupations, hua_bei_low, hua_bei_middle, hua_bei_high, bai_tiao_low, bai_tiao_middle, bai_tiao_high, zhi_ma, create_time, update_time, remark from merchant
     </sql>
     <sql id="findAllMerchant">
         select id, merchant_name  from merchant
@@ -96,6 +98,7 @@
             <if test="ageLimitEnd != null "> and age_limit_end = #{ageLimitEnd}</if>
             <if test="phoneLimit != null  and phoneLimit != ''"> and phone_limit = #{phoneLimit}</if>
             <if test="label != null  and label != ''"> and label = #{label}</if>
+            <if test="merchantAuth != null "> and merchant_auth = #{merchantAuth}</if>
             <if test="socialSecurityNo != null "> and social_security_no = #{socialSecurityNo}</if>
             <if test="socialSecurityLow != null "> and social_security_low = #{socialSecurityLow}</if>
             <if test="socialSecurityHigh != null "> and social_security_high = #{socialSecurityHigh}</if>
@@ -158,6 +161,7 @@
             <if test="ageLimitEnd != null">age_limit_end,</if>
             <if test="phoneLimit != null">phone_limit,</if>
             <if test="label != null">label,</if>
+            <if test="merchant_auth != null">merchantAuth,</if>
             <if test="socialSecurityNo != null">social_security_no,</if>
             <if test="socialSecurityLow != null">social_security_low,</if>
             <if test="socialSecurityHigh != null">social_security_high,</if>
@@ -214,6 +218,7 @@
             <if test="ageLimitEnd != null">#{ageLimitEnd},</if>
             <if test="phoneLimit != null">#{phoneLimit},</if>
             <if test="label != null">#{label},</if>
+            <if test="merchantAuth != null">#{merchantAuth},</if>
             <if test="socialSecurityNo != null">#{socialSecurityNo},</if>
             <if test="socialSecurityLow != null">#{socialSecurityLow},</if>
             <if test="socialSecurityHigh != null">#{socialSecurityHigh},</if>
@@ -274,6 +279,7 @@
             <if test="ageLimitEnd != null">age_limit_end = #{ageLimitEnd},</if>
             <if test="phoneLimit != null">phone_limit = #{phoneLimit},</if>
             <if test="label != null">label = #{label},</if>
+            <if test="merchantAuth != null">merchant_auth = #{merchantAuth},</if>
             <if test="socialSecurityNo != null">social_security_no = #{socialSecurityNo},</if>
             <if test="socialSecurityLow != null">social_security_low = #{socialSecurityLow},</if>
             <if test="socialSecurityHigh != null">social_security_high = #{socialSecurityHigh},</if>
