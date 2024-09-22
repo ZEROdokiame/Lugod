@@ -2,19 +2,24 @@ package com.ruoyi.system.service.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ruoyi.common.core.constant.RedisConstant;
 import com.ruoyi.common.core.constant.SecurityConstants;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.domain.http.Customer;
+import com.ruoyi.common.core.domain.http.CustomerApplyLog;
 import com.ruoyi.common.core.utils.DateUtils;
 import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.common.redis.service.CustomerTokenService;
+import com.ruoyi.common.redis.service.RedisService;
 import com.ruoyi.system.domain.dto.MerchantListDto;
 import com.ruoyi.system.mapper.CustomerApplyLogMapper;
 import com.ruoyi.system.mapper.CustomerMapper;
@@ -42,6 +47,7 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
     private final CustomerTokenService customerTokenService;
     private final ICustomerApplyLogService customerApplyLogService;
     private final CustomerMapper customerMapper;
+    private final RedisService redisService;
 
     /**
      * 查询商户
@@ -152,6 +158,32 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
             merchantListDtos.add(merchantListDto);
         }
         return AjaxResult.success(merchantListDtos);
+    }
+
+    @Override
+    public AjaxResult H5applyMerchant(Long merchantId, HttpServletRequest request) {
+        //获取用户
+        String authorization = request.getHeader("Authorization");
+        Long customerId = customerTokenService.getCustomerId(authorization, false);
+        Boolean aBoolean = redisService.hasKey(RedisConstant.H5_APPLY_CHECK + customerId);
+        if (aBoolean){
+            return AjaxResult.error("请勿重复点击");
+        }
+        Customer customer = customerMapper.selectById(customerId);
+        Merchant merchant = merchantMapper.selectById(merchantId);
+        redisService.setCacheObject(RedisConstant.H5_APPLY_CHECK+customerId,1,10l, TimeUnit.SECONDS);
+        //生成订单号
+        String orderNo = System.currentTimeMillis()+""+merchantId+""+customerId;
+        //记录申请订单
+        CustomerApplyLog customerApplyLog = new CustomerApplyLog();
+        customerApplyLog.setCustomerId(customerId);
+        customerApplyLog.setMerchantId(merchantId);
+        customerApplyLog.setChannelId(customer.getChannelId());
+        customerApplyLog.setOrderStatus(0l);
+        customerApplyLog.setOrderNo(orderNo);
+        customerApplyLog.setCreateTime(new Date());
+        customerApplyLogService.save(customerApplyLog);
+        return AjaxResult.success("点击成功","orderNo="+orderNo+"&sign="+merchant.getChannelSign());
     }
 
     /**

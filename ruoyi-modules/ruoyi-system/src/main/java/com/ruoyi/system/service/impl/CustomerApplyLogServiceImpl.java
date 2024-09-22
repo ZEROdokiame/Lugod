@@ -2,17 +2,24 @@ package com.ruoyi.system.service.impl;
 
 import java.util.List;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.utils.DateUtils;
 import com.ruoyi.common.core.utils.LocalDateTimeUtils;
+import com.ruoyi.common.core.utils.SecureUtils;
+import com.ruoyi.common.core.web.domain.AjaxResult;
+import com.ruoyi.system.domain.dto.ApplyCallback;
+import com.ruoyi.system.domain.dto.ApplyCallbackDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.mapper.CustomerApplyLogMapper;
 import com.ruoyi.common.core.domain.http.CustomerApplyLog;
 import com.ruoyi.system.service.ICustomerApplyLogService;
+import org.springframework.util.StringUtils;
 
 /**
  * 客户申请记录Service业务层处理
@@ -21,6 +28,7 @@ import com.ruoyi.system.service.ICustomerApplyLogService;
  * @date 2024-09-15
  */
 @Service
+@Slf4j
 public class CustomerApplyLogServiceImpl extends ServiceImpl<CustomerApplyLogMapper, CustomerApplyLog> implements IService<CustomerApplyLog>,ICustomerApplyLogService
 {
     @Autowired
@@ -130,5 +138,42 @@ public class CustomerApplyLogServiceImpl extends ServiceImpl<CustomerApplyLogMap
                         .ge(CustomerApplyLog::getCreateTime, LocalDateTimeUtils.getDateFromLocalDateTime(LocalDateTimeUtils.getTodayStartTime()))
                         .le(CustomerApplyLog::getCreateTime, LocalDateTimeUtils.getDateFromLocalDateTime(LocalDateTimeUtils.getTodayEndTime())));
         return R.ok(aLong>0);
+    }
+
+    /**
+     * 申请回调
+     */
+    @Override
+    public AjaxResult applyCallBack(ApplyCallback applyCallback) {
+        String s = SecureUtils.AesUtil.AesDecode(applyCallback.getData(), applyCallback.getSign());
+        if (StringUtils.isEmpty(s)){
+            return AjaxResult.error("解密异常");
+        }
+        ApplyCallbackDto applyCallbackDto;
+        try {
+             applyCallbackDto = JSONObject.parseObject(s, ApplyCallbackDto.class);
+             log.info("渠道：{},回调数据:{}",applyCallback.getSign(),applyCallbackDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.error("数据转换异常");
+        }
+        try {
+            CustomerApplyLog customerApplyLog = customerApplyLogMapper.selectOne(new LambdaQueryWrapper<CustomerApplyLog>().eq(CustomerApplyLog::getOrderNo, applyCallbackDto.getOrderNo()));
+            if (applyCallbackDto.getOrderStatus()!=null) {
+                customerApplyLog.setOrderStatus(applyCallbackDto.getOrderStatus().longValue());
+            }
+            if (applyCallbackDto.getPrice()!=null){
+                if (customerApplyLog.getPrice()==null){
+                    customerApplyLog.setPrice(applyCallbackDto.getPrice());
+                }else {
+                    customerApplyLog.setPrice(customerApplyLog.getPrice().add(applyCallbackDto.getPrice()));
+                }
+            }
+            customerApplyLogMapper.updateById(customerApplyLog);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.error("数据异常");
+        }
+        return AjaxResult.success("回调成功");
     }
 }

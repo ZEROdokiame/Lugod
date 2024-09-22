@@ -109,6 +109,9 @@ public class Merchant extends BaseEntity
     @Excel(name = "标签")
     private String label;
 
+    @Excel(name = "下游渠道标识")
+    private String channelSign;
+
     /** 无社保 */
     @Excel(name = "无社保")
     private Boolean socialSecurityNo;

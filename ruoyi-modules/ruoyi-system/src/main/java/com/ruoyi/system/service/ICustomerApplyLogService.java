@@ -5,6 +5,8 @@ import java.util.List;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.domain.http.CustomerApplyLog;
+import com.ruoyi.common.core.web.domain.AjaxResult;
+import com.ruoyi.system.domain.dto.ApplyCallback;
 
 /**
  * 客户申请记录Service接口
@@ -75,4 +77,11 @@ public interface ICustomerApplyLogService extends IService<CustomerApplyLog>
      * @return
      */
     R<Boolean> getCustomerApply(Long customerID);
+
+    /**
+     * 申请回调
+     * @param applyCallback
+     * @return
+     */
+    AjaxResult applyCallBack(ApplyCallback applyCallback);
 }

@@ -13,6 +13,7 @@ import com.ruoyi.common.core.domain.http.Channel;
 import com.ruoyi.common.core.domain.http.Customer;
 import com.ruoyi.common.core.domain.http.CustomerApplyLog;
 import com.ruoyi.common.core.domain.http.Merchant;
+import com.ruoyi.common.core.utils.LocalDateTimeUtils;
 import com.ruoyi.common.core.utils.ProbitUtil;
 import com.ruoyi.common.core.utils.SecureUtils;
 import com.ruoyi.common.core.utils.StringUtils;
@@ -239,15 +240,16 @@ public class SysPublicHalfServiceImpl implements ISysPublicHalfService
             result.put("data",map);
             return AjaxResult.success(result);
         }
-        String url = channel.getHtmlLocation() + "token="+remoteCustomerService.getCustomerToken(customer.getPhone());
+        String url = channel.getHtmlLocation() + "?token="+remoteCustomerService.getCustomerToken(customer.getPhone());
         map.put("url",url);
         map.put("regist",true);
         result.put("data",map);
-        CustomerApplyLog customerApplyLog = new CustomerApplyLog();
-        customerApplyLog.setCustomerId(customerInfoByPhoneMd5.getData().getId());
-        customerApplyLog.setChannelId(channel.getId());
-        customerApplyLog.setOrderStatus(0l);
-        remoteCustomerApplyLogService.add(customerApplyLog);
+        //CustomerApplyLog customerApplyLog = new CustomerApplyLog();
+//        customerApplyLog.setCustomerId(customerInfoByPhoneMd5.getData().getId());
+//        customerApplyLog.setChannelId(channel.getId());
+//        customerApplyLog.setOrderStatus(0l);
+        //+"&orderNo="+ LocalDateTimeUtils.getStringFromLocalDateTime()
+        //remoteCustomerApplyLogService.add(customerApplyLog);
         //返回上游信息
         return AjaxResult.success(result);
     }

@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.common.core.constant.SecurityConstants;
 import com.ruoyi.common.core.domain.R;
+import com.ruoyi.system.domain.dto.ApplyCallback;
 import com.ruoyi.system.service.IChannelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -132,4 +133,14 @@ public class MerchantController extends BaseController
     public AjaxResult getMatchMerchantList(HttpServletRequest request){
         return merchantService.getMatchMerchantList(request);
     }
+
+    /**
+     * H5申请商户
+     */
+    @GetMapping("/h5applyMerchant")
+    public AjaxResult H5applyMerchant(@RequestParam("merchantId") Long merchantId,HttpServletRequest request){
+        return merchantService.H5applyMerchant(merchantId,request);
+    }
+
+
 }

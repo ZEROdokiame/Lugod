@@ -84,4 +84,11 @@ public interface IMerchantService extends IService<Merchant>
      */
     public List<Merchant> findAllMerchantList();
 
+    /**
+     * H5申请订单
+     * @param merchantId
+     * @param request
+     * @return
+     */
+    AjaxResult H5applyMerchant(Long merchantId, HttpServletRequest request);
 }

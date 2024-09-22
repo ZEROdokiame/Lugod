@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.common.core.constant.SecurityConstants;
 import com.ruoyi.common.core.domain.R;
+import com.ruoyi.system.domain.dto.ApplyCallback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.log.annotation.Log;
@@ -121,5 +122,13 @@ public class CustomerApplyLogController extends BaseController
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(customerApplyLogService.deleteCustomerApplyLogByIds(ids));
+    }
+
+    /**
+     * 下游数据回调
+     */
+    @PostMapping("/applyCallback")
+    public AjaxResult applyCallback(@RequestBody ApplyCallback applyCallback){
+        return customerApplyLogService.applyCallBack(applyCallback);
     }
 }

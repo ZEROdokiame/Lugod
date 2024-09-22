@@ -45,4 +45,7 @@ public class CustomerApplyLog extends BaseEntity
     @Excel(name = "成交金额 分")
     private BigDecimal price;
 
+    @Excel(name = "订单号")
+    private String orderNo;
+
 }

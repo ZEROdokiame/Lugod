@@ -29,4 +29,9 @@ public class RedisConstant {
      * H5登录验证码
      */
     public final static String H5_LOGIN_CACHE = CacheConstants.PROJET+"H5:login:cache:";
+
+    /**
+     * H5申请幂等校验
+     */
+    public final static String H5_APPLY_CHECK = CacheConstants.PROJET+"H5:apply:check";
 }
