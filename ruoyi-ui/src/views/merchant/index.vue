@@ -317,7 +317,7 @@
             <el-radio :label="1">准入渠道</el-radio>
             <el-radio :label="2">禁入渠道</el-radio>
           </el-radio-group>
-          <el-select v-model="form.channelLimnit"
+          <el-select v-model="form.channelLimit"
                      placeholder="请选择渠道"
                      clearable
                      multiple
@@ -327,7 +327,7 @@
             <el-option v-for="item in merchantChannelList"
                        :key="item.id"
                        :label="item.channelName"
-                       :value="item.id"></el-option>
+                       :value="item.id + ''"></el-option>
           </el-select>
         </el-form-item>
 
@@ -778,7 +778,7 @@ export default {
         huaBeiMiddle: 0,
         huaBeiHigh: 0,
         zhiMa: null,
-        channelLimnit: []
+        channelLimit: []
       };
       this.resetForm("form");
     },
@@ -811,7 +811,11 @@ export default {
       getMerchant(id).then((response) => {
         this.form = response.data;
         this.form.period = this.form.period ? this.form.period.split(",") : [];
-        this.form.period = this.form.channelLimnit ? this.form.channelLimnit.split(",") : [];
+        this.form.channelLimit = this.form.channelLimit ? this.form.channelLimit.split(",") : [];
+        let checkedCount = this.form.period.length;
+        this.checkAll = checkedCount === this.cityOptions.length;
+        this.isIndeterminate =
+          checkedCount > 0 && checkedCount < this.cityOptions.length;
         this.open = true;
         this.title = "修改商户";
       });
@@ -825,8 +829,8 @@ export default {
             if (params.period) {
               params.period = params.period.join(",");
             }
-            if (params.channelLimnit) {
-              params.channelLimnit = params.channelLimnit.join(",");
+            if (params.channelLimit) {
+              params.channelLimit = params.channelLimit.join(",");
             }
             updateMerchant(params).then((response) => {
               this.$modal.msgSuccess("修改成功");
@@ -838,8 +842,8 @@ export default {
             if (params.period) {
               params.period = params.period.join(",");
             }
-            if (params.channelLimnit) {
-              params.channelLimnit = params.channelLimnit.join(",");
+            if (params.channelLimit) {
+              params.channelLimit = params.channelLimit.join(",");
             }
             addMerchant(params).then((response) => {
               this.$modal.msgSuccess("新增成功");
