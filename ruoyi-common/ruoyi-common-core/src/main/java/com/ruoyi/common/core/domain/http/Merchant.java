@@ -109,6 +109,10 @@ public class Merchant extends BaseEntity
     @Excel(name = "标签")
     private String label;
 
+    /** 商户是否开启二要素     0 否 1 是 */
+    @Excel(name = "商户是否开启二要素")
+    private Boolean merchantAuth;
+
     @Excel(name = "下游渠道标识")
     private String channelSign;
 
