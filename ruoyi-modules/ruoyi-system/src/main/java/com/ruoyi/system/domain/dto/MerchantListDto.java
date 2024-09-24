@@ -6,11 +6,14 @@ import lombok.Data;
 public class MerchantListDto {
 
     //商户名
-    String merchantName;
+    private String merchantName;
 
     //商户跳转地址
-    String merchantUrl;
+    private String merchantUrl;
 
     //商户描述
-    String merchantDescribe;
+    private String merchantDescribe;
+
+    //商户ID
+    private Long merchantId;
 }

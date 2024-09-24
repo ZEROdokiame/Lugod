@@ -4,6 +4,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.common.core.constant.SecurityConstants;
+import com.ruoyi.common.core.domain.GetSumDto;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.system.domain.dto.ApplyCallback;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,13 +48,13 @@ public class CustomerApplyLogController extends BaseController
      * 获取商户今日已申请数
      *
      *
-     * @param merchantId
+     * @param getSumDto
      * @param source 请求来源
      * @return 结果
      */
-    @GetMapping("/sum")
-    public R<Integer> sum(@PathVariable("merchantId") Long merchantId, @RequestHeader(SecurityConstants.FROM_SOURCE) String source){
-        return R.ok(customerApplyLogService.getApplySum(merchantId));
+    @PostMapping("/sum")
+    public R<Integer> sum(@RequestBody GetSumDto getSumDto, @RequestHeader(SecurityConstants.FROM_SOURCE) String source){
+        return R.ok(customerApplyLogService.getApplySum(getSumDto.getMerchantId()));
     }
 
     /**

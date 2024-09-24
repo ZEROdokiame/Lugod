@@ -55,8 +55,9 @@ public interface RemoteCustomerService
     /**
      * 获取用户token
      * @param phone
+     * @param channelId
      * @return
      */
     @GetMapping("/customer/getCustomerToken")
-    public String getCustomerToken(@RequestParam("phone") String phone);
+    public String getCustomerToken(@RequestParam("phone") String phone,@RequestParam("channelId")Long channelId);
 }

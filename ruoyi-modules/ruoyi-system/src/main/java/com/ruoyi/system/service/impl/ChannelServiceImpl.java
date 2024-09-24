@@ -40,7 +40,9 @@ public class ChannelServiceImpl implements IChannelService
         log.info("初始化渠道数据开始");
         List<Channel> channels = channelMapper.selectList(new LambdaQueryWrapper<Channel>());
         for (Channel channel:channels) {
+            redisService.deleteObject(CacheConstants.CHANNEL_ID+channel.getId());
             redisService.setCacheObject(CacheConstants.CHANNEL_ID+channel.getId(),channel);
+            redisService.deleteObject(CacheConstants.CHANNEL_SIGN+channel.getChannelSign());
             redisService.setCacheObject(CacheConstants.CHANNEL_SIGN+channel.getChannelSign(),channel);
         }
     }

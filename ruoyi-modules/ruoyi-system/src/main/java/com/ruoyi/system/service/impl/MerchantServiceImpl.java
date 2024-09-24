@@ -155,6 +155,7 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
             merchantListDto.setMerchantName(merchant.getMerchantName());
             merchantListDto.setMerchantDescribe(merchant.getMerchantDescribe());
             merchantListDto.setMerchantUrl(merchant.getHitUrl());
+            merchantListDto.setMerchantId(merchant.getId());
             merchantListDtos.add(merchantListDto);
         }
         return AjaxResult.success(merchantListDtos);

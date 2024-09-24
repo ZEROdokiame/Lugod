@@ -149,8 +149,8 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
 
     @Override
     public String getCustomerToken(String phone) {
-        log.info("获取用户token,手机号:{},加密结果：{}", phone, EncryptUtil.AESencode(phone, systemConfig.getAESkey()));
-        Customer customer = this.getOne(new LambdaQueryWrapper<Customer>().eq(Customer::getPhone, EncryptUtil.AESencode(phone, systemConfig.getAESkey())));
+        log.info("获取用户token,手机号:{}", phone);
+        Customer customer = this.getOne(new LambdaQueryWrapper<Customer>().eq(Customer::getPhone, phone));
         log.info("获取用户token,用户信息:{}", customer);
         //获取到用户登陆的token
         String token = customerTokenService.getToken(customer.getId());

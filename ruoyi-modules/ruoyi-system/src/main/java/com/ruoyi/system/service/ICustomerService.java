@@ -87,6 +87,13 @@ public interface ICustomerService extends IService<Customer>
     String getCustomerToken(String phone);
 
     /**
+     * 注册并返回token
+     * @param phone
+     * @return
+     */
+    public String registAndretrunToken(String phone,Long channelId);
+
+    /**
      * h5用户登录
      * @param phone
      * @param code

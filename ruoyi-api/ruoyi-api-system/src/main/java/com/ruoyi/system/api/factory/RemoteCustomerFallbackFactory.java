@@ -46,7 +46,7 @@ public class RemoteCustomerFallbackFactory implements FallbackFactory<RemoteCust
             }
 
             @Override
-            public String getCustomerToken(String phone) {
+            public String getCustomerToken(String phone, Long channelId) {
                 return null;
             }
         };

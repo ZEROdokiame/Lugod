@@ -88,7 +88,7 @@ public class CustomerController extends BaseController
      * @return 结果
      */
     @PostMapping("/updateByPhoneMd5")
-    public R updateByPhoneMd5(Customer customer ,@RequestHeader(SecurityConstants.FROM_SOURCE) String source){
+    public R updateByPhoneMd5(@RequestBody Customer customer ,@RequestHeader(SecurityConstants.FROM_SOURCE) String source){
         return customerService.updateByPhoneMd5(customer);
     }
 
@@ -143,7 +143,7 @@ public class CustomerController extends BaseController
      * @return
      */
     @GetMapping("/getCustomerToken")
-    public String getCustomerToken(@RequestParam("phone") String phone) {
+    public String getCustomerToken(@RequestParam("phone") String phone,@RequestParam("channelId")Long channelId) {
         return customerService.getCustomerToken(phone);
     }
 

@@ -1,6 +1,7 @@
 package com.ruoyi.system.api.factory;
 
 import com.ruoyi.common.core.constant.SecurityConstants;
+import com.ruoyi.common.core.domain.GetSumDto;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.domain.http.CustomerApplyLog;
 import com.ruoyi.common.core.domain.http.Merchant;
@@ -32,7 +33,7 @@ public class RemoteCustomerApplyLogFallbackFactory implements FallbackFactory<Re
         return new RemoteCustomerApplyLogService()
         {
             @Override
-            public R<Integer> sum(@PathVariable("merchantId") Long merchantId, @RequestHeader(SecurityConstants.FROM_SOURCE) String source)
+            public R<Integer> sum(GetSumDto getSumDto, @RequestHeader(SecurityConstants.FROM_SOURCE) String source)
             {
                 return R.fail("获取商户已申请数失败:" + throwable.getMessage());
             }

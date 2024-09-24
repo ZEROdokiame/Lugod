@@ -3,17 +3,18 @@ package com.ruoyi.btc.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.ruoyi.btc.config.Config;
 import com.ruoyi.btc.domain.ComPublicHalfDto;
 import com.ruoyi.btc.domain.CustomerInfoDto;
 import com.ruoyi.btc.service.ISysPublicHalfService;
 import com.ruoyi.common.core.constant.CacheConstants;
 import com.ruoyi.common.core.constant.SecurityConstants;
+import com.ruoyi.common.core.domain.GetSumDto;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.domain.http.Channel;
 import com.ruoyi.common.core.domain.http.Customer;
-import com.ruoyi.common.core.domain.http.CustomerApplyLog;
 import com.ruoyi.common.core.domain.http.Merchant;
-import com.ruoyi.common.core.utils.LocalDateTimeUtils;
+import com.ruoyi.common.core.utils.EncryptUtil;
 import com.ruoyi.common.core.utils.ProbitUtil;
 import com.ruoyi.common.core.utils.SecureUtils;
 import com.ruoyi.common.core.utils.StringUtils;
@@ -24,7 +25,6 @@ import com.ruoyi.system.api.RemoteCustomerService;
 import com.ruoyi.system.api.RemoteMerchantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -42,6 +42,7 @@ public class SysPublicHalfServiceImpl implements ISysPublicHalfService
     private final RemoteMerchantService remoteMerchantService;
     private final RemoteCustomerApplyLogService remoteCustomerApplyLogService;
     private final RedisService redisService;
+    private final Config config;
 
     /**
      * 半流程通用撞库
@@ -81,6 +82,7 @@ public class SysPublicHalfServiceImpl implements ISysPublicHalfService
         customer.setLastLoginTime(new Date());
         customer.setIsAuth(false);
         customer.setStatus(2);
+        customer.setPhoneMd5(customerInfoDto.getPhoneMd5());
         R<Customer> customerInfoByPhoneMd5 = remoteCustomerService.getCustomerInfoByPhoneMd5(customerInfoDto.getPhoneMd5(), SecurityConstants.INNER);
         if (customerInfoByPhoneMd5.getCode()==200){
             remoteCustomerService.updateByPhoneMd5(customer,SecurityConstants.INNER);
@@ -111,7 +113,9 @@ public class SysPublicHalfServiceImpl implements ISysPublicHalfService
         List<Merchant> merchants = new ArrayList<>();
         for (Merchant merchant:listR.getData()) {
             //限量判定
-            R<Integer> sum = remoteCustomerApplyLogService.sum(merchant.getId(), SecurityConstants.INNER);
+            GetSumDto dto = new GetSumDto();
+            dto.setMerchantId(merchant.getId());
+            R<Integer> sum = remoteCustomerApplyLogService.sum(dto, SecurityConstants.INNER);
             if (merchant.getLimitType()==1&&merchant.getLimitNum()<=sum.getData()){
                 continue;
             }
@@ -224,6 +228,9 @@ public class SysPublicHalfServiceImpl implements ISysPublicHalfService
         customer.setStatus(1);
         R<Customer> customerInfoByPhoneMd5 = remoteCustomerService.getCustomerInfoByPhoneMd5(customerInfoDto.getPhoneMd5(), SecurityConstants.INNER);
         if (customerInfoByPhoneMd5.getCode()==200){
+            customer.setPhone(EncryptUtil.AESencode(customer.getPhone(), config.getAESkey()));
+            customer.setIdCard(EncryptUtil.AESencode(customer.getIdCard(),config.getAESkey()));
+            customer.setActurlName(EncryptUtil.AESencode(customer.getActurlName(),config.getAESkey()));
             remoteCustomerService.updateByPhoneMd5(customer,SecurityConstants.INNER);
         }else {
             remoteCustomerService.add(customer,SecurityConstants.INNER);
@@ -240,7 +247,7 @@ public class SysPublicHalfServiceImpl implements ISysPublicHalfService
             result.put("data",map);
             return AjaxResult.success(result);
         }
-        String url = channel.getHtmlLocation() + "?token="+remoteCustomerService.getCustomerToken(customer.getPhone());
+        String url = channel.getHtmlLocation()+"?sign="+channel.getChannelSign() + "&token="+remoteCustomerService.getCustomerToken(customer.getPhone(),channel.getId() );
         map.put("url",url);
         map.put("regist",true);
         result.put("data",map);

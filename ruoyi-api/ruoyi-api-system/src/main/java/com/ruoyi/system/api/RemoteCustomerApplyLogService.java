@@ -2,6 +2,7 @@ package com.ruoyi.system.api;
 
 import com.ruoyi.common.core.constant.SecurityConstants;
 import com.ruoyi.common.core.constant.ServiceNameConstants;
+import com.ruoyi.common.core.domain.GetSumDto;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.domain.http.CustomerApplyLog;
 import com.ruoyi.common.core.domain.http.Merchant;
@@ -24,12 +25,12 @@ public interface RemoteCustomerApplyLogService
      * 获取商户今日已申请数
      *
      *
-     * @param merchantId
+     * @param getSumDto
      * @param source 请求来源
      * @return 结果
      */
-    @GetMapping("/log/sum")
-    public R<Integer> sum(@PathVariable("merchantId") Long merchantId,@RequestHeader(SecurityConstants.FROM_SOURCE) String source);
+    @PostMapping("/log/sum")
+    public R<Integer> sum(@RequestBody GetSumDto getSumDto, @RequestHeader(SecurityConstants.FROM_SOURCE) String source);
 
     /**
      * 获取用户今日是否是否已申请

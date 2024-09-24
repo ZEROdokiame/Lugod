@@ -8,6 +8,7 @@ import com.ruoyi.btc.domain.CustomerInfoDto;
 import com.ruoyi.btc.service.ISysPublicAllService;
 import com.ruoyi.common.core.constant.CacheConstants;
 import com.ruoyi.common.core.constant.SecurityConstants;
+import com.ruoyi.common.core.domain.GetSumDto;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.domain.http.Channel;
 import com.ruoyi.common.core.domain.http.Customer;
@@ -108,7 +109,9 @@ public class SysPublicAllServiceImpl implements ISysPublicAllService
         List<Merchant> merchants = new ArrayList<>();
         for (Merchant merchant:listR.getData()) {
             //限量判定
-            R<Integer> sum = remoteCustomerApplyLogService.sum(merchant.getId(), SecurityConstants.INNER);
+            GetSumDto dto = new GetSumDto();
+            dto.setMerchantId(merchant.getId());
+            R<Integer> sum = remoteCustomerApplyLogService.sum(dto, SecurityConstants.INNER);
             if (merchant.getLimitType()==1&&merchant.getLimitNum()<=sum.getData()){
                 continue;
             }
