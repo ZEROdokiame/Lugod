@@ -141,7 +141,7 @@ public class ChannelServiceImpl implements IChannelService
      * 获取所有的渠道列表
      * @return
      */
-    @Cacheable(value = "channel",key = "'channel:all'")
+    //@Cacheable(value = "channel",key = "'channel:all'")
     public List<Channel> findAllChannelList(){
         return channelMapper.findAllChannelList();
     }

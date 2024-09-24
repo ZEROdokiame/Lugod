@@ -20,6 +20,7 @@
         <result property="ispass"    column="ispass"    />
         <result property="customerInfoFilterType"    column="customer_info_filter_type"    />
         <result property="channelLimitType"    column="channel_limit_type"    />
+        <result property="channelLimit"    column="channel_limit"    />
         <result property="period"    column="period"    />
         <result property="hitUrl"    column="hit_url"    />
         <result property="registUrl"    column="regist_url"    />
@@ -69,7 +70,7 @@
         <result property="merchantName"    column="merchant_name"    />
     </resultMap>
     <sql id="selectMerchantVo">
-        select id, merchant_type, merchant_name, merchant_describe, merchant_company, logo, status, limit_num, limit_type,is_balance_monitoring,balance_monitoring,ispass, customer_info_filter_type,channel_limit_type,period,hit_url,regist_url,age_limit_start, age_limit_end, phone_limit,label,merchant_auth, social_security_no, social_security_low, social_security_high, car_no, car_have, guarantee_slip_low, guarantee_slip_centre, guarantee_slip_high, education_middle, education_high_school, education_polytechnic, education_junior_college, education_undergraduate_course, education_postgraduate, accumulation_fund_low, accumulation_fund_high, hourse_no, hourse_full_payment, hourse_mortgaging, office_worker, civil_servant, private_property_owners, self_employed_person, other_occupations, hua_bei_low, hua_bei_middle, hua_bei_high, bai_tiao_low, bai_tiao_middle, bai_tiao_high, zhi_ma, create_time, update_time, remark from merchant
+        select id, merchant_type, merchant_name, merchant_describe, merchant_company, logo, status, limit_num, limit_type,is_balance_monitoring,balance_monitoring,ispass, customer_info_filter_type,channel_limit_type,channel_limit,period,hit_url,regist_url,age_limit_start, age_limit_end, phone_limit,label,merchant_auth, social_security_no, social_security_low, social_security_high, car_no, car_have, guarantee_slip_low, guarantee_slip_centre, guarantee_slip_high, education_middle, education_high_school, education_polytechnic, education_junior_college, education_undergraduate_course, education_postgraduate, accumulation_fund_low, accumulation_fund_high, hourse_no, hourse_full_payment, hourse_mortgaging, office_worker, civil_servant, private_property_owners, self_employed_person, other_occupations, hua_bei_low, hua_bei_middle, hua_bei_high, bai_tiao_low, bai_tiao_middle, bai_tiao_high, zhi_ma, create_time, update_time, remark from merchant
     </sql>
     <sql id="findAllMerchant">
         select id, merchant_name  from merchant
@@ -91,6 +92,7 @@
             <if test="ispass != null "> and ispass = #{ispass}</if>
             <if test="customerInfoFilterType != null "> and customer_info_filter_type = #{customerInfoFilterType}</if>
             <if test="channelLimitType != null "> and channel_limit_type = #{channelLimitType}</if>
+            <if test="channelLimit != null "> and channel_limit = #{channelLimit}</if>
             <if test="period != null "> and period = #{period}</if>
             <if test="hitUrl != null "> and hit_url = #{hitUrl}</if>
             <if test="registUrl != null "> and regist_url = #{registUrl}</if>
@@ -154,6 +156,7 @@
             <if test="ispass != null">ispass,</if>
             <if test="customerInfoFilterType != null">customer_info_filter_type,</if>
             <if test="channelLimitType != null">channel_limit_type,</if>
+            <if test="channelLimit != null">channel_limit,</if>
             <if test="period != null">period,</if>
             <if test="hitUrl != null">hit_url,</if>
             <if test="registUrl != null">regist_url,</if>
@@ -161,7 +164,7 @@
             <if test="ageLimitEnd != null">age_limit_end,</if>
             <if test="phoneLimit != null">phone_limit,</if>
             <if test="label != null">label,</if>
-            <if test="merchant_auth != null">merchantAuth,</if>
+            <if test="merchantAuth != null">merchant_auth,</if>
             <if test="socialSecurityNo != null">social_security_no,</if>
             <if test="socialSecurityLow != null">social_security_low,</if>
             <if test="socialSecurityHigh != null">social_security_high,</if>
@@ -211,6 +214,7 @@
             <if test="ispass != null">#{ispass},</if>
             <if test="customerInfoFilterType != null">#{customerInfoFilterType},</if>
             <if test="channelLimitType != null">#{channelLimitType},</if>
+            <if test="channelLimit != null">#{channelLimit},</if>
             <if test="period != null">#{period},</if>
             <if test="hitUrl != null">#{hitUrl},</if>
             <if test="registUrl != null">#{registUrl},</if>
@@ -272,6 +276,7 @@
             <if test="ispass != null">ispass = #{ispass},</if>
             <if test="customerInfoFilterType != null">customer_info_filter_type = #{customerInfoFilterType},</if>
             <if test="channelLimitType != null">channel_limit_type = #{channelLimitType},</if>
+            <if test="channelLimit != null">channel_limit = #{channelLimit},</if>
             <if test="period != null">period = #{period},</if>
             <if test="hitUrl != null">hit_url = #{hitUrl},</if>
             <if test="registUrl != null">regist_url = #{registUrl},</if>
