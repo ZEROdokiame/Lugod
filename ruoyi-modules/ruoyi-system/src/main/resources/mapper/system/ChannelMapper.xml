@@ -19,6 +19,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="remark"    column="remark"    />
     </resultMap>
 
+    <resultMap type="com.ruoyi.common.core.domain.http.Channel" id="ChannelResultList">
+        <result property="id"    column="id"    />
+        <result property="channelName"    column="channel_name"    />
+        <result property="channelSign"    column="channel_sign"    />
+    </resultMap>
     <sql id="selectChannelVo">
         select id, channel_name, channel_sign,channel_type, score, html_name, html_location, ips, period, create_time, update_time, remark from channel
     </sql>
@@ -103,7 +108,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
-    <select id="findAllChannelList"  resultMap="ChannelResult">
+    <select id="findAllChannelList"  resultMap="ChannelResultList">
         <include refid="selectChannelIdName"/>
     </select>
 </mapper>
