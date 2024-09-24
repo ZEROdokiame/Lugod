@@ -164,7 +164,7 @@
             <if test="ageLimitEnd != null">age_limit_end,</if>
             <if test="phoneLimit != null">phone_limit,</if>
             <if test="label != null">label,</if>
-            <if test="merchant_auth != null">merchantAuth,</if>
+            <if test="merchantAuth != null">merchant_auth,</if>
             <if test="socialSecurityNo != null">social_security_no,</if>
             <if test="socialSecurityLow != null">social_security_low,</if>
             <if test="socialSecurityHigh != null">social_security_high,</if>
