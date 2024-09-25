@@ -41,7 +41,7 @@ public interface RemoteCustomerApplyLogService
      * @return 结果
      */
     @GetMapping("/log/customerApply")
-    public R<Boolean> customerApply(@PathVariable("customerID") Long customerID,@RequestHeader(SecurityConstants.FROM_SOURCE) String source);
+    public R<Boolean> customerApply(@RequestParam("customerID") Long customerID,@RequestHeader(SecurityConstants.FROM_SOURCE) String source);
 
     /**
      * 新增用户

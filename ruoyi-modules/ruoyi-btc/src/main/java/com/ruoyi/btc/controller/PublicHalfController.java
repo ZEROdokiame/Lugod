@@ -42,7 +42,7 @@ public class PublicHalfController{
      * 通用半流程撞库
      */
     @GetMapping("/checkOrder")
-    public AjaxResult checkOrder(@RequestParam("phoneMD5")String phoneMd5,@RequestParam("channelSign")String channelSign)
+    public AjaxResult checkOrder(String phoneMd5,String channelSign)
     {
 
         return sysPublicHalfService.checkOrder(phoneMd5,channelSign);

@@ -25,6 +25,7 @@ import com.ruoyi.system.mapper.CustomerApplyLogMapper;
 import com.ruoyi.system.mapper.CustomerMapper;
 import com.ruoyi.system.service.ICustomerApplyLogService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.mapper.MerchantMapper;
@@ -41,6 +42,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> implements IService<Merchant>,IMerchantService
 {
     private final MerchantMapper merchantMapper;
@@ -147,6 +149,7 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
         if (customerId==null){
             return AjaxResult.error("用户不存在或未登录");
         }
+        log.info("H5打开页面：{}",customerId);
         Customer customer = customerMapper.selectById(customerId);
         List<Merchant> merchants = matchMerchant(customer);
         List<MerchantListDto> merchantListDtos = new ArrayList<>();
@@ -170,6 +173,7 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
         if (aBoolean){
             return AjaxResult.error("请勿重复点击");
         }
+        log.info("H5申请用户：{}",customerId);
         Customer customer = customerMapper.selectById(customerId);
         Merchant merchant = merchantMapper.selectById(merchantId);
         redisService.setCacheObject(RedisConstant.H5_APPLY_CHECK+customerId,1,10l, TimeUnit.SECONDS);

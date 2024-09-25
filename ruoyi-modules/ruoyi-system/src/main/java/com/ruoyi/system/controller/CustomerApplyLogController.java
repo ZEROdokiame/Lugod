@@ -66,7 +66,7 @@ public class CustomerApplyLogController extends BaseController
      * @return 结果
      */
     @GetMapping("/customerApply")
-    public R<Boolean> customerApply(@PathVariable("customerID") Long customerID,@RequestHeader(SecurityConstants.FROM_SOURCE) String source){
+    public R<Boolean> customerApply(@RequestParam("customerID") Long customerID,@RequestHeader(SecurityConstants.FROM_SOURCE) String source){
         return customerApplyLogService.getCustomerApply(customerID);
     }
     /**

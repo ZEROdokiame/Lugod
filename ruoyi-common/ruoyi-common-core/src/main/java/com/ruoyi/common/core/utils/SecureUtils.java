@@ -334,7 +334,7 @@ public class SecureUtils {
                     "    \"orderStatus\":\"2\"\n" +
                     "}";
 
-            System.out.println(AesEncode(s3,"LwLjtU1Bt8dcxxjY"));
+            System.out.println(AesEncode(s1,"g5N8XTYaOEwEmBgg"));
         }
         /**
          * 解密
