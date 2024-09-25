@@ -138,8 +138,8 @@ public class MerchantController extends BaseController
      * H5申请商户
      */
     @GetMapping("/h5applyMerchant")
-    public AjaxResult H5applyMerchant(@RequestParam("merchantId") Long merchantId,HttpServletRequest request){
-        return merchantService.H5applyMerchant(merchantId,request);
+    public AjaxResult H5applyMerchant(@RequestParam("merchantId") String merchantId,HttpServletRequest request){
+        return merchantService.H5applyMerchant(Long.valueOf(merchantId),request);
     }
 
 
