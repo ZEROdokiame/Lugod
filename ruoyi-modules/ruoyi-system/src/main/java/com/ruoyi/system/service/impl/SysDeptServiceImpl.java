@@ -333,6 +333,6 @@ public class SysDeptServiceImpl implements ISysDeptService
      */
     private boolean hasChild(List<SysDept> list, SysDept t)
     {
-        return getChildList(list, t).size() > 0 ? true : false;
+        return getChildList(list, t).size() > 0;
     }
 }
