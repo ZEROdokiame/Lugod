@@ -1,5 +1,28 @@
 package com.ruoyi.system.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ruoyi.common.core.constant.RedisConstant;
+import com.ruoyi.common.core.domain.R;
+import com.ruoyi.common.core.domain.http.Customer;
+import com.ruoyi.common.core.domain.http.CustomerApplyLog;
+import com.ruoyi.common.core.domain.http.Merchant;
+import com.ruoyi.common.core.utils.DateUtils;
+import com.ruoyi.common.core.web.domain.AjaxResult;
+import com.ruoyi.common.redis.service.CustomerTokenService;
+import com.ruoyi.common.redis.service.RedisService;
+import com.ruoyi.system.domain.dto.MerchantListDto;
+import com.ruoyi.system.mapper.CustomerMapper;
+import com.ruoyi.system.mapper.MerchantMapper;
+import com.ruoyi.system.service.ICustomerApplyLogService;
+import com.ruoyi.system.service.IMerchantService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -7,35 +30,9 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import cn.hutool.core.collection.CollectionUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.ruoyi.common.core.constant.RedisConstant;
-import com.ruoyi.common.core.constant.SecurityConstants;
-import com.ruoyi.common.core.domain.R;
-import com.ruoyi.common.core.domain.http.Customer;
-import com.ruoyi.common.core.domain.http.CustomerApplyLog;
-import com.ruoyi.common.core.utils.DateUtils;
-import com.ruoyi.common.core.web.domain.AjaxResult;
-import com.ruoyi.common.redis.service.CustomerTokenService;
-import com.ruoyi.common.redis.service.RedisService;
-import com.ruoyi.system.domain.dto.MerchantListDto;
-import com.ruoyi.system.mapper.CustomerApplyLogMapper;
-import com.ruoyi.system.mapper.CustomerMapper;
-import com.ruoyi.system.service.ICustomerApplyLogService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.ruoyi.system.mapper.MerchantMapper;
-import com.ruoyi.common.core.domain.http.Merchant;
-import com.ruoyi.system.service.IMerchantService;
-
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * 商户Service业务层处理
- * 
+ *
  * @author ruoyi
  * @date 2024-09-15
  */
@@ -51,7 +48,7 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
 
     /**
      * 查询商户
-     * 
+     *
      * @param id 商户主键
      * @return 商户
      */
@@ -63,7 +60,7 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
 
     /**
      * 查询商户列表
-     * 
+     *
      * @param merchant 商户
      * @return 商户
      */
@@ -75,7 +72,7 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
 
     /**
      * 新增商户
-     * 
+     *
      * @param merchant 商户
      * @return 结果
      */
@@ -88,7 +85,7 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
 
     /**
      * 修改商户
-     * 
+     *
      * @param merchant 商户
      * @return 结果
      */
@@ -101,7 +98,7 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
 
     /**
      * 批量删除商户
-     * 
+     *
      * @param ids 需要删除的商户主键
      * @return 结果
      */
@@ -113,7 +110,7 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
 
     /**
      * 删除商户信息
-     * 
+     *
      * @param id 商户主键
      * @return 结果
      */
@@ -216,6 +213,46 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
                 if (merchant.getChannelLimitType()==2&& list.contains(customer.getChannelId())){
                     continue;
                 }
+            }
+            merchants.add(merchant);
+        }
+        return merchants;
+    }
+
+
+    @Override
+    public AjaxResult getMatchMerchantNew() {
+        List<Merchant> merchantLists = matchMerchantNew();
+        List<MerchantListDto> results = new ArrayList<>();
+        for (Merchant merchant : merchantLists) {
+            MerchantListDto merchantListDto = new MerchantListDto();
+            merchantListDto.setMerchantName(merchant.getMerchantName());
+            merchantListDto.setMerchantDescribe(merchant.getMerchantDescribe());
+            merchantListDto.setMerchantUrl(merchant.getHitUrl());
+            merchantListDto.setMerchantId(merchant.getId());
+            results.add(merchantListDto);
+        }
+        return AjaxResult.success(results);
+    }
+
+
+    private List<Merchant> getMerchantLists() {
+        LambdaQueryWrapper<Merchant> queryWrapper = new LambdaQueryWrapper<Merchant>().eq(Merchant::getStatus, true);
+        List<Merchant> merchants = merchantMapper.selectList(queryWrapper);
+        return CollectionUtils.isEmpty(merchants) ? new ArrayList<>() : merchants;
+    }
+
+    private List<Merchant> matchMerchantNew() {
+        List<Merchant> merchantLists = getMerchantLists();
+        if (CollectionUtils.isEmpty(merchantLists)) {
+            return merchantLists;
+        }
+        List<Merchant> merchants = new ArrayList<>();
+        for (Merchant merchant : merchantLists) {
+            //限量判定
+            Integer sum = customerApplyLogService.getApplySum(merchant.getId());
+            if (merchant.getLimitType() != null && merchant.getLimitType() == 1 && merchant.getLimitNum() <= sum) {
+                continue;
             }
             merchants.add(merchant);
         }

@@ -142,5 +142,10 @@ public class MerchantController extends BaseController
         return merchantService.H5applyMerchant(Long.valueOf(merchantId),request);
     }
 
+    @GetMapping("/getMatchMerchantNew")
+    public AjaxResult getMatchMerchantNew(){
+        return merchantService.getMatchMerchantNew();
+    }
+
 
 }
