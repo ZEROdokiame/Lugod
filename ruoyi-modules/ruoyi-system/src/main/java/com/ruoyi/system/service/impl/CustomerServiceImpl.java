@@ -1,0 +1,282 @@
+package com.ruoyi.system.service.impl;
+
+import java.util.*;
+
+import cn.hutool.core.util.IdcardUtil;
+import cn.hutool.crypto.digest.MD5;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ruoyi.common.core.constant.CacheConstants;
+import com.ruoyi.common.core.constant.RedisConstant;
+import com.ruoyi.common.core.domain.R;
+import com.ruoyi.common.core.domain.http.Channel;
+import com.ruoyi.common.core.utils.DateUtils;
+import com.ruoyi.common.core.utils.EncryptUtil;
+import com.ruoyi.common.core.web.domain.AjaxResult;
+import com.ruoyi.common.redis.service.CustomerTokenService;
+import com.ruoyi.common.redis.service.RedisService;
+import com.ruoyi.common.security.service.TokenService;
+import com.ruoyi.system.config.SystemConfig;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import com.ruoyi.system.mapper.CustomerMapper;
+import com.ruoyi.common.core.domain.http.Customer;
+import com.ruoyi.system.service.ICustomerService;
+import org.springframework.util.StringUtils;
+
+import javax.servlet.http.HttpServletRequest;
+
+/**
+ * 客户信息Service业务层处理
+ * 
+ * @author ruoyi
+ * @date 2024-09-15
+ */
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> implements IService<Customer>,ICustomerService {
+    private final CustomerMapper customerMapper;
+    private final SystemConfig systemConfig;
+    private final CustomerTokenService customerTokenService;
+    private final RedisService redisService;
+    private final TokenService tokenService;
+
+    /**
+     * 查询客户信息
+     * 
+     * @param id 客户信息主键
+     * @return 客户信息
+     */
+    @Override
+    public Customer selectCustomerById(Long id)
+    {
+        return customerMapper.selectCustomerById(id);
+    }
+
+    /**
+     * 查询客户信息列表
+     * 
+     * @param customer 客户信息
+     * @return 客户信息
+     */
+    @Override
+    public List<Customer> selectCustomerList(Customer customer)
+    {
+        return customerMapper.selectCustomerList(customer);
+    }
+
+    /**
+     * 新增客户信息
+     * 
+     * @param customer 客户信息
+     * @return 结果
+     */
+    @Override
+    public int insertCustomer(Customer customer)
+    {
+        customer.setCreateTime(DateUtils.getNowDate());
+        return customerMapper.insertCustomer(customer);
+    }
+
+    /**
+     * 修改客户信息
+     * 
+     * @param customer 客户信息
+     * @return 结果
+     */
+    @Override
+    public int updateCustomer(Customer customer)
+    {
+        customer.setUpdateTime(DateUtils.getNowDate());
+        return customerMapper.updateCustomer(customer);
+    }
+
+    /**
+     * 批量删除客户信息
+     * 
+     * @param ids 需要删除的客户信息主键
+     * @return 结果
+     */
+    @Override
+    public int deleteCustomerByIds(Long[] ids)
+    {
+        return customerMapper.deleteCustomerByIds(ids);
+    }
+
+    /**
+     * 删除客户信息信息
+     * 
+     * @param id 客户信息主键
+     * @return 结果
+     */
+    @Override
+    public int deleteCustomerById(Long id)
+    {
+        return customerMapper.deleteCustomerById(id);
+    }
+
+    /**
+     * 通过手机号MD5查询
+     * @param phoneMD5
+     * @return
+     */
+    @Override
+    public R<Customer> selectByPhoneMd5(String phoneMD5) {
+        Customer one = getOne(new LambdaQueryWrapper<Customer>().eq(Customer::getPhoneMd5, phoneMD5));
+        if (one==null||one.getId()==null){
+            return R.fail();
+        }
+        return R.ok(one);
+    }
+
+    /**
+     * 通过手机号更新用户信息
+     * @param customer
+     * @return
+     */
+    @Override
+    public R updateByPhoneMd5(Customer customer) {
+        int update = customerMapper.update(customer, new UpdateWrapper<Customer>().lambda().eq(Customer::getPhoneMd5, customer.getPhoneMd5()));
+        if (update>0){
+            return R.ok();
+        }
+        return R.fail();
+    }
+
+    @Override
+    public String getCustomerToken(String phone) {
+        log.info("获取用户token,手机号:{}", phone);
+        Customer customer = this.getOne(new LambdaQueryWrapper<Customer>().eq(Customer::getPhone, phone));
+        log.info("获取用户token,用户信息:{}", customer);
+        //获取到用户登陆的token
+        String token = customerTokenService.getToken(customer.getId());
+        if (StringUtils.isEmpty(token)) {
+            //生成一个长60的token
+            //token = customerTokenService.generateToken(customer.getId(), customer.getPhone(), "ANDROID", customer.getChannelId());
+            token = tokenService.createTokenApp(customer.getId(),customer.getChannelId());
+        }
+        return token;
+    }
+
+    /**
+     * 注册并返回token
+     * @param phone
+     * @return
+     */
+    public String registAndretrunToken(String phone,Long channelId){
+        Customer customer = new Customer();
+        customer.setChannelId(channelId);
+        customer.setPhone(EncryptUtil.AESencode(phone, systemConfig.getAESkey()));
+        customer.setPhoneMd5(MD5.create().digestHex(phone).toLowerCase(Locale.ROOT));
+        customer.setIsAuth(false);
+        customer.setFirstLoginTime(new Date());
+        customer.setLastLoginTime(new Date());
+        customer.setStatus(1);
+        customer.setCreateTime(new Date());
+        customerMapper.insert(customer);
+        String token = customerTokenService.getToken(customer.getId());
+        if (StringUtils.isEmpty(token)) {
+            //生成一个长60的token
+            //token = customerTokenService.generateToken(customer.getId(), customer.getPhone(), "ANDROID", customer.getChannelId());
+            token = tokenService.createTokenApp(customer.getId(),channelId);
+        }
+        return token;
+    }
+
+    /**
+     * H5用户登陆
+     * @param phone
+     * @param code
+     * @param request
+     * @return
+     */
+    @Override
+    public AjaxResult customerLogin(String phone, Integer code, HttpServletRequest request) {
+        String sign = request.getHeader("sign");
+        if (StringUtils.isEmpty(sign)){
+            return AjaxResult.error("渠道标识不存在");
+        }
+        Channel channel = redisService.getCacheObject(CacheConstants.CHANNEL_SIGN+sign);
+        Boolean aBoolean = redisService.hasKey(RedisConstant.H5_LOGIN_CACHE + phone);
+        if (!aBoolean){
+            return AjaxResult.error("验证码不存在");
+        }
+        int cacheCode = redisService.getCacheObject(RedisConstant.H5_LOGIN_CACHE + phone);
+        if (cacheCode!=code){
+            return AjaxResult.success("验证码错误");
+        }
+        String customerToken = registAndretrunToken(phone,channel.getId());
+
+        return AjaxResult.success("登录成功",customerToken);
+    }
+
+    /**
+     * 保存用户留资信息
+     * @param customer
+     * @param request
+     * @return
+     */
+    @Override
+    public AjaxResult saveCustomerInfo(Customer customer, HttpServletRequest request) {
+        String authorization = request.getHeader("Authorization");
+        Long customerId = customerTokenService.getCustomerId(authorization, false);
+        String sign = request.getHeader("sign");
+        if (StringUtils.isEmpty(sign)){
+            return AjaxResult.error("渠道标识不存在");
+        }
+        Channel channel = redisService.getCacheObject(CacheConstants.CHANNEL_SIGN+sign);
+        if (customerId==null){
+            return AjaxResult.error("用户不存在或未登录");
+        }
+        if (StringUtils.isEmpty(customer.getIdCard())){
+            return AjaxResult.error("身份证好不能为空");
+        }
+        boolean validCard = IdcardUtil.isValidCard(customer.getIdCard());
+        if (validCard){
+            return AjaxResult.error("身份证号码异常");
+        }
+        if (StringUtils.isEmpty(customer.getActurlName())){
+            return AjaxResult.error("姓名不能为空");
+        }
+        int ageByIdCard = IdcardUtil.getAgeByIdCard(customer.getIdCard());
+        customer.setAge(ageByIdCard);
+        int genderByIdCard = IdcardUtil.getGenderByIdCard(customer.getIdCard());
+        customer.setSex(genderByIdCard==0?1:0);
+        customer.setId(customerId);
+        customer.setChannelId(channel.getId());
+        customer.setIsAuth(true);
+        customer.setStatus(1);
+        updateById(customer);
+        return AjaxResult.success("保存成功");
+    }
+
+    @Override
+    public AjaxResult v1SaveCustomerInfo(Customer customer, HttpServletRequest request) {
+        String authorization = request.getHeader("Authorization");
+        Long customerId = customerTokenService.getCustomerId(authorization, false);
+        String sign = request.getHeader("sign");
+        if (StringUtils.isEmpty(sign)) {
+            return AjaxResult.error("渠道标识不存在");
+        }
+        Channel channel = redisService.getCacheObject(CacheConstants.CHANNEL_SIGN + sign);
+        if (customerId == null) {
+            return AjaxResult.error("用户不存在或未登录");
+        }
+
+        if (StringUtils.isEmpty(customer.getActurlName())) {
+            return AjaxResult.error("姓名不能为空");
+        }
+        customer.setId(customerId);
+        customer.setChannelId(channel.getId());
+        customer.setIsAuth(true);
+        customer.setStatus(1);
+        updateById(customer);
+        return AjaxResult.success("保存成功");
+    }
+
+
+}

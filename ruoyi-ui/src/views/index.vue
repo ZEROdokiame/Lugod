@@ -39,9 +39,9 @@
     </el-row>
     <el-row :gutter="20">
       <el-col :sm="24" :lg="12" style="padding-left: 20px">
-        <h2>若依后台管理框架</h2>
+        <h2>未信用秒租后台管理框架</h2>
         <p>
-          一直想做一款后台管理系统，看了很多优秀的开源项目但是发现没有合适自己的。于是利用空闲休息时间开始自己写一套后台系统。如此有了若依管理系统，她可以用于所有的Web应用程序，如网站管理后台，网站会员中心，CMS，CRM，OA等等，当然，您也可以对她进行深度定制，以做出更强系统。所有前端后台代码封装过后十分精简易上手，出错概率低。同时支持移动客户端访问。系统会陆续更新一些实用功能。
+          一直想做一款后台管理系统，看了很多优秀的开源项目但是发现没有合适自己的。于是利用空闲休息时间开始自己写一套后台系统。如此有了未信用秒租管理系统，她可以用于所有的Web应用程序，如网站管理后台，网站会员中心，CMS，CRM，OA等等，当然，您也可以对她进行深度定制，以做出更强系统。所有前端后台代码封装过后十分精简易上手，出错概率低。同时支持移动客户端访问。系统会陆续更新一些实用功能。
         </p>
         <p>
           <b>当前版本:</b> <span>v{{ version }}</span>
@@ -118,22 +118,28 @@
               >
             </p>
             <p>
-              <i class="el-icon-user-solid"></i> QQ群： <s> 满42799195 </s>  <s> 满170157040 </s>
-              <s> 满130643120 </s> <s> 满225920371 </s> <s> 满201705537 </s> <s> 满236543183 </s>
-              <s> 满213618602 </s> <s> 满148794840 </s> <s> 满118752664 </s> <s> 满101038945 </s>
-              <s> 满128355254 </s> <s> 满179219821 </s> <a href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=Z6j1amUmIPBXamuZzxpwjY8GwaP45XB6&authKey=zfSnxECfnScfY1HLCWilSqCq%2BmSVtr%2Bi%2F4oXeBcuQVwlq6XlrAfbZ0awp3%2B4Bdec&noverify=0&group_code=158753145" target="_blank">158753145</a>
+              <i class="el-icon-user-solid"></i> QQ群： <s> 满42799195 </s>
+              <s> 满170157040 </s> <s> 满130643120 </s> <s> 满225920371 </s>
+              <s> 满201705537 </s> <s> 满236543183 </s> <s> 满213618602 </s>
+              <s> 满148794840 </s> <s> 满118752664 </s> <s> 满101038945 </s>
+              <s> 满128355254 </s> <s> 满179219821 </s>
+              <a
+                href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=Z6j1amUmIPBXamuZzxpwjY8GwaP45XB6&authKey=zfSnxECfnScfY1HLCWilSqCq%2BmSVtr%2Bi%2F4oXeBcuQVwlq6XlrAfbZ0awp3%2B4Bdec&noverify=0&group_code=158753145"
+                target="_blank"
+                >158753145</a
+              >
             </p>
             <p>
               <i class="el-icon-chat-dot-round"></i> 微信：<a
                 href="javascript:;"
-                >/ *若依</a
+                >/ *未信用秒租</a
               >
             </p>
             <p>
               <i class="el-icon-money"></i> 支付宝：<a
                 href="javascript:;"
                 class="支付宝信息"
-                >/ *若依</a
+                >/ *未信用秒租</a
               >
             </p>
           </div>
@@ -173,7 +179,9 @@
                 <li>修复未登录带参数访问成功后参数丢失问题</li>
                 <li>修复HeaderSearch组件跳转query参数丢失问题</li>
                 <li>修复数据字典列表页重置后标签值无法输入问题</li>
-                <li>修复Excels导入时无法获取到readConverterExp内容转表达式问题</li>
+                <li>
+                  修复Excels导入时无法获取到readConverterExp内容转表达式问题
+                </li>
                 <li>优化Xss注解匹配方式</li>
                 <li>优化权限字符匹配方式</li>
                 <li>优化下载zip方法新增遮罩层</li>
@@ -223,7 +231,9 @@
                 <li>优化DictTag组件value没有匹配的值时则展示value</li>
                 <li>优化去除@EnableCustomSwagger注解后会启动失败问题</li>
                 <li>优化upload接口在文件过大和文件名过长的情况返回提示信息</li>
-                <li>优化异步保存日志发生报错不进RemoteLogFallbackFactory问题</li>
+                <li>
+                  优化异步保存日志发生报错不进RemoteLogFallbackFactory问题
+                </li>
                 <li>其他细节优化</li>
               </ol>
             </el-collapse-item>
@@ -317,7 +327,9 @@
                 <li>Excel注解支持color字体颜色</li>
                 <li>用户头像上传限制只能为图片格式</li>
                 <li>检查定时任务bean所在包名是否为白名单配置</li>
-                <li>字典类型必须以字母开头，且只能为（小写字母，数字，下滑线）</li>
+                <li>
+                  字典类型必须以字母开头，且只能为（小写字母，数字，下滑线）
+                </li>
                 <li>升级spring-cloud-alibaba到最新版2021.0.1.0</li>
                 <li>升级spring-cloud到最新版2021.0.3</li>
                 <li>升级spring-boot到最新版本2.7.1</li>
@@ -502,7 +514,9 @@
                 <li>修复多图组件验证失败被删除问题</li>
                 <li>请求参数新增reasonable分页合理化属性</li>
                 <li>修复代码生成页面数据编辑保存之后总是跳转第一页的问题</li>
-                <li>修复带safari浏览器无法格式化utc日期格式yyyy-MM-dd'T'HH:mm:ss.SSS问题</li>
+                <li>
+                  修复带safari浏览器无法格式化utc日期格式yyyy-MM-dd'T'HH:mm:ss.SSS问题
+                </li>
                 <li>其他细节优化</li>
               </ol>
             </el-collapse-item>
@@ -563,7 +577,9 @@
             </el-collapse-item>
             <el-collapse-item title="v3.0.0 - 2021-06-10">
               <ol>
-                <li>新增菜单导航显示风格TopNav（false为左侧导航菜单，true为顶部导航菜单）</li>
+                <li>
+                  新增菜单导航显示风格TopNav（false为左侧导航菜单，true为顶部导航菜单）
+                </li>
                 <li>布局设置支持保存&重置配置</li>
                 <li>富文本编辑器支持自定义上传地址</li>
                 <li>富文本编辑组件新增readOnly属性</li>
@@ -766,7 +782,9 @@
                 <li>网关白名单放入nacos配置&支持模糊匹配</li>
                 <li>修复富文本工具栏样式不对齐问题</li>
                 <li>Editor组件优化，支持自定义高度&图片冲突问题</li>
-                <li>修复富文本空格和缩进保存后不生效问题&删除重复的placeholder</li>
+                <li>
+                  修复富文本空格和缩进保存后不生效问题&删除重复的placeholder
+                </li>
                 <li>限制系统内置参数不允许删除</li>
                 <li>修正调用目标字符串最大长度</li>
                 <li>修改自定义权限实现</li>
@@ -820,7 +838,9 @@
                 <li>代码生成浮点型改用BigDecimal</li>
                 <li>表单类型为Integer/Long设置整形默认值</li>
                 <li>修改用户管理复选框宽度，防止部分浏览器出现省略号</li>
-                <li>RedisCache中所有方法参数添加final，并优化list取出效率，添加其它常用redis方法</li>
+                <li>
+                  RedisCache中所有方法参数添加final，并优化list取出效率，添加其它常用redis方法
+                </li>
                 <li>修正定时任务日志权限字符</li>
                 <li>添加Jackson时区配置</li>
                 <li>代码生成相关问题修复</li>
@@ -874,14 +894,16 @@
                 <li>支持一级菜单（和主页同级）在main区域显示</li>
                 <li>限制外链地址必须以http(s)😕/开头</li>
                 <li>tagview & sidebar 主题颜色与element ui(全局)同步</li>
-                <li>修复dict_sort不可update为0的问题&查询返回增加dict_sort升序排序</li>
+                <li>
+                  修复dict_sort不可update为0的问题&查询返回增加dict_sort升序排序
+                </li>
                 <li>权限部分代码调整</li>
                 <li>其他细节优化</li>
               </ol>
             </el-collapse-item>
             <el-collapse-item title="v1.0.0 - 2020-05-20">
               <ol>
-                <li>若依微服务系统正式发布</li>
+                <li>未信用秒租微服务系统正式发布</li>
               </ol>
             </el-collapse-item>
           </el-collapse>
@@ -893,11 +915,7 @@
             <span>捐赠支持</span>
           </div>
           <div class="body">
-            <img
-              src="@/assets/images/pay.png"
-              alt="donate"
-              width="100%"
-            />
+            <img src="@/assets/images/pay.png" alt="donate" width="100%" />
             <span style="display: inline-block; height: 30px; line-height: 30px"
               >你可以请作者喝杯咖啡表示鼓励</span
             >
@@ -988,4 +1006,3 @@ export default {
   }
 }
 </style>
-

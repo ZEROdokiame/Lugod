@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
+
+import com.ruoyi.common.core.constant.RedisConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,11 @@ public class TokenService
     private final static Long MILLIS_MINUTE_TEN = CacheConstants.REFRESH_TIME * MILLIS_MINUTE;
 
     /**
+     * token过期时间
+     */
+    private static final Long EXPIRE_TIME = 30 * 24 * 60 * 60L;
+
+    /**
      * 创建令牌
      */
     public Map<String, Object> createToken(LoginUser loginUser)
@@ -67,6 +74,40 @@ public class TokenService
         rspMap.put("access_token", JwtUtils.createToken(claimsMap));
         rspMap.put("expires_in", expireTime);
         return rspMap;
+    }
+
+    /**
+     * 创建令牌
+     */
+    public String createTokenApp(Long customerId,Long channelId)
+    {
+        String token = IdUtils.fastUUID();
+//        Long userId = loginUser.getSysUser().getUserId();
+//        String userName = loginUser.getSysUser().getUserName();
+//        loginUser.setToken(token);
+//        loginUser.setUserid(userId);
+//        loginUser.setUsername(userName);
+//        loginUser.setIpaddr(IpUtils.getIpAddr());
+//        refreshToken(loginUser);
+
+        // Jwt存储信息
+        Map<String, Object> claimsMap = new HashMap<String, Object>();
+        claimsMap.put(SecurityConstants.USER_KEY, token);
+        claimsMap.put(SecurityConstants.DETAILS_USER_ID, customerId);
+        claimsMap.put(SecurityConstants.DETAILS_USERNAME, "userName");
+
+        // 接口返回信息
+        Map<String, Object> rspMap = new HashMap<String, Object>();
+        String token1 = JwtUtils.createToken(claimsMap);
+        rspMap.put("access_token", token1);
+        rspMap.put("expires_in", expireTime);
+
+        redisService.setCacheObject(RedisConstant.APP_CUSTOMER_USERNAME_KEY + token1, customerId, EXPIRE_TIME, TimeUnit.SECONDS);
+        redisService.setCacheObject(RedisConstant.APP_CUSTOMER_KEY + customerId, token1, EXPIRE_TIME, TimeUnit.SECONDS);
+        redisService.setCacheObject(RedisConstant.APP_CUSTOMER_CHANNEL_KEY + token1, channelId, EXPIRE_TIME, TimeUnit.SECONDS);
+        redisService.setCacheObject(RedisConstant.APP_CUSTOMER_TOKEN_KEY + token1, customerId, EXPIRE_TIME, TimeUnit.SECONDS);
+        redisService.setCacheObject( CacheConstants.LOGIN_TOKEN_KEY+token,customerId,EXPIRE_TIME,TimeUnit.SECONDS);
+        return token1;
     }
 
     /**

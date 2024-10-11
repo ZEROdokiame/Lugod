@@ -1,5 +1,6 @@
 package com.ruoyi.file.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import com.ruoyi.file.utils.FileUploadUtils;
  */
 @Primary
 @Service
+@Slf4j
 public class LocalSysFileServiceImpl implements ISysFileService
 {
     /**
@@ -45,6 +47,7 @@ public class LocalSysFileServiceImpl implements ISysFileService
     {
         String name = FileUploadUtils.upload(localFilePath, file);
         String url = domain + localFilePrefix + name;
+
         return url;
     }
 }
