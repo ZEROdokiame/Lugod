@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.MerchantMapper">
+
+
+    <resultMap type="com.ruoyi.common.core.domain.http.Merchant" id="MerchantResult">
+        <result property="id"    column="id"    />
+        <result property="merchantType"    column="merchant_type"    />
+        <result property="merchantName"    column="merchant_name"    />
+        <result property="merchantDescribe"    column="merchant_describe"    />
+        <result property="merchantCompany"    column="merchant_company"    />
+        <result property="logo"    column="logo"    />
+        <result property="status"    column="status"    />
+        <result property="limitNum"    column="limit_num"    />
+        <result property="limitType"    column="limit_type"    />
+        <result property="isBalanceMonitoring"    column="is_balance_monitoring"    />
+        <result property="balanceMonitoring"    column="balance_monitoring"    />
+        <result property="ispass"    column="ispass"    />
+        <result property="customerInfoFilterType"    column="customer_info_filter_type"    />
+        <result property="channelLimitType"    column="channel_limit_type"    />
+        <result property="channelLimit"    column="channel_limit"    />
+        <result property="period"    column="period"    />
+        <result property="hitUrl"    column="hit_url"    />
+        <result property="registUrl"    column="regist_url"    />
+        <result property="ageLimitStart"    column="age_limit_start"    />
+        <result property="ageLimitEnd"    column="age_limit_end"    />
+        <result property="phoneLimit"    column="phone_limit"    />
+        <result property="label"    column="label"    />
+        <result property="merchantAuth"    column="merchant_auth"    />
+        <result property="socialSecurityNo"    column="social_security_no"    />
+        <result property="socialSecurityLow"    column="social_security_low"    />
+        <result property="socialSecurityHigh"    column="social_security_high"    />
+        <result property="carNo"    column="car_no"    />
+        <result property="carHave"    column="car_have"    />
+        <result property="guaranteeSlipLow"    column="guarantee_slip_low"    />
+        <result property="guaranteeSlipCentre"    column="guarantee_slip_centre"    />
+        <result property="guaranteeSlipHigh"    column="guarantee_slip_high"    />
+        <result property="educationMiddle"    column="education_middle"    />
+        <result property="educationHighSchool"    column="education_high_school"    />
+        <result property="educationPolytechnic"    column="education_polytechnic"    />
+        <result property="educationJuniorCollege"    column="education_junior_college"    />
+        <result property="educationUndergraduateCourse"    column="education_undergraduate_course"    />
+        <result property="educationPostgraduate"    column="education_postgraduate"    />
+        <result property="accumulationFundLow"    column="accumulation_fund_low"    />
+        <result property="accumulationFundHigh"    column="accumulation_fund_high"    />
+        <result property="hourseNo"    column="hourse_no"    />
+        <result property="hourseFullPayment"    column="hourse_full_payment"    />
+        <result property="hourseMortgaging"    column="hourse_mortgaging"    />
+        <result property="officeWorker"    column="office_worker"    />
+        <result property="civilServant"    column="civil_servant"    />
+        <result property="privatePropertyOwners"    column="private_property_owners"    />
+        <result property="selfEmployedPerson"    column="self_employed_person"    />
+        <result property="otherOccupations"    column="other_occupations"    />
+        <result property="huaBeiLow"    column="hua_bei_low"    />
+        <result property="huaBeiMiddle"    column="hua_bei_middle"    />
+        <result property="huaBeiHigh"    column="hua_bei_high"    />
+        <result property="baiTiaoLow"    column="bai_tiao_low"    />
+        <result property="baiTiaoMiddle"    column="bai_tiao_middle"    />
+        <result property="baiTiaoHigh"    column="bai_tiao_high"    />
+        <result property="zhiMa"    column="zhi_ma"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <resultMap type="com.ruoyi.common.core.domain.http.Merchant" id="MerchantIdNameResult">
+        <result property="id"    column="id"    />
+        <result property="merchantName"    column="merchant_name"    />
+    </resultMap>
+    <sql id="selectMerchantVo">
+        select id, merchant_type, merchant_name, merchant_describe, merchant_company, logo, status, limit_num, limit_type,is_balance_monitoring,balance_monitoring,ispass, customer_info_filter_type,channel_limit_type,channel_limit,period,hit_url,regist_url,age_limit_start, age_limit_end, phone_limit,label,merchant_auth, social_security_no, social_security_low, social_security_high, car_no, car_have, guarantee_slip_low, guarantee_slip_centre, guarantee_slip_high, education_middle, education_high_school, education_polytechnic, education_junior_college, education_undergraduate_course, education_postgraduate, accumulation_fund_low, accumulation_fund_high, hourse_no, hourse_full_payment, hourse_mortgaging, office_worker, civil_servant, private_property_owners, self_employed_person, other_occupations, hua_bei_low, hua_bei_middle, hua_bei_high, bai_tiao_low, bai_tiao_middle, bai_tiao_high, zhi_ma, create_time, update_time, remark from merchant
+    </sql>
+    <sql id="findAllMerchant">
+        select id, merchant_name  from merchant
+    </sql>
+
+    <select id="selectMerchantList" parameterType="com.ruoyi.common.core.domain.http.Merchant" resultMap="MerchantResult">
+        <include refid="selectMerchantVo"/>
+        <where>
+            <if test="merchantType != null "> and merchant_type = #{merchantType}</if>
+            <if test="merchantName != null  and merchantName != ''"> and merchant_name like concat('%', #{merchantName}, '%')</if>
+            <if test="merchantDescribe != null  and merchantDescribe != ''"> and merchant_describe = #{merchantDescribe}</if>
+            <if test="merchantCompany != null  and merchantCompany != ''"> and merchant_company = #{merchantCompany}</if>
+            <if test="logo != null "> and logo = #{logo}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="limitNum != null  and limitNum != ''"> and limit_num = #{limitNum}</if>
+            <if test="limitType != null "> and limit_type = #{limitType}</if>
+            <if test="isBalanceMonitoring != null "> and is_balance_monitoring = #{isBalanceMonitoring}</if>
+            <if test="balanceMonitoring  != null "> and balance_monitoring = #{balanceMonitoring}</if>
+            <if test="ispass != null "> and ispass = #{ispass}</if>
+            <if test="customerInfoFilterType != null "> and customer_info_filter_type = #{customerInfoFilterType}</if>
+            <if test="channelLimitType != null "> and channel_limit_type = #{channelLimitType}</if>
+            <if test="channelLimit != null "> and channel_limit = #{channelLimit}</if>
+            <if test="period != null "> and period = #{period}</if>
+            <if test="hitUrl != null "> and hit_url = #{hitUrl}</if>
+            <if test="registUrl != null "> and regist_url = #{registUrl}</if>
+            <if test="ageLimitStart != null "> and age_limit_start = #{ageLimitStart}</if>
+            <if test="ageLimitEnd != null "> and age_limit_end = #{ageLimitEnd}</if>
+            <if test="phoneLimit != null  and phoneLimit != ''"> and phone_limit = #{phoneLimit}</if>
+            <if test="label != null  and label != ''"> and label = #{label}</if>
+            <if test="merchantAuth != null "> and merchant_auth = #{merchantAuth}</if>
+            <if test="socialSecurityNo != null "> and social_security_no = #{socialSecurityNo}</if>
+            <if test="socialSecurityLow != null "> and social_security_low = #{socialSecurityLow}</if>
+            <if test="socialSecurityHigh != null "> and social_security_high = #{socialSecurityHigh}</if>
+            <if test="carNo != null "> and car_no = #{carNo}</if>
+            <if test="carHave != null "> and car_have = #{carHave}</if>
+            <if test="guaranteeSlipLow != null "> and guarantee_slip_low = #{guaranteeSlipLow}</if>
+            <if test="guaranteeSlipCentre != null "> and guarantee_slip_centre = #{guaranteeSlipCentre}</if>
+            <if test="guaranteeSlipHigh != null "> and guarantee_slip_high = #{guaranteeSlipHigh}</if>
+            <if test="educationMiddle != null "> and education_middle = #{educationMiddle}</if>
+            <if test="educationHighSchool != null "> and education_high_school = #{educationHighSchool}</if>
+            <if test="educationPolytechnic != null "> and education_polytechnic = #{educationPolytechnic}</if>
+            <if test="educationJuniorCollege != null "> and education_junior_college = #{educationJuniorCollege}</if>
+            <if test="educationUndergraduateCourse != null "> and education_undergraduate_course = #{educationUndergraduateCourse}</if>
+            <if test="educationPostgraduate != null "> and education_postgraduate = #{educationPostgraduate}</if>
+            <if test="accumulationFundLow != null "> and accumulation_fund_low = #{accumulationFundLow}</if>
+            <if test="accumulationFundHigh != null "> and accumulation_fund_high = #{accumulationFundHigh}</if>
+            <if test="hourseNo != null "> and hourse_no = #{hourseNo}</if>
+            <if test="hourseFullPayment != null "> and hourse_full_payment = #{hourseFullPayment}</if>
+            <if test="hourseMortgaging != null "> and hourse_mortgaging = #{hourseMortgaging}</if>
+            <if test="officeWorker != null "> and office_worker = #{officeWorker}</if>
+            <if test="civilServant != null "> and civil_servant = #{civilServant}</if>
+            <if test="privatePropertyOwners != null "> and private_property_owners = #{privatePropertyOwners}</if>
+            <if test="selfEmployedPerson != null "> and self_employed_person = #{selfEmployedPerson}</if>
+            <if test="otherOccupations != null "> and other_occupations = #{otherOccupations}</if>
+            <if test="huaBeiLow != null "> and hua_bei_low = #{huaBeiLow}</if>
+            <if test="huaBeiMiddle != null "> and hua_bei_middle = #{huaBeiMiddle}</if>
+            <if test="huaBeiHigh != null "> and hua_bei_high = #{huaBeiHigh}</if>
+            <if test="baiTiaoLow != null "> and bai_tiao_low = #{baiTiaoLow}</if>
+            <if test="baiTiaoMiddle != null "> and bai_tiao_middle = #{baiTiaoMiddle}</if>
+            <if test="baiTiaoHigh != null "> and bai_tiao_high = #{baiTiaoHigh}</if>
+            <if test="zhiMa != null "> and zhi_ma = #{zhiMa}</if>
+        </where>
+    </select>
+
+    <select id="selectMerchantById" parameterType="java.lang.Long" resultMap="MerchantResult">
+        <include refid="selectMerchantVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertMerchant" parameterType="com.ruoyi.common.core.domain.http.Merchant" useGeneratedKeys="true" keyProperty="id">
+        insert into merchant
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="merchantType != null">merchant_type,</if>
+            <if test="merchantName != null">merchant_name,</if>
+            <if test="merchantDescribe != null">merchant_describe,</if>
+            <if test="merchantCompany != null">merchant_company,</if>
+            <if test="logo != null">logo,</if>
+            <if test="status != null">status,</if>
+            <if test="limitNum != null">limit_num,</if>
+            <if test="limitType != null">limit_type,</if>
+            <if test="isBalanceMonitoring != null">is_balance_monitoring,</if>
+            <if test="balanceMonitoring != null">balance_monitoring,</if>
+            <if test="ispass != null">ispass,</if>
+            <if test="customerInfoFilterType != null">customer_info_filter_type,</if>
+            <if test="channelLimitType != null">channel_limit_type,</if>
+            <if test="channelLimit != null">channel_limit,</if>
+            <if test="period != null">period,</if>
+            <if test="hitUrl != null">hit_url,</if>
+            <if test="registUrl != null">regist_url,</if>
+            <if test="ageLimitStart != null">age_limit_start,</if>
+            <if test="ageLimitEnd != null">age_limit_end,</if>
+            <if test="phoneLimit != null">phone_limit,</if>
+            <if test="label != null">label,</if>
+            <if test="merchantAuth != null">merchant_auth,</if>
+            <if test="socialSecurityNo != null">social_security_no,</if>
+            <if test="socialSecurityLow != null">social_security_low,</if>
+            <if test="socialSecurityHigh != null">social_security_high,</if>
+            <if test="carNo != null">car_no,</if>
+            <if test="carHave != null">car_have,</if>
+            <if test="guaranteeSlipLow != null">guarantee_slip_low,</if>
+            <if test="guaranteeSlipCentre != null">guarantee_slip_centre,</if>
+            <if test="guaranteeSlipHigh != null">guarantee_slip_high,</if>
+            <if test="educationMiddle != null">education_middle,</if>
+            <if test="educationHighSchool != null">education_high_school,</if>
+            <if test="educationPolytechnic != null">education_polytechnic,</if>
+            <if test="educationJuniorCollege != null">education_junior_college,</if>
+            <if test="educationUndergraduateCourse != null">education_undergraduate_course,</if>
+            <if test="educationPostgraduate != null">education_postgraduate,</if>
+            <if test="accumulationFundLow != null">accumulation_fund_low,</if>
+            <if test="accumulationFundHigh != null">accumulation_fund_high,</if>
+            <if test="hourseNo != null">hourse_no,</if>
+            <if test="hourseFullPayment != null">hourse_full_payment,</if>
+            <if test="hourseMortgaging != null">hourse_mortgaging,</if>
+            <if test="officeWorker != null">office_worker,</if>
+            <if test="civilServant != null">civil_servant,</if>
+            <if test="privatePropertyOwners != null">private_property_owners,</if>
+            <if test="selfEmployedPerson != null">self_employed_person,</if>
+            <if test="otherOccupations != null">other_occupations,</if>
+            <if test="huaBeiLow != null">hua_bei_low,</if>
+            <if test="huaBeiMiddle != null">hua_bei_middle,</if>
+            <if test="huaBeiHigh != null">hua_bei_high,</if>
+            <if test="baiTiaoLow != null">bai_tiao_low,</if>
+            <if test="baiTiaoMiddle != null">bai_tiao_middle,</if>
+            <if test="baiTiaoHigh != null">bai_tiao_high,</if>
+            <if test="zhiMa != null">zhi_ma,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="merchantType != null">#{merchantType},</if>
+            <if test="merchantName != null">#{merchantName},</if>
+            <if test="merchantDescribe != null">#{merchantDescribe},</if>
+            <if test="merchantCompany != null">#{merchantCompany},</if>
+            <if test="logo != null">#{logo},</if>
+            <if test="status != null">#{status},</if>
+            <if test="limitNum != null">#{limitNum},</if>
+            <if test="limitType != null">#{limitType},</if>
+            <if test="isBalanceMonitoring != null">#{isBalanceMonitoring},</if>
+            <if test="balanceMonitoring != null">#{balanceMonitoring},</if>
+            <if test="ispass != null">#{ispass},</if>
+            <if test="customerInfoFilterType != null">#{customerInfoFilterType},</if>
+            <if test="channelLimitType != null">#{channelLimitType},</if>
+            <if test="channelLimit != null">#{channelLimit},</if>
+            <if test="period != null">#{period},</if>
+            <if test="hitUrl != null">#{hitUrl},</if>
+            <if test="registUrl != null">#{registUrl},</if>
+            <if test="ageLimitStart != null">#{ageLimitStart},</if>
+            <if test="ageLimitEnd != null">#{ageLimitEnd},</if>
+            <if test="phoneLimit != null">#{phoneLimit},</if>
+            <if test="label != null">#{label},</if>
+            <if test="merchantAuth != null">#{merchantAuth},</if>
+            <if test="socialSecurityNo != null">#{socialSecurityNo},</if>
+            <if test="socialSecurityLow != null">#{socialSecurityLow},</if>
+            <if test="socialSecurityHigh != null">#{socialSecurityHigh},</if>
+            <if test="carNo != null">#{carNo},</if>
+            <if test="carHave != null">#{carHave},</if>
+            <if test="guaranteeSlipLow != null">#{guaranteeSlipLow},</if>
+            <if test="guaranteeSlipCentre != null">#{guaranteeSlipCentre},</if>
+            <if test="guaranteeSlipHigh != null">#{guaranteeSlipHigh},</if>
+            <if test="educationMiddle != null">#{educationMiddle},</if>
+            <if test="educationHighSchool != null">#{educationHighSchool},</if>
+            <if test="educationPolytechnic != null">#{educationPolytechnic},</if>
+            <if test="educationJuniorCollege != null">#{educationJuniorCollege},</if>
+            <if test="educationUndergraduateCourse != null">#{educationUndergraduateCourse},</if>
+            <if test="educationPostgraduate != null">#{educationPostgraduate},</if>
+            <if test="accumulationFundLow != null">#{accumulationFundLow},</if>
+            <if test="accumulationFundHigh != null">#{accumulationFundHigh},</if>
+            <if test="hourseNo != null">#{hourseNo},</if>
+            <if test="hourseFullPayment != null">#{hourseFullPayment},</if>
+            <if test="hourseMortgaging != null">#{hourseMortgaging},</if>
+            <if test="officeWorker != null">#{officeWorker},</if>
+            <if test="civilServant != null">#{civilServant},</if>
+            <if test="privatePropertyOwners != null">#{privatePropertyOwners},</if>
+            <if test="selfEmployedPerson != null">#{selfEmployedPerson},</if>
+            <if test="otherOccupations != null">#{otherOccupations},</if>
+            <if test="huaBeiLow != null">#{huaBeiLow},</if>
+            <if test="huaBeiMiddle != null">#{huaBeiMiddle},</if>
+            <if test="huaBeiHigh != null">#{huaBeiHigh},</if>
+            <if test="baiTiaoLow != null">#{baiTiaoLow},</if>
+            <if test="baiTiaoMiddle != null">#{baiTiaoMiddle},</if>
+            <if test="baiTiaoHigh != null">#{baiTiaoHigh},</if>
+            <if test="zhiMa != null">#{zhiMa},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateMerchant" parameterType="com.ruoyi.common.core.domain.http.Merchant">
+        update merchant
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="merchantType != null">merchant_type = #{merchantType},</if>
+            <if test="merchantName != null">merchant_name = #{merchantName},</if>
+            <if test="merchantDescribe != null">merchant_describe = #{merchantDescribe},</if>
+            <if test="merchantCompany != null">merchant_company = #{merchantCompany},</if>
+            <if test="logo != null">logo = #{logo},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="limitNum != null">limit_num = #{limitNum},</if>
+            <if test="limitType != null">limit_type = #{limitType},</if>
+            <if test="isBalanceMonitoring != null">is_balance_monitoring = #{isBalanceMonitoring},</if>
+            <if test="balanceMonitoring != null">balance_monitoring = #{balanceMonitoring},</if>
+            <if test="ispass != null">ispass = #{ispass},</if>
+            <if test="customerInfoFilterType != null">customer_info_filter_type = #{customerInfoFilterType},</if>
+            <if test="channelLimitType != null">channel_limit_type = #{channelLimitType},</if>
+            <if test="channelLimit != null">channel_limit = #{channelLimit},</if>
+            <if test="period != null">period = #{period},</if>
+            <if test="hitUrl != null">hit_url = #{hitUrl},</if>
+            <if test="registUrl != null">regist_url = #{registUrl},</if>
+            <if test="ageLimitStart != null">age_limit_start = #{ageLimitStart},</if>
+            <if test="ageLimitEnd != null">age_limit_end = #{ageLimitEnd},</if>
+            <if test="phoneLimit != null">phone_limit = #{phoneLimit},</if>
+            <if test="label != null">label = #{label},</if>
+            <if test="merchantAuth != null">merchant_auth = #{merchantAuth},</if>
+            <if test="socialSecurityNo != null">social_security_no = #{socialSecurityNo},</if>
+            <if test="socialSecurityLow != null">social_security_low = #{socialSecurityLow},</if>
+            <if test="socialSecurityHigh != null">social_security_high = #{socialSecurityHigh},</if>
+            <if test="carNo != null">car_no = #{carNo},</if>
+            <if test="carHave != null">car_have = #{carHave},</if>
+            <if test="guaranteeSlipLow != null">guarantee_slip_low = #{guaranteeSlipLow},</if>
+            <if test="guaranteeSlipCentre != null">guarantee_slip_centre = #{guaranteeSlipCentre},</if>
+            <if test="guaranteeSlipHigh != null">guarantee_slip_high = #{guaranteeSlipHigh},</if>
+            <if test="educationMiddle != null">education_middle = #{educationMiddle},</if>
+            <if test="educationHighSchool != null">education_high_school = #{educationHighSchool},</if>
+            <if test="educationPolytechnic != null">education_polytechnic = #{educationPolytechnic},</if>
+            <if test="educationJuniorCollege != null">education_junior_college = #{educationJuniorCollege},</if>
+            <if test="educationUndergraduateCourse != null">education_undergraduate_course = #{educationUndergraduateCourse},</if>
+            <if test="educationPostgraduate != null">education_postgraduate = #{educationPostgraduate},</if>
+            <if test="accumulationFundLow != null">accumulation_fund_low = #{accumulationFundLow},</if>
+            <if test="accumulationFundHigh != null">accumulation_fund_high = #{accumulationFundHigh},</if>
+            <if test="hourseNo != null">hourse_no = #{hourseNo},</if>
+            <if test="hourseFullPayment != null">hourse_full_payment = #{hourseFullPayment},</if>
+            <if test="hourseMortgaging != null">hourse_mortgaging = #{hourseMortgaging},</if>
+            <if test="officeWorker != null">office_worker = #{officeWorker},</if>
+            <if test="civilServant != null">civil_servant = #{civilServant},</if>
+            <if test="privatePropertyOwners != null">private_property_owners = #{privatePropertyOwners},</if>
+            <if test="selfEmployedPerson != null">self_employed_person = #{selfEmployedPerson},</if>
+            <if test="otherOccupations != null">other_occupations = #{otherOccupations},</if>
+            <if test="huaBeiLow != null">hua_bei_low = #{huaBeiLow},</if>
+            <if test="huaBeiMiddle != null">hua_bei_middle = #{huaBeiMiddle},</if>
+            <if test="huaBeiHigh != null">hua_bei_high = #{huaBeiHigh},</if>
+            <if test="baiTiaoLow != null">bai_tiao_low = #{baiTiaoLow},</if>
+            <if test="baiTiaoMiddle != null">bai_tiao_middle = #{baiTiaoMiddle},</if>
+            <if test="baiTiaoHigh != null">bai_tiao_high = #{baiTiaoHigh},</if>
+            <if test="zhiMa != null">zhi_ma = #{zhiMa},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMerchantById" parameterType="java.lang.Long">
+        delete from merchant where id = #{id}
+    </delete>
+
+    <delete id="deleteMerchantByIds" parameterType="java.lang.String">
+        delete from merchant where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="findAllMerchantList"  resultMap="MerchantIdNameResult">
+        <include refid="findAllMerchant"/>
+    </select>
+</mapper>

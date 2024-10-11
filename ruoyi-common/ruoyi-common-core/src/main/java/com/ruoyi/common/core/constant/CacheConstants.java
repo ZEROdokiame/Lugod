@@ -56,4 +56,20 @@ public class CacheConstants
      * 登录IP黑名单 cache key
      */
     public static final String SYS_LOGIN_BLACKIPLIST = SYS_CONFIG_KEY + "sys.login.blackIPList";
+
+
+    public static final String PROJET = "xymz:";
+    /**
+     * 渠道redis缓存键
+     */
+    public static final String CHANNEL_ID = PROJET + "channel:id:";
+    /**
+     * 渠道redis缓存键
+     */
+    public static final String CHANNEL_SIGN = PROJET + "channel:sign:";
+
+    /**
+     * 商户redis缓存键
+     */
+    public static final String MERCHANT = PROJET + "merchant:key:";
 }

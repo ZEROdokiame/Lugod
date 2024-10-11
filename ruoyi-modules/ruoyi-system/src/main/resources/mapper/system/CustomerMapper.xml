@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.CustomerMapper">
+
+    <resultMap type="com.ruoyi.common.core.domain.http.Customer" id="CustomerResult">
+        <result property="id"    column="id"    />
+        <result property="channelId"    column="channel_id"    />
+        <result property="age"    column="age"    />
+        <result property="sex"    column="sex"    />
+        <result property="name"    column="name"    />
+        <result property="acturlName"    column="acturl_name"    />
+        <result property="phone"    column="phone"    />
+        <result property="phoneMd5"    column="phone_md5"    />
+        <result property="isAuth"    column="is_auth"    />
+        <result property="city"    column="city"    />
+        <result property="cityCode"    column="city_code"    />
+        <result property="firstLoginTime"    column="first_login_time"    />
+        <result property="lastLoginTime"    column="last_login_time"    />
+        <result property="lastLoginIp"    column="last_login_ip"    />
+        <result property="status"    column="status"    />
+        <result property="socialSecurity"    column="social_security"    />
+        <result property="car"    column="car"    />
+        <result property="guaranteeSlip"    column="guarantee_slip"    />
+        <result property="education"    column="education"    />
+        <result property="accumulationFund"    column="accumulation_fund"    />
+        <result property="hourse"    column="hourse"    />
+        <result property="career"    column="career"    />
+        <result property="huaBei"    column="hua_bei"    />
+        <result property="baiTiao"    column="bai_tiao"    />
+        <result property="zhiMa"    column="zhi_ma"    />
+        <result property="income"    column="income"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectCustomerVo">
+        select id, channel_id, age, sex, name, acturl_name, phone, phone_md5, is_auth, city, city_code, first_login_time, last_login_time, last_login_ip, status, social_security, car, guarantee_slip, education, accumulation_fund, hourse, career, hua_bei, bai_tiao, zhi_ma, income, create_time, update_time from customer
+    </sql>
+
+    <select id="selectCustomerList" parameterType="com.ruoyi.common.core.domain.http.Customer" resultMap="CustomerResult">
+        <include refid="selectCustomerVo"/>
+        <where>
+            <if test="channelId != null "> and channel_id = #{channelId}</if>
+            <if test="age != null "> and age = #{age}</if>
+            <if test="sex != null "> and sex = #{sex}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="acturlName != null  and acturlName != ''"> and acturl_name like concat('%', #{acturlName}, '%')</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="phoneMd5 != null  and phoneMd5 != ''"> and phone_md5 = #{phoneMd5}</if>
+            <if test="isAuth != null "> and is_auth = #{isAuth}</if>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="cityCode != null "> and city_code = #{cityCode}</if>
+            <if test="firstLoginTime != null "> and first_login_time = #{firstLoginTime}</if>
+            <if test="lastLoginTime != null "> and last_login_time = #{lastLoginTime}</if>
+            <if test="lastLoginIp != null "> and last_login_ip = #{lastLoginIp}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="socialSecurity != null "> and social_security = #{socialSecurity}</if>
+            <if test="car != null "> and car = #{car}</if>
+            <if test="guaranteeSlip != null "> and guarantee_slip = #{guaranteeSlip}</if>
+            <if test="education != null "> and education = #{education}</if>
+            <if test="accumulationFund != null "> and accumulation_fund = #{accumulationFund}</if>
+            <if test="hourse != null "> and hourse = #{hourse}</if>
+            <if test="career != null "> and career = #{career}</if>
+            <if test="huaBei != null "> and hua_bei = #{huaBei}</if>
+            <if test="baiTiao != null "> and bai_tiao = #{baiTiao}</if>
+            <if test="zhiMa != null "> and zhi_ma = #{zhiMa}</if>
+            <if test="income != null "> and income = #{income}</if>
+        </where>
+    </select>
+
+    <select id="selectCustomerById" parameterType="java.lang.Long" resultMap="CustomerResult">
+        <include refid="selectCustomerVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCustomer" parameterType="com.ruoyi.common.core.domain.http.Customer" useGeneratedKeys="true" keyProperty="id">
+        insert into customer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="channelId != null">channel_id,</if>
+            <if test="age != null">age,</if>
+            <if test="sex != null">sex,</if>
+            <if test="name != null">name,</if>
+            <if test="acturlName != null">acturl_name,</if>
+            <if test="phone != null">phone,</if>
+            <if test="phoneMd5 != null">phone_md5,</if>
+            <if test="isAuth != null">is_auth,</if>
+            <if test="city != null">city,</if>
+            <if test="cityCode != null">city_code,</if>
+            <if test="firstLoginTime != null">first_login_time,</if>
+            <if test="lastLoginTime != null">last_login_time,</if>
+            <if test="lastLoginIp != null">last_login_ip,</if>
+            <if test="status != null">status,</if>
+            <if test="socialSecurity != null">social_security,</if>
+            <if test="car != null">car,</if>
+            <if test="guaranteeSlip != null">guarantee_slip,</if>
+            <if test="education != null">education,</if>
+            <if test="accumulationFund != null">accumulation_fund,</if>
+            <if test="hourse != null">hourse,</if>
+            <if test="career != null">career,</if>
+            <if test="huaBei != null">hua_bei,</if>
+            <if test="baiTiao != null">bai_tiao,</if>
+            <if test="zhiMa != null">zhi_ma,</if>
+            <if test="income != null">income,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="channelId != null">#{channelId},</if>
+            <if test="age != null">#{age},</if>
+            <if test="sex != null">#{sex},</if>
+            <if test="name != null">#{name},</if>
+            <if test="acturlName != null">#{acturlName},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="phoneMd5 != null">#{phoneMd5},</if>
+            <if test="isAuth != null">#{isAuth},</if>
+            <if test="city != null">#{city},</if>
+            <if test="cityCode != null">#{cityCode},</if>
+            <if test="firstLoginTime != null">#{firstLoginTime},</if>
+            <if test="lastLoginTime != null">#{lastLoginTime},</if>
+            <if test="lastLoginIp != null">#{lastLoginIp},</if>
+            <if test="status != null">#{status},</if>
+            <if test="socialSecurity != null">#{socialSecurity},</if>
+            <if test="car != null">#{car},</if>
+            <if test="guaranteeSlip != null">#{guaranteeSlip},</if>
+            <if test="education != null">#{education},</if>
+            <if test="accumulationFund != null">#{accumulationFund},</if>
+            <if test="hourse != null">#{hourse},</if>
+            <if test="career != null">#{career},</if>
+            <if test="huaBei != null">#{huaBei},</if>
+            <if test="baiTiao != null">#{baiTiao},</if>
+            <if test="zhiMa != null">#{zhiMa},</if>
+            <if test="income != null">#{income},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCustomer" parameterType="com.ruoyi.common.core.domain.http.Customer">
+        update customer
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="channelId != null">channel_id = #{channelId},</if>
+            <if test="age != null">age = #{age},</if>
+            <if test="sex != null">sex = #{sex},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="acturlName != null">acturl_name = #{acturlName},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="phoneMd5 != null">phone_md5 = #{phoneMd5},</if>
+            <if test="isAuth != null">is_auth = #{isAuth},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="cityCode != null">city_code = #{cityCode},</if>
+            <if test="firstLoginTime != null">first_login_time = #{firstLoginTime},</if>
+            <if test="lastLoginTime != null">last_login_time = #{lastLoginTime},</if>
+            <if test="lastLoginIp != null">last_login_ip = #{lastLoginIp},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="socialSecurity != null">social_security = #{socialSecurity},</if>
+            <if test="car != null">car = #{car},</if>
+            <if test="guaranteeSlip != null">guarantee_slip = #{guaranteeSlip},</if>
+            <if test="education != null">education = #{education},</if>
+            <if test="accumulationFund != null">accumulation_fund = #{accumulationFund},</if>
+            <if test="hourse != null">hourse = #{hourse},</if>
+            <if test="career != null">career = #{career},</if>
+            <if test="huaBei != null">hua_bei = #{huaBei},</if>
+            <if test="baiTiao != null">bai_tiao = #{baiTiao},</if>
+            <if test="zhiMa != null">zhi_ma = #{zhiMa},</if>
+            <if test="income != null">income = #{income},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCustomerById" parameterType="java.lang.Long">
+        delete from customer where id = #{id}
+    </delete>
+
+    <delete id="deleteCustomerByIds" parameterType="java.lang.String">
+        delete from customer where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
