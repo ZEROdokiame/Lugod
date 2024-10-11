@@ -235,6 +235,28 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
         return AjaxResult.success(results);
     }
 
+    @Override
+    public AjaxResult V1GetMatchMerchant(HttpServletRequest request) {
+
+        String authorization = request.getHeader("Authorization");
+        Long customerId = customerTokenService.getCustomerId(authorization, false);
+        if (customerId==null){
+            return AjaxResult.error("用户不存在或未登录");
+        }
+        Customer customer = customerMapper.selectById(customerId);
+        List<Merchant> merchants = matchMerchant(customer);
+        List<MerchantListDto> merchantListDtos = new ArrayList<>();
+        for (Merchant merchant:merchants) {
+            MerchantListDto merchantListDto = new MerchantListDto();
+            merchantListDto.setMerchantName(merchant.getMerchantName());
+            merchantListDto.setMerchantDescribe(merchant.getMerchantDescribe());
+            merchantListDto.setMerchantUrl(merchant.getHitUrl());
+            merchantListDto.setMerchantId(merchant.getId());
+            merchantListDtos.add(merchantListDto);
+        }
+        return AjaxResult.success(merchantListDtos);
+    }
+
 
     private List<Merchant> getMerchantLists() {
         LambdaQueryWrapper<Merchant> queryWrapper = new LambdaQueryWrapper<Merchant>().eq(Merchant::getStatus, true);

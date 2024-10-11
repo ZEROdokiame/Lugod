@@ -20,5 +20,5 @@ public interface ICommonService
      * @param phone
      * @return
      */
-    AjaxResult sendSms(String phone);
+    AjaxResult sendSms(String phone,String smsSource);
 }

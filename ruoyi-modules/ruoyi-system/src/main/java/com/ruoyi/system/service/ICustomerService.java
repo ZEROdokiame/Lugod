@@ -109,4 +109,6 @@ public interface ICustomerService extends IService<Customer>
      * @return
      */
     AjaxResult saveCustomerInfo(Customer customer, HttpServletRequest request);
+
+    AjaxResult v1SaveCustomerInfo(Customer customer, HttpServletRequest request);
 }

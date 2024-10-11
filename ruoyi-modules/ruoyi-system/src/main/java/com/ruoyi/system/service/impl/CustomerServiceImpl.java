@@ -254,5 +254,29 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         return AjaxResult.success("保存成功");
     }
 
+    @Override
+    public AjaxResult v1SaveCustomerInfo(Customer customer, HttpServletRequest request) {
+        String authorization = request.getHeader("Authorization");
+        Long customerId = customerTokenService.getCustomerId(authorization, false);
+        String sign = request.getHeader("sign");
+        if (StringUtils.isEmpty(sign)) {
+            return AjaxResult.error("渠道标识不存在");
+        }
+        Channel channel = redisService.getCacheObject(CacheConstants.CHANNEL_SIGN + sign);
+        if (customerId == null) {
+            return AjaxResult.error("用户不存在或未登录");
+        }
+
+        if (StringUtils.isEmpty(customer.getActurlName())) {
+            return AjaxResult.error("姓名不能为空");
+        }
+        customer.setId(customerId);
+        customer.setChannelId(channel.getId());
+        customer.setIsAuth(true);
+        customer.setStatus(1);
+        updateById(customer);
+        return AjaxResult.success("保存成功");
+    }
+
 
 }

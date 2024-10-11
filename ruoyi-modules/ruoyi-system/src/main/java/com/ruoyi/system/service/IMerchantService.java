@@ -93,4 +93,6 @@ public interface IMerchantService extends IService<Merchant>
     AjaxResult H5applyMerchant(Long merchantId, HttpServletRequest request);
 
     AjaxResult getMatchMerchantNew();
+
+    AjaxResult V1GetMatchMerchant(HttpServletRequest request);
 }

@@ -148,4 +148,10 @@ public class MerchantController extends BaseController
     }
 
 
+    @GetMapping("/v1/getMatchMerchant")
+    public AjaxResult V1GetMatchMerchant(HttpServletRequest request){
+        return merchantService.V1GetMatchMerchant(request);
+    }
+
+
 }

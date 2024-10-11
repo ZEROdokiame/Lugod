@@ -33,12 +33,13 @@ public class CommonController extends BaseController
 
     /**
      * H5发送验证码
-     * @param phone
-     * @return
+     * @param phone 手机号码
+     * @return AjaxResult
      */
     @GetMapping("/sendSms")
-    public AjaxResult getChannelBySign(@RequestParam("phone")String phone, HttpServletRequest request){
-        return commonService.sendSms(phone);
+    public AjaxResult sendSms(@RequestParam("phone")String phone, HttpServletRequest request){
+        String header = request.getHeader("x-sms-source");
+        return commonService.sendSms(phone,header);
     }
 
 

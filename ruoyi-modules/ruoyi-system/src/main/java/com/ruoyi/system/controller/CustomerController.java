@@ -175,4 +175,10 @@ public class CustomerController extends BaseController
     {
         return success(merchantService.findAllMerchantList());
     }
+
+
+    @PostMapping("/v1/saveCustomerInfo")
+    public AjaxResult v1SaveCustomerInfo(@RequestBody Customer customer, HttpServletRequest request){
+        return customerService.v1SaveCustomerInfo(customer,request);
+    }
 }
