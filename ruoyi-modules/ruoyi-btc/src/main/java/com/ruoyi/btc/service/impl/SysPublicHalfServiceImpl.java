@@ -8,6 +8,7 @@ import com.ruoyi.btc.domain.ComPublicHalfDto;
 import com.ruoyi.btc.domain.CustomerInfoDto;
 import com.ruoyi.btc.service.ISysPublicHalfService;
 import com.ruoyi.common.core.constant.CacheConstants;
+import com.ruoyi.common.core.constant.RedisConstant;
 import com.ruoyi.common.core.constant.SecurityConstants;
 import com.ruoyi.common.core.domain.GetSumDto;
 import com.ruoyi.common.core.domain.R;
@@ -24,9 +25,11 @@ import com.ruoyi.system.api.RemoteCustomerApplyLogService;
 import com.ruoyi.system.api.RemoteCustomerService;
 import com.ruoyi.system.api.RemoteMerchantService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -36,6 +39,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SysPublicHalfServiceImpl implements ISysPublicHalfService
 {
     private final RemoteCustomerService remoteCustomerService;
@@ -51,7 +55,6 @@ public class SysPublicHalfServiceImpl implements ISysPublicHalfService
     @Override
     public AjaxResult check(ComPublicHalfDto comPublicHalfDto) {
         //校验 IP地址是否正常 渠道标识是否存在 数据是否为空
-
         if (StringUtils.isEmpty(comPublicHalfDto.getChannelSignature())){
             return AjaxResult.error("渠道标识不能未空");
         }
@@ -62,12 +65,20 @@ public class SysPublicHalfServiceImpl implements ISysPublicHalfService
         if (StringUtils.isEmpty(comPublicHalfDto.getData())){
             return AjaxResult.error("加密数据不能为空");
         }
+
         //解密为customerInfoDto
         String s = SecureUtils.AesUtil.AesDecode(comPublicHalfDto.getData(), comPublicHalfDto.getChannelSignature());
         if (s==null){
             return AjaxResult.error("解密异常");
         }
         CustomerInfoDto customerInfoDto = JSONObject.parseObject(s, CustomerInfoDto.class);
+        //撞库幂等性校验 暂时不加
+//        Boolean aBoolean = redisService.hasKey(RedisConstant.HIT_CHECK_CACHE+customerInfoDto.getPhoneMd5()+":"+comPublicHalfDto.getChannelSignature());
+//        if (aBoolean){
+//            return AjaxResult.error("手机号："+customerInfoDto.getPhoneMd5()+"请勿重复撞库");
+//        }
+//        redisService.setCacheObject(RedisConstant.HIT_CHECK_CACHE+customerInfoDto.getPhoneMd5(),1,60*3l, TimeUnit.SECONDS);
+        log.info("渠道：{}，撞库手机号：{}",channel.getChannelName(),customerInfoDto.getPhoneMd5());
         //校验数据必传参数是否未传
         String checkData = checkData(customerInfoDto);
         if (checkData!=null){
@@ -84,6 +95,7 @@ public class SysPublicHalfServiceImpl implements ISysPublicHalfService
         customer.setStatus(2);
         customer.setPhoneMd5(customerInfoDto.getPhoneMd5());
         R<Customer> customerInfoByPhoneMd5 = remoteCustomerService.getCustomerInfoByPhoneMd5(customerInfoDto.getPhoneMd5(), SecurityConstants.INNER);
+        log.info("渠道：{}，是否查询到用户：{}",channel.getChannelName(),customerInfoByPhoneMd5.getCode());
         if (customerInfoByPhoneMd5.getCode()==200){
             remoteCustomerService.updateByPhoneMd5(customer,SecurityConstants.INNER);
         }else {
@@ -211,6 +223,7 @@ public class SysPublicHalfServiceImpl implements ISysPublicHalfService
             return AjaxResult.error("解密异常");
         }
         CustomerInfoDto customerInfoDto = JSONObject.parseObject(s, CustomerInfoDto.class);
+        log.info("渠道：{}，进件手机号：{}",channel.getChannelName(),customerInfoDto.getPhone());
         //校验数据必传参数是否未传
         String checkData = checkData(customerInfoDto);
         //转化字段未数据库中资质字段 更新 用户实名状态 一并保存用户申请记录 已申请

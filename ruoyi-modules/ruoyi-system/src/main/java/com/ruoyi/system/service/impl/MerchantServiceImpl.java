@@ -19,6 +19,8 @@ import com.ruoyi.system.mapper.MerchantMapper;
 import com.ruoyi.system.service.ICustomerApplyLogService;
 import com.ruoyi.system.service.IMerchantService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -32,12 +34,13 @@ import java.util.stream.Collectors;
 
 /**
  * 商户Service业务层处理
- *
+ * 
  * @author ruoyi
  * @date 2024-09-15
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> implements IService<Merchant>,IMerchantService
 {
     private final MerchantMapper merchantMapper;
@@ -48,7 +51,7 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
 
     /**
      * 查询商户
-     *
+     * 
      * @param id 商户主键
      * @return 商户
      */
@@ -60,7 +63,7 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
 
     /**
      * 查询商户列表
-     *
+     * 
      * @param merchant 商户
      * @return 商户
      */
@@ -72,7 +75,7 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
 
     /**
      * 新增商户
-     *
+     * 
      * @param merchant 商户
      * @return 结果
      */
@@ -85,7 +88,7 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
 
     /**
      * 修改商户
-     *
+     * 
      * @param merchant 商户
      * @return 结果
      */
@@ -98,7 +101,7 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
 
     /**
      * 批量删除商户
-     *
+     * 
      * @param ids 需要删除的商户主键
      * @return 结果
      */
@@ -110,7 +113,7 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
 
     /**
      * 删除商户信息
-     *
+     * 
      * @param id 商户主键
      * @return 结果
      */
@@ -144,6 +147,7 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
         if (customerId==null){
             return AjaxResult.error("用户不存在或未登录");
         }
+        log.info("H5打开页面：{}",customerId);
         Customer customer = customerMapper.selectById(customerId);
         List<Merchant> merchants = matchMerchant(customer);
         List<MerchantListDto> merchantListDtos = new ArrayList<>();
@@ -167,6 +171,7 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
         if (aBoolean){
             return AjaxResult.error("请勿重复点击");
         }
+        log.info("H5申请用户：{}",customerId);
         Customer customer = customerMapper.selectById(customerId);
         Merchant merchant = merchantMapper.selectById(merchantId);
         redisService.setCacheObject(RedisConstant.H5_APPLY_CHECK+customerId,1,10l, TimeUnit.SECONDS);

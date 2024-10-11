@@ -33,5 +33,10 @@ public class RedisConstant {
     /**
      * H5申请幂等校验
      */
-    public final static String H5_APPLY_CHECK = CacheConstants.PROJET+"H5:apply:check";
+    public final static String H5_APPLY_CHECK = CacheConstants.PROJET+"H5:apply:check:";
+
+    /**
+     * 撞库幂等校验
+     */
+    public final static String HIT_CHECK_CACHE = CacheConstants.PROJET+"hit:check:cache:";
 }

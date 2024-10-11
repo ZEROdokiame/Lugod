@@ -134,7 +134,7 @@ public class CustomerApplyLogServiceImpl extends ServiceImpl<CustomerApplyLogMap
         Long aLong = customerApplyLogMapper.selectCount(
                 new LambdaQueryWrapper<CustomerApplyLog>()
                         .isNotNull(CustomerApplyLog::getMerchantId)
-                        .eq(CustomerApplyLog::getOrderStatus, 0)
+                        .eq(CustomerApplyLog::getOrderStatus, 20)
                         .ge(CustomerApplyLog::getCreateTime, LocalDateTimeUtils.getDateFromLocalDateTime(LocalDateTimeUtils.getTodayStartTime()))
                         .le(CustomerApplyLog::getCreateTime, LocalDateTimeUtils.getDateFromLocalDateTime(LocalDateTimeUtils.getTodayEndTime())));
         return R.ok(aLong>0);
