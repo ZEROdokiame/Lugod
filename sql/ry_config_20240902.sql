@@ -60,6 +60,29 @@ CREATE TABLE `config_info_aggr` (
   UNIQUE KEY `uk_configinfoaggr_datagrouptenantdatum` (`data_id`,`group_id`,`tenant_id`,`datum_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='增加租户字段';
 
+/******************************************/
+/*   表名称 = config_info  since 2.5.0                */
+/******************************************/
+CREATE TABLE `config_info_gray` (
+                                    `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+                                    `data_id` varchar(255) NOT NULL COMMENT 'data_id',
+                                    `group_id` varchar(128) NOT NULL COMMENT 'group_id',
+                                    `content` longtext NOT NULL COMMENT 'content',
+                                    `md5` varchar(32) DEFAULT NULL COMMENT 'md5',
+                                    `src_user` text COMMENT 'src_user',
+                                    `src_ip` varchar(100) DEFAULT NULL COMMENT 'src_ip',
+                                    `gmt_create` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) COMMENT 'gmt_create',
+                                    `gmt_modified` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) COMMENT 'gmt_modified',
+                                    `app_name` varchar(128) DEFAULT NULL COMMENT 'app_name',
+                                    `tenant_id` varchar(128) DEFAULT '' COMMENT 'tenant_id',
+                                    `gray_name` varchar(128) NOT NULL COMMENT 'gray_name',
+                                    `gray_rule` text NOT NULL COMMENT 'gray_rule',
+                                    `encrypted_data_key` varchar(256) NOT NULL DEFAULT '' COMMENT 'encrypted_data_key',
+                                    PRIMARY KEY (`id`),
+                                    UNIQUE KEY `uk_configinfogray_datagrouptenantgray` (`data_id`,`group_id`,`tenant_id`,`gray_name`),
+                                    KEY `idx_dataid_gmt_modified` (`data_id`,`gmt_modified`),
+                                    KEY `idx_gmt_modified` (`gmt_modified`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='config_info_gray';
 
 /******************************************/
 /*   表名称 = config_info_beta   */
