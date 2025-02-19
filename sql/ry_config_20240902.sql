@@ -165,24 +165,27 @@ CREATE TABLE `group_capacity` (
 /*   表名称 = his_config_info   */
 /******************************************/
 CREATE TABLE `his_config_info` (
-  `id` bigint(64) unsigned NOT NULL,
-  `nid` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `data_id` varchar(255) NOT NULL,
-  `group_id` varchar(128) NOT NULL,
-  `app_name` varchar(128) DEFAULT NULL COMMENT 'app_name',
-  `content` longtext NOT NULL,
-  `md5` varchar(32) DEFAULT NULL,
-  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `src_user` text,
-  `src_ip` varchar(50) DEFAULT NULL,
-  `op_type` char(10) DEFAULT NULL,
-  `tenant_id` varchar(128) DEFAULT '' COMMENT '租户字段',
-  `encrypted_data_key` text COMMENT '秘钥',
-  PRIMARY KEY (`nid`),
-  KEY `idx_gmt_create` (`gmt_create`),
-  KEY `idx_gmt_modified` (`gmt_modified`),
-  KEY `idx_did` (`data_id`)
+                                   `id` bigint(20) unsigned NOT NULL COMMENT 'id',
+                                   `nid` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'nid, 自增标识',
+                                   `data_id` varchar(255) NOT NULL COMMENT 'data_id',
+                                   `group_id` varchar(128) NOT NULL COMMENT 'group_id',
+                                   `app_name` varchar(128) DEFAULT NULL COMMENT 'app_name',
+                                   `content` longtext NOT NULL COMMENT 'content',
+                                   `md5` varchar(32) DEFAULT NULL COMMENT 'md5',
+                                   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+                                   `src_user` text COMMENT 'source user',
+                                   `src_ip` varchar(50) DEFAULT NULL COMMENT 'source ip',
+                                   `op_type` char(10) DEFAULT NULL COMMENT 'operation type',
+                                   `tenant_id` varchar(128) DEFAULT '' COMMENT '租户字段',
+                                   `encrypted_data_key` varchar(1024) NOT NULL DEFAULT '' COMMENT '密钥',
+                                   `publish_type` varchar(50)  DEFAULT 'formal' COMMENT 'publish type gray or formal',
+                                   `gray_name` varchar(50)  DEFAULT NULL COMMENT 'gray name',
+                                   `ext_info`  longtext DEFAULT NULL COMMENT 'ext info',
+                                   PRIMARY KEY (`nid`),
+                                   KEY `idx_gmt_create` (`gmt_create`),
+                                   KEY `idx_gmt_modified` (`gmt_modified`),
+                                   KEY `idx_did` (`data_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='多租户改造';
 
 
