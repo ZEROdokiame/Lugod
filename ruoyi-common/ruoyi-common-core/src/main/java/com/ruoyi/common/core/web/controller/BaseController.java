@@ -59,14 +59,13 @@ public class BaseController
     /**
      * 响应请求分页数据
      */
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    protected TableDataInfo getDataTable(List<?> list)
+    protected <T> TableDataInfo<T> getDataTable(List<T> list)
     {
-        TableDataInfo rspData = new TableDataInfo();
+        TableDataInfo<T> rspData = new TableDataInfo<>();
         rspData.setCode(HttpStatus.SUCCESS);
         rspData.setRows(list);
         rspData.setMsg("查询成功");
-        rspData.setTotal(new PageInfo(list).getTotal());
+        rspData.setTotal(new PageInfo<>(list).getTotal());
         return rspData;
     }
 
