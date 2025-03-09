@@ -167,6 +167,12 @@ export function handleTree(data, id, parentId, children) {
   for (let d of data) {
     let id = d[config.id];
     childrenListMap[id] = d;
+    // 检查元素是否已经有 children 字段，如果没有则添加 children 空数组字段
+    // 避免后面的代码中 parentObj[config.childrenList] 出现 undefined 的情况
+    // 甚至进而引发 [Vue warn]: Duplicate keys detected: '1366'. This may cause an update error. 类似的警告
+    if (!d[config.childrenList]) {
+      d[config.childrenList] = [];
+    }
   }
 
   for (let d of data) {
