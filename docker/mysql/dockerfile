@@ -3,5 +3,8 @@ FROM mysql:5.7
 # author
 MAINTAINER ruoyi
 
+# 设置docker默认编码db初始化数据乱码
+ENV LANG C.UTF-8
+
 # 执行sql脚本
 ADD ./db/*.sql /docker-entrypoint-initdb.d/
