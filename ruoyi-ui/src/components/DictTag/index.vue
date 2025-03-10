@@ -1,7 +1,7 @@
 <template>
   <div>
     <template v-for="(item, index) in options">
-      <template v-if="values.includes(item.value)">
+      <template v-if="values.includes(item.value) || values.includes(item.value.toUpperCase())">
         <span
           v-if="(item.raw.listClass == 'default' || item.raw.listClass == '') && (item.raw.cssClass == '' || item.raw.cssClass == null)"
           :key="item.value"
