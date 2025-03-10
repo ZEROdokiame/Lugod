@@ -355,13 +355,13 @@ public final class UUID implements java.io.Serializable, Comparable<UUID>
         }
         // time_high_and_version
         builder.append(digits(mostSigBits, 4));
-        if (false == isSimple)
+        if (!isSimple)
         {
             builder.append('-');
         }
         // variant_and_sequence
         builder.append(digits(leastSigBits >> 48, 4));
-        if (false == isSimple)
+        if (!isSimple)
         {
             builder.append('-');
         }
@@ -419,13 +419,9 @@ public final class UUID implements java.io.Serializable, Comparable<UUID>
     @Override
     public int compareTo(UUID val)
     {
-        // The ordering is intentionally set up so that the UUIDs
-        // can simply be numerically compared as two numbers
         return (this.mostSigBits < val.mostSigBits ? -1 : //
                 (this.mostSigBits > val.mostSigBits ? 1 : //
-                        (this.leastSigBits < val.leastSigBits ? -1 : //
-                                (this.leastSigBits > val.leastSigBits ? 1 : //
-                                        0))));
+                        (Long.compare(this.leastSigBits, val.leastSigBits))));
     }
 
     // -------------------------------------------------------------------------------------------------------------------
