@@ -22,7 +22,7 @@ public class FeignRequestInterceptor implements RequestInterceptor
     public void apply(RequestTemplate requestTemplate)
     {
         HttpServletRequest httpServletRequest = ServletUtils.getRequest();
-        if (StringUtils.isNotNull(httpServletRequest))
+        if (httpServletRequest != null)
         {
             Map<String, String> headers = ServletUtils.getHeaders(httpServletRequest);
             // 传递用户信息请求头，防止丢失
