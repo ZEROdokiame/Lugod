@@ -48,7 +48,7 @@ create table QRTZ_TRIGGERS (
     misfire_instr        smallint(2)     null                comment '补偿执行的策略',
     job_data             blob            null                comment '存放持久化job对象',
     primary key (sched_name, trigger_name, trigger_group),
-    foreign key (sched_name, job_name, job_group) references QRTZ_JOB_DETAILS(sched_name, job_name, job_group)
+    constraint tr_jb foreign key (sched_name, job_name, job_group) references QRTZ_JOB_DETAILS(sched_name, job_name, job_group)
 ) engine=innodb comment = '触发器详细信息表';
 
 -- ----------------------------
@@ -62,7 +62,7 @@ create table QRTZ_SIMPLE_TRIGGERS (
     repeat_interval      bigint(12)      not null            comment '重复的间隔时间',
     times_triggered      bigint(10)      not null            comment '已经触发的次数',
     primary key (sched_name, trigger_name, trigger_group),
-    foreign key (sched_name, trigger_name, trigger_group) references QRTZ_TRIGGERS(sched_name, trigger_name, trigger_group)
+    constraint st_tr foreign key (sched_name, trigger_name, trigger_group) references QRTZ_TRIGGERS(sched_name, trigger_name, trigger_group)
 ) engine=innodb comment = '简单触发器的信息表';
 
 -- ----------------------------
@@ -75,7 +75,7 @@ create table QRTZ_CRON_TRIGGERS (
     cron_expression      varchar(200)    not null            comment 'cron表达式',
     time_zone_id         varchar(80)                         comment '时区',
     primary key (sched_name, trigger_name, trigger_group),
-    foreign key (sched_name, trigger_name, trigger_group) references QRTZ_TRIGGERS(sched_name, trigger_name, trigger_group)
+    constraint ct_tr foreign key (sched_name, trigger_name, trigger_group) references QRTZ_TRIGGERS(sched_name, trigger_name, trigger_group)
 ) engine=innodb comment = 'Cron类型的触发器表';
 
 -- ----------------------------
@@ -87,7 +87,7 @@ create table QRTZ_BLOB_TRIGGERS (
     trigger_group        varchar(200)    not null            comment 'qrtz_triggers表trigger_group的外键',
     blob_data            blob            null                comment '存放持久化Trigger对象',
     primary key (sched_name, trigger_name, trigger_group),
-    foreign key (sched_name, trigger_name, trigger_group) references QRTZ_TRIGGERS(sched_name, trigger_name, trigger_group)
+    constraint bt_tr foreign key (sched_name, trigger_name, trigger_group) references QRTZ_TRIGGERS(sched_name, trigger_name, trigger_group)
 ) engine=innodb comment = 'Blob类型的触发器表';
 
 -- ----------------------------
@@ -168,7 +168,7 @@ create table QRTZ_SIMPROP_TRIGGERS (
     bool_prop_1          varchar(1)      null                comment 'Boolean类型的trigger的第一个参数',
     bool_prop_2          varchar(1)      null                comment 'Boolean类型的trigger的第二个参数',
     primary key (sched_name, trigger_name, trigger_group),
-    foreign key (sched_name, trigger_name, trigger_group) references QRTZ_TRIGGERS(sched_name, trigger_name, trigger_group)
+    constraint sp_tr foreign key (sched_name, trigger_name, trigger_group) references QRTZ_TRIGGERS(sched_name, trigger_name, trigger_group)
 ) engine=innodb comment = '同步机制的行锁表';
 
 commit;
