@@ -16,14 +16,17 @@
       v-if="!disabled"
     >
       <!-- 上传按钮 -->
-      <el-button size="mini" type="primary">选取文件</el-button>
-      <!-- 上传提示 -->
-      <div class="el-upload__tip" slot="tip" v-if="showTip">
-        请上传
-        <template v-if="fileSize"> 大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b> </template>
-        <template v-if="fileType"> 格式为 <b style="color: #f56c6c">{{ fileType.join("/") }}</b> </template>
-        的文件
-      </div>
+      <el-popover placement="right" width="250" trigger="hover" :disabled="!showTip">
+        <!-- 上传提示 -->
+        <div style="font-size:12px;">
+            请上传
+            <template v-if="fileSize"> 大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b> <br> </template>
+            <template v-if="fileType"> 格式为 <b style="color: #f56c6c">{{ fileType.join("/") }}</b> </template>
+            的文件
+        </div>
+        <el-button size="mini" type="primary" slot="reference">选取文件</el-button>
+      </el-popover>
+      
     </el-upload>
 
     <!-- 文件列表 -->
