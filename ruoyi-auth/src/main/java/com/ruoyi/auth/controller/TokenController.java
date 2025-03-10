@@ -1,6 +1,7 @@
 package com.ruoyi.auth.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,7 +36,7 @@ public class TokenController
     public R<?> login(@RequestBody LoginBody form)
     {
         // 用户登录
-        LoginUser userInfo = sysLoginService.login(form.getUsername(), form.getPassword());
+        LoginUser userInfo = sysLoginService.login(form.getUsername(), StringEscapeUtils.unescapeHtml(form.getPassword()));
         // 获取登录token
         return R.ok(tokenService.createToken(userInfo));
     }
