@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * 
  * @author ruoyi
  */
+@JsonIgnoreProperties("password")
 public class SysUserPost
 {
     /** 用户ID */
