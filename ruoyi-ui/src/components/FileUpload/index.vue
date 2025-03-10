@@ -122,7 +122,7 @@ export default {
       if (this.fileType) {
         const fileName = file.name.split('.');
         const fileExt = fileName[fileName.length - 1];
-        const isTypeOk = this.fileType.indexOf(fileExt) >= 0;
+        const isTypeOk = this.fileType.toLowerCase().indexOf(fileExt.toLowerCase()) >= 0;
         if (!isTypeOk) {
           this.$modal.msgError(`文件格式不正确，请上传${this.fileType.join("/")}格式文件!`);
           return false;
