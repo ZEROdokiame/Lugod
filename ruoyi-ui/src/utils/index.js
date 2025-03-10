@@ -235,9 +235,10 @@ export function debounce(func, wait, immediate) {
     }
   }
 
-  return function(...args) {
+  return function(...args1) {
     context = this
     timestamp = +new Date()
+    args = args1
     const callNow = immediate && !timeout
     // 如果延时不存在，重新设定延时
     if (!timeout) timeout = setTimeout(later, wait)
