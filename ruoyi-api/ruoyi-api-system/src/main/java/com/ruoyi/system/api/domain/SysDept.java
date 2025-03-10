@@ -48,9 +48,6 @@ public class SysDept extends BaseEntity
 
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
-
-    /** 父部门名称 */
-    private String parentName;
     
     /** 子部门 */
     private List<SysDept> children = new ArrayList<SysDept>();
@@ -159,16 +156,6 @@ public class SysDept extends BaseEntity
     public void setDelFlag(String delFlag)
     {
         this.delFlag = delFlag;
-    }
-
-    public String getParentName()
-    {
-        return parentName;
-    }
-
-    public void setParentName(String parentName)
-    {
-        this.parentName = parentName;
     }
 
     public List<SysDept> getChildren()
