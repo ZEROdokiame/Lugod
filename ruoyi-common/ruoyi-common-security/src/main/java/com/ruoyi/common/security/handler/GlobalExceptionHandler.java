@@ -1,9 +1,14 @@
 package com.ruoyi.common.security.handler;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingPathVariableException;
@@ -20,6 +25,8 @@ import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.core.utils.StringUtils;
 import com.ruoyi.common.core.utils.html.EscapeUtil;
 import com.ruoyi.common.core.web.domain.AjaxResult;
+
+import java.util.List;
 
 /**
  * 全局异常处理器
@@ -141,9 +148,19 @@ public class GlobalExceptionHandler
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Object handleMethodArgumentNotValidException(MethodArgumentNotValidException e)
     {
-        log.error(e.getMessage(), e);
-        String message = e.getBindingResult().getFieldError().getDefaultMessage();
-        return AjaxResult.error(message);
+        BindingResult result = e.getBindingResult();
+        List<ObjectError> errors = result.getAllErrors();
+        String message = "请填写正确信息";
+        if (!result.hasErrors() || CollectionUtils.isEmpty(errors)) {
+            return AjaxResult.error(message);
+        }
+        errors.forEach(p -> {
+            FieldError fieldError = (FieldError) p;
+            log.warn("Data check failure: object[{}],field[{}],errorMessage[{}]", fieldError.getObjectName(),
+                    fieldError.getField(), fieldError.getDefaultMessage());
+        });
+        FieldError fieldError = (FieldError) errors.get(0);
+        return AjaxResult.error(StringUtils.isEmpty(fieldError.getDefaultMessage()) ? message : fieldError.getDefaultMessage());
     }
 
     /**
