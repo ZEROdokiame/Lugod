@@ -3,6 +3,7 @@ package com.ruoyi.system.service.impl;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,21 +69,20 @@ public class SysDeptServiceImpl implements ISysDeptService
      * @return 树结构列表
      */
     @Override
-    public List<SysDept> buildDeptTree(List<SysDept> depts)
-    {
+    public List<SysDept> buildDeptTree(List<SysDept> depts) {
         List<SysDept> returnList = new ArrayList<SysDept>();
         List<Long> tempList = depts.stream().map(SysDept::getDeptId).collect(Collectors.toList());
-        for (SysDept dept : depts)
-        {
+        // 按父级分组
+        Map<Long, List<SysDept>> groupByParentIdDepts = depts.stream().filter(dept -> dept.getParentId() != null)
+                .collect(Collectors.groupingBy(SysDept::getParentId));
+        for (SysDept dept : depts) {
             // 如果是顶级节点, 遍历该父节点的所有子节点
-            if (!tempList.contains(dept.getParentId()))
-            {
-                recursionFn(depts, dept);
+            if (!tempList.contains(dept.getParentId())) {
+                recursionFn(groupByParentIdDepts, dept);
                 returnList.add(dept);
             }
         }
-        if (returnList.isEmpty())
-        {
+        if (returnList.isEmpty()) {
             returnList = depts;
         }
         return returnList;
@@ -296,17 +296,17 @@ public class SysDeptServiceImpl implements ISysDeptService
     /**
      * 递归列表
      */
-    private void recursionFn(List<SysDept> list, SysDept t)
-    {
+    private void recursionFn(Map<Long, List<SysDept>> groupByParentIdDepts, SysDept t) {
         // 得到子节点列表
-        List<SysDept> childList = getChildList(list, t);
-        t.setChildren(childList);
-        for (SysDept tChild : childList)
-        {
-            if (hasChild(list, tChild))
-            {
-                recursionFn(list, tChild);
+        List<SysDept> childList = groupByParentIdDepts.get(t.getDeptId());
+        if (childList != null) {
+            t.setChildren(childList);
+            // 为每个子节点递归找到子节点
+            for (SysDept tChild : childList) {
+                recursionFn(groupByParentIdDepts, tChild);
             }
+        } else {
+            t.setChildren(new ArrayList<>(0));
         }
     }
 
