@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: minio
+  name: minio
+  namespace: minio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minio
+  template:
+    metadata:
+      labels:
+        app: minio
+    spec:
+      containers:
+      - name: minio
+        image: minio/minio
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9000
+          name: tcp
+        - containerPort: 9090
+          protocol: TCP
+          name: console
+        command:
+          - /bin/sh
+          - -c
+          - minio server /data --console-address ":9090"
+        env:
+        - name: MINIO_ACCESS_KEY
+          value: minioadmin
+        - name: MINIO_SECRET_KEY
+          value: minioadmin
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /minio/health/ready
+            port: 9000
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        volumeMounts:
+        - mountPath: /data
+          name: minio-data
+      volumes:
+        - name: minio-data
+          hostPath:
+            path: /run/desktop/mnt/host/c/k8sVolume/minio/data
+            type: Directory

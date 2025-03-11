@@ -1,0 +1,50 @@
+apiVersion: apps/v1           # API version
+kind: Deployment              # Type of kubernetes resource
+metadata:
+  name: ruoyi-job    # Name of the kubernetes resource
+  namespace: kube-ruoyi
+  labels: # Labels that will be applied to this resource
+    app: ruoyi-job
+spec:
+  replicas: 1                 # No. of replicas/pods to run in this deployment
+  selector:
+    matchLabels: # The deployment applies to any pods matching the specified labels
+      app: ruoyi-job
+  template: # Template for creating the pods in this deployment
+    metadata:
+      labels: # Labels that will be applied to each Pod in this deployment
+        app: ruoyi-job
+    spec: # Spec for the containers that will be run in the Pods
+      containers:
+        - name: ruoyi-job-server
+          image: ruoyi-modules-job:3.6.2
+          ports:
+            - name: http
+              containerPort: 9203 # The port that the container exposes
+          env: # Environment variables supplied to the Pod
+            - name: SPRING_PROFILES_ACTIVE
+              value: k8s
+            - name: SERVER_NAME
+              value: ruoyi-job
+            - name: NACOS_SERVER
+              value: ruoyi-nacos # nacos svc name
+            - name: NACOS_PORT
+              value: "8848"
+            - name: NACOS_SHARED_CONFIGS
+              value: application-dev.yml
+---
+apiVersion: v1                # API version
+kind: Service                 # Type of the kubernetes resource
+metadata:
+  name: ruoyi-job    # Name of the kubernetes resource
+  labels: # Labels that will be applied to this resource
+    app: ruoyi-job
+  namespace: kube-ruoyi
+spec:
+  type: NodePort              # The service will be exposed by opening a Port on each node and proxying it.
+  selector:
+    app: ruoyi-job   # The service exposes Pods with label `app=ruoyi-job`
+  ports: # Forward incoming connections on port 9203 to the target port 9203
+    - name: http
+      port: 9203
+      targetPort: 9203

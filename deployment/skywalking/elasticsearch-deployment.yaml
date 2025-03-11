@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: elasticsearch
+  name: elasticsearch
+  namespace: kube-ruoyi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: elasticsearch
+  template:
+    metadata:
+      labels:
+        app: elasticsearch
+    spec:
+      containers:
+      - name: elasticsearch
+        image: elasticsearch:7.14.2
+        ports:
+        - containerPort: 9200
+          name: cluster-node
+        env:
+        - name: discovery.type
+          value: single-node
+        - name: TZ
+          value: Asia/Shanghai
+        - name: ES_JAVA_OPTS
+          value: -Xms512m -Xmx512m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: elasticsearch
+  namespace: kube-ruoyi
+spec:
+  ports:
+    - port: 9220 # 和auth-server的端口冲突了，对外暴露换一个端口访问
+      targetPort: 9200
+      name: cluster-node
+  selector:
+    app: elasticsearch # 该 Service 会将所有具有标签 app: mysql-labels-app暴露到一个抽象的 Service 端口上（targetPort：容器接收流量的端口；port：可任意取值的抽象的 Service 端口，其他 Pod 通过该端口访问 Service
+  type: NodePort

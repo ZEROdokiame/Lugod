@@ -1,0 +1,50 @@
+apiVersion: apps/v1           # API version
+kind: Deployment              # Type of kubernetes resource
+metadata:
+  name: ruoyi-auth    # Name of the kubernetes resource
+  namespace: kube-ruoyi
+  labels: # Labels that will be applied to this resource
+    app: ruoyi-auth
+spec:
+  replicas: 1                 # No. of replicas/pods to run in this deployment
+  selector:
+    matchLabels: # The deployment applies to any pods matching the specified labels
+      app: ruoyi-auth
+  template: # Template for creating the pods in this deployment
+    metadata:
+      labels: # Labels that will be applied to each Pod in this deployment
+        app: ruoyi-auth
+    spec: # Spec for the containers that will be run in the Pods
+      containers:
+        - name: ruoyi-auth-server
+          image: ruoyi-auth:3.6.2
+          ports:
+            - name: http
+              containerPort: 9200 # The port that the container exposes
+          env: # Environment variables supplied to the Pod
+            - name: SPRING_PROFILES_ACTIVE
+              value: k8s
+            - name: SERVER_NAME
+              value: ruoyi-auth
+            - name: NACOS_SERVER
+              value: ruoyi-nacos # nacos svc name
+            - name: NACOS_PORT
+              value: "8848"
+            - name: NACOS_SHARED_CONFIGS
+              value: application-dev.yml
+---
+apiVersion: v1                # API version
+kind: Service                 # Type of the kubernetes resource
+metadata:
+  name: ruoyi-auth    # Name of the kubernetes resource
+  labels: # Labels that will be applied to this resource
+    app: ruoyi-auth
+  namespace: kube-ruoyi
+spec:
+  type: NodePort              # The service will be exposed by opening a Port on each node and proxying it.
+  selector:
+    app: ruoyi-auth   # The service exposes Pods with label `app=ruoyi-auth`
+  ports: # Forward incoming connections on port 9200 to the target port 9200
+    - name: http
+      port: 9200
+      targetPort: 9200

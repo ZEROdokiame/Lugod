@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: skywalking
+  name: skywalking
+  namespace: kube-ruoyi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: skywalking
+  template:
+    metadata:
+      labels:
+        app: skywalking
+    spec:
+      containers:
+      - name: skywalking
+        image: apache/skywalking-oap-server
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 11800
+          name: collector
+        - containerPort: 12800
+          name: oap
+        env:
+        - name: SW_STORAGE
+          value: elasticsearch
+        - name: TZ
+          value: Asia/Shanghai
+        - name: SW_STORAGE_ES_CLUSTER_NODES
+          value: elasticsearch:9220
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: skywalking
+  namespace: kube-ruoyi
+spec:
+  ports:
+    - port: 11800
+      targetPort: 11800
+      name: collector
+    - port: 12800
+      targetPort: 12800
+      name: oap
+  selector:
+    app: skywalking # 该 Service 会将所有具有标签 app: mysql-labels-app暴露到一个抽象的 Service 端口上（targetPort：容器接收流量的端口；port：可任意取值的抽象的 Service 端口，其他 Pod 通过该端口访问 Service
+  type: NodePort

@@ -1,0 +1,22 @@
+# Tomcat
+server:
+  port: 9100
+
+# Spring
+spring:
+  application:
+    # 应用名称
+    name: ${SERVER_NAME}
+  cloud:
+    nacos:
+      discovery:
+        # 服务注册地址
+        server-addr: ${NACOS_SERVER}:${NACOS_PORT}
+      config:
+        # 配置中心地址
+        server-addr: ${NACOS_SERVER}:${NACOS_PORT}
+        # 配置文件格式
+        file-extension: yml
+        # 共享配置
+        shared-configs:
+          - ${NACOS_SHARED_CONFIGS}

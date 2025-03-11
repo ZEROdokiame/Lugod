@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ruoyi-nginx
+  namespace: kube-ruoyi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ruoyi-nginx
+  template:
+    metadata:
+      labels:
+        app: ruoyi-nginx
+    spec:
+      containers:
+        - name: ruoyi-nginx
+          image: nginx
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - mountPath: /etc/nginx/nginx.conf
+              name: nginx-conf
+              subPath: nginx.conf
+            - mountPath: /home/ruoyi/projects/ruoyi-ui
+              name: local-path   #/usr/share/nginx/html 挂载到volumes中server+path
+      volumes:
+        - name: nginx-conf
+          configMap:
+            name: ruoyi-nginx-config
+        - name: local-path
+          hostPath:
+            path: /run/desktop/mnt/host/c/k8sVolume/dist
+            type: Directory
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ruoyi-nginx
+  namespace: kube-ruoyi
+  labels:
+    name: ruoyi-nginx
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30080
+  selector:
+    app: ruoyi-nginx
+

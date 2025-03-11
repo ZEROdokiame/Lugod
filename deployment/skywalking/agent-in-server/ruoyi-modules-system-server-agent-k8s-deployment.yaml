@@ -1,0 +1,73 @@
+apiVersion: apps/v1           # API version
+kind: Deployment              # Type of kubernetes resource
+metadata:
+  name: ruoyi-system    # Name of the kubernetes resource
+  namespace: kube-ruoyi
+  labels: # Labels that will be applied to this resource
+    app: ruoyi-system
+spec:
+  replicas: 1                 # No. of replicas/pods to run in this deployment
+  selector:
+    matchLabels: # The deployment applies to any pods matching the specified labels
+      app: ruoyi-system
+  template: # Template for creating the pods in this deployment
+    metadata:
+      labels: # Labels that will be applied to each Pod in this deployment
+        app: ruoyi-system
+    spec: # Spec for the containers that will be run in the Pods
+      containers:
+        - name: ruoyi-system-server
+          image: ruoyi-modules-system:3.6.2
+          ports:
+            - name: http
+              containerPort: 9201 # The port that the container exposes
+          env: # Environment variables supplied to the Pod
+            - name: SPRING_PROFILES_ACTIVE
+              value: k8s
+            - name: SERVER_NAME
+              value: ruoyi-system
+            - name: NACOS_SERVER
+              value: ruoyi-nacos # nacos svc name
+            - name: NACOS_PORT
+              value: "8848"
+            - name: NACOS_SHARED_CONFIGS
+              value: application-dev.yml
+            - name: JAVA_OPTS
+              value: -javaagent:/javaagent/skywalking-agent/skywalking-agent.jar -Dskywalking.agent.service_name=k8s::$(SERVER_NAME) -Dskywalking.collector.backend_service=skywalking:11800
+          volumeMounts:
+            - mountPath: /javaagent
+              name: agent-jar
+      volumes:
+        - emptyDir: { }
+          name: agent-jar
+      initContainers:
+        # 官网用脚本命令行+args的方式执行多条command语句
+        - command: ['sh']
+          args:
+            - "-c"
+            - |
+              cp -r /opt/skywalking-agent /javaagent
+              chown -R 65534:65534 /javaagent
+              /bin/chmod -R 777 /javaagent
+          image: skywalking-agent:8.14.0
+          imagePullPolicy: IfNotPresent
+          name: skywalking-agent
+          volumeMounts:
+            - mountPath: /javaagent
+              name: agent-jar
+---
+apiVersion: v1                # API version
+kind: Service                 # Type of the kubernetes resource
+metadata:
+  name: ruoyi-system    # Name of the kubernetes resource
+  labels: # Labels that will be applied to this resource
+    app: ruoyi-system
+  namespace: kube-ruoyi
+spec:
+  type: NodePort              # The service will be exposed by opening a Port on each node and proxying it.
+  selector:
+    app: ruoyi-system   # The service exposes Pods with label `app=ruoyi-system`
+  ports: # Forward incoming connections on port 9201 to the target port 9201
+    - name: http
+      port: 9201
+      targetPort: 9201

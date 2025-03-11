@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ruoyi-mysql
+  namespace: kube-ruoyi
+spec:
+  ports:
+    - port: 3306
+      nodePort: 30060
+  selector:
+    app: ruoyi-mysql-local # 该 Service 会将所有具有标签 app: mysql-labels-app暴露到一个抽象的 Service 端口上（targetPort：容器接收流量的端口；port：可任意取值的抽象的 Service 端口，其他 Pod 通过该端口访问 Service
+  type: NodePort

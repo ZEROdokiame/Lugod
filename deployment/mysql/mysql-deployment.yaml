@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ruoyi-mysql #指定deployment的名字
+  namespace: kube-ruoyi
+  labels:
+    app: ruoyi-mysql-local
+spec: #规约
+  replicas: 1 #pod的副本数量，就是希望创建多少个pod的副本.可p选字段。它的默认值是1。
+  selector:  #selector 字段定义 Deployment 如何查找要管理的 Pods。必须匹配 .spec.template.metadata.labels，否则请求会被 API 拒绝。
+    matchLabels:
+      app: ruoyi-mysql-local
+  template: #Deployment Pod 模板；它和 Pod 的语法规则完全相同。 只是这里它是嵌套的，因此不需要 apiVersion 或 kind。
+    metadata:
+      labels:
+        app: ruoyi-mysql-local
+    spec: #pod模板规约
+      containers: #容器
+        - name: ruoyi-mysql #容器的名称
+          image: ruoyi/mysql:5.7 #容器使用的镜像
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: mysql-local-data #pv的name
+              mountPath: /var/lib/mysql #MySQL容器的数据都是存在这个目录的，要对这个目录做数据持久化
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom: # Read environment variables from kubernetes secrets
+                secretKeyRef:
+                  name: ruoyi-mysql-secret
+                  key: mysql-root-pass
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: ruoyi-mysql-secret
+                  key: mysql-user
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ruoyi-mysql-secret
+                  key: mysql-password
+      volumes:
+        - name: mysql-local-data #pv的name
+          hostPath:
+            path: /run/desktop/mnt/host/c/k8sVolume/mysql/data
+            type: Directory
+      restartPolicy: Always #Deployment 中的 Pod 模板必须指定适当的标签和适当的重新启动策略。只有 .spec.template.spec.restartPolicy 等于 Always 才是被允许的，这也是在没有指定时的默认设置

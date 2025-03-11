@@ -1,0 +1,50 @@
+apiVersion: apps/v1           # API version
+kind: Deployment              # Type of kubernetes resource
+metadata:
+  name: ruoyi-gateway    # Name of the kubernetes resource
+  namespace: kube-ruoyi
+  labels: # Labels that will be applied to this resource
+    app: ruoyi-gateway
+spec:
+  replicas: 1                 # No. of replicas/pods to run in this deployment
+  selector:
+    matchLabels: # The deployment applies to any pods matching the specified labels
+      app: ruoyi-gateway
+  template: # Template for creating the pods in this deployment
+    metadata:
+      labels: # Labels that will be applied to each Pod in this deployment
+        app: ruoyi-gateway
+    spec: # Spec for the containers that will be run in the Pods
+      containers:
+        - name: ruoyi-gateway-server
+          image: ruoyi-gateway:3.6.2
+          ports:
+            - name: http
+              containerPort: 8080 # The port that the container exposes
+          env: # Environment variables supplied to the Pod
+            - name: SPRING_PROFILES_ACTIVE
+              value: k8s
+            - name: SERVER_NAME
+              value: ruoyi-gateway
+            - name: NACOS_SERVER
+              value: ruoyi-nacos # nacos svc name
+            - name: NACOS_PORT
+              value: "8848"
+            - name: NACOS_SHARED_CONFIGS
+              value: application-dev.yml
+---
+apiVersion: v1                # API version
+kind: Service                 # Type of the kubernetes resource
+metadata:
+  name: ruoyi-gateway    # Name of the kubernetes resource
+  labels: # Labels that will be applied to this resource
+    app: ruoyi-gateway
+  namespace: kube-ruoyi
+spec:
+  type: NodePort              # The service will be exposed by opening a Port on each node and proxying it.
+  selector:
+    app: ruoyi-gateway   # The service exposes Pods with label `app=ruoyi-gateway`
+  ports: # Forward incoming connections on port 8080 to the target port 8080
+    - name: http
+      port: 8080
+      targetPort: 8080

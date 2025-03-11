@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ruoyi-sentinel
+  namespace: kube-ruoyi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ruoyi-sentinel
+  template:
+    metadata:
+      labels:
+        app: ruoyi-sentinel
+    spec:
+      containers:
+        - name: ruoyi-sentinel
+          image: bladex/sentinel-dashboard
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8858
+          env: # Environment variables supplied to the Pod
+            - name: JAVA_TOOL_OPTIONS
+              value: "-Dserver.port=8858 -Dcsp.sentinel.dashboard.server=localhost:8858 -Dproject.name=sentinel-dashboard"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ruoyi-sentinel
+  namespace: kube-ruoyi
+  labels:
+    name: ruoyi-sentinel
+spec:
+  type: NodePort
+  ports:
+    - port: 8858
+      targetPort: 8858
+      nodePort: 30858
+  selector:
+    app: ruoyi-sentinel
+

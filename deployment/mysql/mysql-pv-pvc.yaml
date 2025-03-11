@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv
+  namespace: kube-ruoyi
+spec:
+  capacity:
+    storage: 3Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain   # 手动删除
+  storageClassName: hostpath #表明这个pv所属的storageClass
+  hostPath:
+    path: /mnt/data #节点上卷的完整路径。（必须是存在的路径，不然容器无法创建，deployment会报错）可以是目录或块设备(磁盘、分区…)。
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc-local
+  namespace: kube-ruoyi
+spec:
+  accessModes: #访问模式 申领在请求具有特定访问模式的存储时，使用与卷相同的访问模式约定。
+    - ReadWriteMany
+  volumeMode: Filesystem #卷模式
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: hostpath # 此处须显式设置空字符串或指定值，否则会被设置为默认的 StorageClass

@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ruoyi-nacos
+  namespace: kube-ruoyi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ruoyi-nacos
+  template:
+    metadata:
+      labels:
+        app: ruoyi-nacos
+    spec:
+      containers:
+        - name: ruoyi-nacos
+          image: nacos/nacos-server
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8848
+              name: client
+            - containerPort: 9848
+              name: client-rpc
+            - containerPort: 9849
+              name: raft-rpc
+          env:
+            - name: MODE
+              value: standalone
+          volumeMounts:
+            - mountPath: /home/nacos/conf/application.properties
+              name: nacos-conf
+              subPath: application.properties
+      volumes:
+        - name: nacos-conf
+          configMap:
+            name: ruoyi-nacos-config
