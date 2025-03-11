@@ -455,7 +455,7 @@ public class ExcelUtil<T>
                         }
                         else if (!attr.handler().equals(ExcelHandlerAdapter.class))
                         {
-                            val = dataFormatHandlerAdapter(val, attr, null);
+                            val = importFormatHandlerAdapter(val, attr, null);
                         }
                         ReflectUtils.invokeSetter(entity, propertyName, val);
                     }
@@ -1013,7 +1013,7 @@ public class ExcelUtil<T>
                 }
                 else if (!attr.handler().equals(ExcelHandlerAdapter.class))
                 {
-                    cell.setCellValue(dataFormatHandlerAdapter(value, attr, cell));
+                    cell.setCellValue(exportFormatHandlerAdapter(value, attr, cell));
                 }
                 else
                 {
@@ -1196,10 +1196,13 @@ public class ExcelUtil<T>
     /**
      * 数据处理器
      *
+     * @deprecated 方法弃用。分别使用导入导出的两个数据处理器分别处理导入导出的数据
+     *
      * @param value 数据值
      * @param excel 数据注解
-     * @return
+     * @return 处理后的结果值
      */
+    @Deprecated
     public String dataFormatHandlerAdapter(Object value, Excel excel, Cell cell)
     {
         try
@@ -1211,6 +1214,46 @@ public class ExcelUtil<T>
         catch (Exception e)
         {
             log.error("不能格式化数据 " + excel.handler(), e.getMessage());
+        }
+        return Convert.toStr(value);
+    }
+
+    /**
+     * 导入时的数据处理器
+     *
+     * @param value 数据值
+     * @param excel 数据注解
+     * @param cell 单元格对象
+     * @return 处理后的结果值
+     */
+    public String importFormatHandlerAdapter(Object value, Excel excel, Cell cell) {
+        try {
+            Object instance = excel.handler().getDeclaredConstructor().newInstance();
+            Method formatMethod = excel.handler().getMethod("importFormat",
+                    Object.class, String[].class, Cell.class, Workbook.class);
+            value = formatMethod.invoke(instance, value, excel.args(), cell, this.wb);
+        } catch (Exception e) {
+            log.error("不能格式化数据 " + excel.handler() + "{}", e.getMessage());
+        }
+        return Convert.toStr(value);
+    }
+
+    /**
+     * 导出时的数据处理器
+     *
+     * @param value 数据值
+     * @param excel 数据注解
+     * @param cell 单元格对象
+     * @return 处理后的结果值
+     */
+    public String exportFormatHandlerAdapter(Object value, Excel excel, Cell cell) {
+        try {
+            Object instance = excel.handler().getDeclaredConstructor().newInstance();
+            Method formatMethod = excel.handler().getMethod("exportFormat",
+                    Object.class, String[].class, Cell.class, Workbook.class);
+            value = formatMethod.invoke(instance, value, excel.args(), cell, this.wb);
+        } catch (Exception e) {
+            log.error("不能格式化数据 " + excel.handler() + "{}", e.getMessage());
         }
         return Convert.toStr(value);
     }
