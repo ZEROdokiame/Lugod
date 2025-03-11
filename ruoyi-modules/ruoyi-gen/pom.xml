@@ -30,10 +30,10 @@
         </dependency>
         
         <!-- SpringCloud Alibaba Sentinel -->
-        <dependency>
+        <!--<dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
-        </dependency>
+        </dependency>-->
         
         <!-- SpringBoot Actuator -->
         <dependency>
