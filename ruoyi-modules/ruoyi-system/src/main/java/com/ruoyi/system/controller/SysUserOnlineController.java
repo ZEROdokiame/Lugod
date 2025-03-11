@@ -46,7 +46,23 @@ public class SysUserOnlineController extends BaseController
         List<SysUserOnline> userOnlineList = new ArrayList<SysUserOnline>();
         for (String key : keys)
         {
-            LoginUser user = redisService.getCacheObject(key);
+            // 获取登录用户缓存对象
+            Object object = redisService.getCacheObject(key);
+            // 登录用户对象
+            LoginUser user;
+            // 判断object类型，如果是JSONObject需要单独处理，解决小概率类型转换异常问题
+            if (object instanceof JSONObject) 
+            {
+                user = JSONObject.parseObject(JSONObject.toJSONString(object, JSONWriter.Feature.WriteNulls), LoginUser.class);
+            } 
+            else if (object instanceof LoginUser) 
+            {
+                user = (LoginUser) object;
+            } 
+            else
+            {
+                throw new ServiceException("用户缓存对象类型异常");
+            }
             if (StringUtils.isNotEmpty(ipaddr) && StringUtils.isNotEmpty(userName))
             {
                 userOnlineList.add(userOnlineService.selectOnlineByInfo(ipaddr, userName, user));
