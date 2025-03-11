@@ -15,9 +15,17 @@ spring:
       discovery:
         # 服务注册地址
         server-addr: 127.0.0.1:8848
+        # nacos访问账号(建议生产环境不使用管理员账号nacos)
+        username: nacos
+        # nacos访问密码(建议生产环境使用复杂密码)
+        password: nacos
       config:
         # 配置中心地址
         server-addr: 127.0.0.1:8848
+        # nacos访问账号(建议生产环境不使用管理员账号nacos)
+        username: nacos
+        # nacos访问密码(建议生产环境使用复杂密码)
+        password: nacos
         # 配置文件格式
         file-extension: yml
         # 共享配置
