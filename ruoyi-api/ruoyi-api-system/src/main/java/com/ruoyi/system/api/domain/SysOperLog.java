@@ -252,4 +252,8 @@ public class SysOperLog extends BaseEntity
     {
         this.costTime = costTime;
     }
+
+    public String toLogString(){
+        return "";
+    }
 }
