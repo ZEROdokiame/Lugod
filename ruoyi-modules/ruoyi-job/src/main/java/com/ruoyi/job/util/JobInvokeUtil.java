@@ -70,7 +70,8 @@ public class JobInvokeUtil
      */
     public static boolean isValidClassName(String invokeTarget)
     {
-        return StringUtils.countMatches(invokeTarget, ".") > 1;
+        String beanName = StringUtils.substringBefore(invokeTarget, "(");
+        return Pattern.matches("(\\w+\\.){2,}\\w+", beanName);
     }
 
     /**
