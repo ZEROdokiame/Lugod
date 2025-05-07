@@ -113,9 +113,10 @@ public class DataScopeAspect
             }
             if (DATA_SCOPE_ALL.equals(dataScope))
             {
+                // 全部数据权限，不添加额外条件
                 sqlString = new StringBuilder();
-                conditions.add(dataScope);
-                break;
+                conditions.clear();
+                return;
             }
             else if (DATA_SCOPE_CUSTOM.equals(dataScope))
             {
@@ -143,28 +144,28 @@ public class DataScopeAspect
                 {
                     sqlString.append(StringUtils.format(" OR {}.user_id = {} ", userAlias, user.getUserId()));
                 }
-                else
-                {
-                    // 数据权限为仅本人且没有userAlias别名不查询任何数据
-                    sqlString.append(StringUtils.format(" OR {}.dept_id = 0 ", deptAlias));
-                }
+                // 当没有 userAlias 时，不添加任何条件
             }
             conditions.add(dataScope);
         }
 
-        // 角色都不包含传递过来的权限字符，这个时候sqlString也会为空，所以要限制一下,不查询任何数据
+        // 角色都不包含传递过来的权限字符，这个时候不添加任何条件
         if (StringUtils.isEmpty(conditions))
         {
-            sqlString.append(StringUtils.format(" OR {}.dept_id = 0 ", deptAlias));
+            sqlString = new StringBuilder();
         }
 
-        if (StringUtils.isNotBlank(sqlString.toString()))
+        String sql = sqlString.toString().trim();
+        if (sql.startsWith("OR ")) {
+            sql = sql.substring(3);
+        }
+        if (StringUtils.isNotBlank(sql))
         {
             Object params = joinPoint.getArgs()[0];
-            if (StringUtils.isNotNull(params) && params instanceof BaseEntity)
+            if (params instanceof BaseEntity)
             {
                 BaseEntity baseEntity = (BaseEntity) params;
-                baseEntity.getParams().put(DATA_SCOPE, " AND (" + sqlString.substring(4) + ")");
+                baseEntity.getParams().put(DATA_SCOPE, " AND (" + sql + ")");
             }
         }
     }
