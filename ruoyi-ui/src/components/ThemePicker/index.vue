@@ -9,6 +9,7 @@
 
 <script>
 const ORIGINAL_THEME = '#409EFF' // default color
+import { setThemeColor } from "@/utils/theme"
 
 export default {
   data() {
@@ -44,6 +45,9 @@ export default {
       if (typeof val !== 'string') return
       const themeCluster = this.getThemeCluster(val.replace('#', ''))
       const originalCluster = this.getThemeCluster(oldVal.replace('#', ''))
+
+      // 更新CSS变量
+      setThemeColor(val);
 
       const getHandler = (variable, id) => {
         return () => {

@@ -7,6 +7,7 @@
 
 <script>
 import ThemePicker from "@/components/ThemePicker"
+import { initTheme } from "@/utils/theme"
 
 export default {
   name: "App",
@@ -18,6 +19,10 @@ export default {
         return title ? `${title} - ${process.env.VUE_APP_TITLE}` : process.env.VUE_APP_TITLE
       }
     }
+  },
+  created() {
+    // 初始化主题设置
+    initTheme(this.$store.state.settings);
   }
 }
 </script>

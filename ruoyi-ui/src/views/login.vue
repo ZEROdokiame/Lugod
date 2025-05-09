@@ -1,7 +1,11 @@
 <template>
   <div class="login">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
-      <h3 class="title">{{title}}</h3>
+      <h3 class="title">
+        <span class="lightning-left"></span>
+        {{title}}
+        <span class="lightning-right"></span>
+      </h3>
       <el-form-item prop="username">
         <el-input
           v-model="loginForm.username"
@@ -56,7 +60,7 @@
     </el-form>
     <!--  底部  -->
     <div class="el-login-footer">
-      <span>Copyright © 2018-2025 ruoyi.vip All Rights Reserved.</span>
+      <span>Copyright 2018-2025 ruoyi.vip All Rights Reserved.</span>
     </div>
   </div>
 </template>
@@ -162,47 +166,114 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100%;
-  background-image: url("../assets/images/login-background.jpg");
-  background-size: cover;
+  background-color: #f0f8ff; /* 更改为淡蓝色背景 */
+  background-image: linear-gradient(120deg, #e0f7fa 0%, #e8f5e9 100%); /* 添加渐变背景 */
+  position: relative;
+  overflow: hidden;
 }
+
 .title {
   margin: 0px auto 30px auto;
   text-align: center;
-  color: #707070;
+  color: #304156;
+  font-weight: bold;
+  font-size: 22px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightning-left,
+.lightning-right {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 30px;
+  margin: 0 15px;
+  overflow: hidden;
+}
+
+.lightning-left:before,
+.lightning-right:before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #409EFF, transparent);
+  animation: lightning 1.5s linear infinite;
+}
+
+.lightning-left:after,
+.lightning-right:after {
+  content: '⚡';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #409EFF;
+  font-size: 16px;
+  animation: flash 2s ease-in-out infinite;
+}
+
+@keyframes lightning {
+  0% {
+    transform: translateX(-100%) scaleX(1);
+  }
+  50% {
+    transform: translateX(0%) scaleX(1.2);
+  }
+  100% {
+    transform: translateX(100%) scaleX(1);
+  }
+}
+
+@keyframes flash {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 .login-form {
-  border-radius: 6px;
-  background: #ffffff;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.9);
   width: 400px;
-  padding: 25px 25px 5px 25px;
+  padding: 35px 35px 15px 35px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  position: relative;
   z-index: 1;
-  .el-input {
-    height: 38px;
-    input {
-      height: 38px;
-    }
-  }
-  .input-icon {
-    height: 39px;
-    width: 14px;
-    margin-left: 2px;
-  }
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
 }
-.login-tip {
-  font-size: 13px;
-  text-align: center;
-  color: #bfbfbf;
+
+.el-button--primary {
+  background: linear-gradient(90deg, #409EFF, #64B5F6);
+  border: none;
+  font-weight: bold;
+  border-radius: 20px;
+  transition: all 0.3s ease;
 }
-.login-code {
-  width: 33%;
-  height: 38px;
-  float: right;
-  img {
-    cursor: pointer;
-    vertical-align: middle;
-  }
+
+.el-button--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(64, 158, 255, 0.4);
 }
+
+.el-form-item {
+  margin-bottom: 25px;
+}
+
+.el-input__inner {
+  border-radius: 20px;
+  padding-left: 15px;
+}
+
 .el-login-footer {
   height: 40px;
   line-height: 40px;
@@ -210,12 +281,22 @@ export default {
   bottom: 0;
   width: 100%;
   text-align: center;
-  color: #fff;
+  color: #606266;
   font-family: Arial;
-  font-size: 12px;
-  letter-spacing: 1px;
+  font-size: 14px;
+  z-index: 0;
+  background-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(5px);
 }
-.login-code-img {
-  height: 38px;
+
+/* 添加背景动画效果 */
+.login:before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, #64B5F6, #4CAF50);
+  opacity: 0.1;
+  z-index: 0;
 }
 </style>

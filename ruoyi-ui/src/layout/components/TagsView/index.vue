@@ -235,48 +235,73 @@ export default {
 
 <style lang="scss" scoped>
 .tags-view-container {
-  height: 34px;
+  height: 40px;
   width: 100%;
   background: #fff;
-  border-bottom: 1px solid #d8dce5;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 0 3px 0 rgba(0, 0, 0, .04);
+  border-bottom: 1px solid #e6e6e6;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s;
+  
   .tags-view-wrapper {
     .tags-view-item {
       display: inline-block;
       position: relative;
       cursor: pointer;
-      height: 26px;
-      line-height: 26px;
-      border: 1px solid #d8dce5;
-      color: #495060;
+      height: 28px;
+      line-height: 28px;
+      border: 1px solid #e6e6e6;
+      color: #606266;
       background: #fff;
-      padding: 0 8px;
+      padding: 0 10px;
       font-size: 12px;
-      margin-left: 5px;
-      margin-top: 4px;
+      margin-left: 6px;
+      margin-top: 6px;
+      border-radius: 3px;
+      transition: all 0.3s cubic-bezier(.645, .045, .355, 1);
+      
       &:first-of-type {
         margin-left: 15px;
       }
+      
       &:last-of-type {
         margin-right: 15px;
       }
+      
+      &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      
       &.active {
-        background-color: #42b983;
+        background-color: var(--theme);
         color: #fff;
-        border-color: #42b983;
+        border-color: var(--theme);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+        
         &::before {
           content: '';
           background: #fff;
           display: inline-block;
-          width: 8px;
-          height: 8px;
+          width: 6px;
+          height: 6px;
           border-radius: 50%;
           position: relative;
-          margin-right: 2px;
+          margin-right: 4px;
         }
+      }
+      
+      .el-icon-close {
+        opacity: 0;
+        transition: all 0.2s;
+      }
+      
+      &:hover .el-icon-close,
+      &.active .el-icon-close {
+        opacity: 1;
       }
     }
   }
+  
   .contextmenu {
     margin: 0;
     background: #fff;
@@ -284,17 +309,28 @@ export default {
     position: absolute;
     list-style-type: none;
     padding: 5px 0;
-    border-radius: 4px;
-    font-size: 12px;
+    border-radius: 6px;
+    font-size: 13px;
     font-weight: 400;
-    color: #333;
-    box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, .3);
+    color: #606266;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+    
     li {
       margin: 0;
       padding: 7px 16px;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      
+      i {
+        margin-right: 8px;
+        font-size: 14px;
+        color: #409EFF;
+      }
+      
       &:hover {
-        background: #eee;
+        background: #f5f7fa;
+        color: #409EFF;
       }
     }
   }
@@ -313,16 +349,26 @@ export default {
       text-align: center;
       transition: all .3s cubic-bezier(.645, .045, .355, 1);
       transform-origin: 100% 50%;
+      
       &:before {
-        transform: scale(.6);
+        transform: scale(.7);
         display: inline-block;
         vertical-align: -3px;
       }
+      
       &:hover {
-        background-color: #b4bccc;
+        background-color: rgba(0, 0, 0, 0.2);
         color: #fff;
+        transform: scale(1.2);
       }
     }
+  }
+}
+
+// 添加标签移动动画
+.tags-view-container .tags-view-wrapper {
+  .tags-view-item {
+    transition: all 0.2s ease;
   }
 }
 </style>
