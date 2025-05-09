@@ -2,15 +2,15 @@
   <div class="app-container home">
     <el-row :gutter="20">
       <el-col :sm="24" :lg="12" style="padding-left: 20px">
-        <h2>若依后台管理框架</h2>
+        <h2>路神后台管理框架</h2>
         <p>
-          一直想做一款后台管理系统，看了很多优秀的开源项目但是发现没有合适自己的。于是利用空闲休息时间开始自己写一套后台系统。如此有了若依管理系统，她可以用于所有的Web应用程序，如网站管理后台，网站会员中心，CMS，CRM，OA等等，当然，您也可以对她进行深度定制，以做出更强系统。所有前端后台代码封装过后十分精简易上手，出错概率低。同时支持移动客户端访问。系统会陆续更新一些实用功能。
+          是的，这是若依的系统，但已经被伟大的路神征用了。MADE BY LUGOD.
         </p>
         <p>
           <b>当前版本:</b> <span>v{{ version }}</span>
         </p>
         <p>
-          <el-tag type="danger">&yen;免费开源</el-tag>
+          <el-tag type="danger">路神收费，浏览一次100美元</el-tag>
         </p>
         <p>
           <el-button
@@ -18,15 +18,15 @@
             size="mini"
             icon="el-icon-cloudy"
             plain
-            @click="goTarget('https://gitee.com/y_project/RuoYi-Cloud')"
-            >访问码云</el-button
+            @click="goTarget('https://github.com/ZEROdokiame/Lugod')"
+            >访问路神github</el-button
           >
           <el-button
             size="mini"
             icon="el-icon-s-home"
             plain
-            @click="goTarget('http://ruoyi.vip')"
-            >访问主页</el-button
+            @click="goTarget('https://github.com/ZEROdokiame/Lugod')"
+            >访问路神主页</el-button
           >
         </p>
       </el-col>
@@ -74,29 +74,10 @@
           </div>
           <div class="body">
             <p>
-              <i class="el-icon-s-promotion"></i> 官网：<el-link
-                href="http://www.ruoyi.vip"
+              <i class="el-icon-s-promotion"></i> 路神的Github地址：<el-link
+                href="https://github.com/ZEROdokiame/Lugod"
                 target="_blank"
-                >http://www.ruoyi.vip</el-link
-              >
-            </p>
-            <p>
-              <i class="el-icon-user-solid"></i> QQ群： <s> 满42799195 </s>  <s> 满170157040 </s>
-              <s> 满130643120 </s> <s> 满225920371 </s> <s> 满201705537 </s> <s> 满236543183 </s>
-              <s> 满213618602 </s> <s> 满148794840 </s> <s> 满118752664 </s> <s> 满101038945 </s>
-              <s> 满128355254 </s> <s> 满179219821 </s> <a href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=Z6j1amUmIPBXamuZzxpwjY8GwaP45XB6&authKey=zfSnxECfnScfY1HLCWilSqCq%2BmSVtr%2Bi%2F4oXeBcuQVwlq6XlrAfbZ0awp3%2B4Bdec&noverify=0&group_code=158753145" target="_blank">158753145</a>
-            </p>
-            <p>
-              <i class="el-icon-chat-dot-round"></i> 微信：<a
-                href="javascript:;"
-                >/ *若依</a
-              >
-            </p>
-            <p>
-              <i class="el-icon-money"></i> 支付宝：<a
-                href="javascript:;"
-                class="支付宝信息"
-                >/ *若依</a
+                >https://github.com/ZEROdokiame/Lugod</el-link
               >
             </p>
           </div>
@@ -362,7 +343,7 @@
                 <li>用户缓存信息添加部门ancestors祖级列表</li>
                 <li>升级spring-cloud到最新版2021.0.1</li>
                 <li>升级spring-boot到最新版本2.6.6</li>
-                <li>升级spring-boot-admin到最新版2.6.6</li>
+                <li>升级spring-boot-admin到最新版2.6.1</li>
                 <li>升级spring-boot-mybatis到最新版2.2.2</li>
                 <li>降级jsencrypt版本兼容IE浏览器</li>
                 <li>修复分页组件请求两次问题</li>
@@ -573,7 +554,7 @@
                 <li>支持docker部署项目</li>
                 <li>升级springcloud到最新版2020.0.3</li>
                 <li>升级spring-boot-alibaba到最新版2021.1</li>
-                <li>升级nacos到最新版2.0.1 性能提升</li>
+                <li>升级nacos到最新版2.0.1 全新内核构建</li>
                 <li>升级spring-boot到最新版本2.5.0</li>
                 <li>升级spring-boot-admin到最新版2.4.1</li>
                 <li>升级swagger到最新版本3.0.0</li>
@@ -660,8 +641,10 @@
                 <li>权限工具类增加管理员判断</li>
                 <li>日志记录增加过滤多文件场景</li>
                 <li>修改用户头像预览宽高</li>
-                <li>Excel支持注解align对齐方式</li>
-                <li>项目添加robots.txt 防止系统被搜索引擎收录</li>
+                <li>Excel支持sort导出排序</li>
+                <li>Excel支持分割字符串组内容</li>
+                <li>excel 导入数字不需要格式化 ，导入允许列和属性个数不一致</li>
+                <li>新增菜单默认主类目</li>
                 <li>移除path-to-regexp正则匹配插件</li>
                 <li>修改Set可能导致嵌套的问题</li>
                 <li>调整代码生成页列宽</li>
@@ -888,13 +871,8 @@
             <span>捐赠支持</span>
           </div>
           <div class="body">
-            <img
-              src="@/assets/images/pay.png"
-              alt="donate"
-              width="100%"
-            />
             <span style="display: inline-block; height: 30px; line-height: 30px"
-              >你可以请作者喝杯咖啡表示鼓励</span
+              >路神不需要捐赠</span
             >
           </div>
         </el-card>
@@ -983,4 +961,3 @@ export default {
   }
 }
 </style>
-
