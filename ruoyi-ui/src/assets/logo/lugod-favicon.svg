@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="faviconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#30B08F"/>
+      <stop offset="100%" stop-color="#4AB7BD"/>
+    </linearGradient>
+  </defs>
+  <circle cx="32" cy="32" r="30" fill="white" stroke="url(#faviconGradient)" stroke-width="4"/>
+  <text x="32" y="40" font-family="Arial, sans-serif" font-size="28" font-weight="bold" text-anchor="middle" fill="#304156">L</text>
+  <path d="M18,20 C18,16 24,12 32,12 C40,12 46,16 46,20" stroke="url(#faviconGradient)" stroke-width="3" fill="none"/>
+  <path d="M18,44 C18,48 24,52 32,52 C40,52 46,48 46,44" stroke="url(#faviconGradient)" stroke-width="3" fill="none"/>
+</svg>
