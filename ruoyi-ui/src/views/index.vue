@@ -30,7 +30,7 @@
                 size="medium"
                 icon="el-icon-cloudy"
                 @click="goTarget('https://github.com/ZEROdokiame/Lugod')"
-                >访问路神github</el-button
+                >访问路神Github</el-button
               >
               <el-button
                 type="success"
