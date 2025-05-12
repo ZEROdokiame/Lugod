@@ -1,7 +1,7 @@
 <p align="center">
-	<img alt="路神logo" src="https://raw.githubusercontent.com/ZEROdokiame/Lugod/main/logo.png">
+	<img alt="路神logo" src="ruoyi-ui/src/assets/logo/lugod-logo.svg" width="200" height="200">
 </p>
-<h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">路神管理系统 v1.0.0</h1>
+<h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">路神后台管理框架 v1.0.0</h1>
 <h4 align="center">基于 Vue/Element UI 和 Spring Boot/Spring Cloud & Alibaba 前后端分离的分布式微服务架构</h4>
 <p align="center">
 	<a href="https://github.com/ZEROdokiame/Lugod"><img src="https://img.shields.io/badge/Lugod-v1.0.0-brightgreen.svg"></a>
@@ -48,7 +48,47 @@ com.ruoyi
 
 ## 架构图
 
-<img src="https://raw.githubusercontent.com/ZEROdokiame/Lugod/main/architecture.png"/>
+<p align="center">
+	<img src="ruoyi-ui/src/assets/images/lugod-architecture.svg" alt="路神微服务架构图" width="750">
+</p>
+
+<p align="center">
+    <b>核心技术栈</b>
+</p>
+
+<table align="center">
+    <tr>
+        <td align="center"><b>前端技术</b></td>
+        <td align="center"><b>后端技术</b></td>
+        <td align="center"><b>服务治理</b></td>
+    </tr>
+    <tr>
+        <td>
+            <ul>
+                <li>Vue.js</li>
+                <li>Element UI</li>
+                <li>Axios</li>
+                <li>Vuex</li>
+            </ul>
+        </td>
+        <td>
+            <ul>
+                <li>Spring Boot</li>
+                <li>Spring Cloud</li>
+                <li>MyBatis</li>
+                <li>JWT</li>
+            </ul>
+        </td>
+        <td>
+            <ul>
+                <li>Nacos - 注册/配置中心</li>
+                <li>Sentinel - 流量控制</li>
+                <li>Seata - 分布式事务</li>
+                <li>Redis - 缓存服务</li>
+            </ul>
+        </td>
+    </tr>
+</table>
 
 ## 内置功能
 
