@@ -1,0 +1,52 @@
+-- 患者信息表
+CREATE TABLE `hospital_patient` (
+  `patient_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '患者ID',
+  `patient_name` varchar(50) NOT NULL COMMENT '患者姓名',
+  `gender` char(1) DEFAULT '0' COMMENT '性别（0男 1女 2未知）',
+  `age` int(11) DEFAULT NULL COMMENT '年龄',
+  `id_card` varchar(18) DEFAULT NULL COMMENT '身份证号',
+  `phone` varchar(11) DEFAULT NULL COMMENT '联系电话',
+  `address` varchar(200) DEFAULT NULL COMMENT '地址',
+  `emergency_contact` varchar(50) DEFAULT NULL COMMENT '紧急联系人',
+  `emergency_phone` varchar(11) DEFAULT NULL COMMENT '紧急联系电话',
+  `status` char(1) DEFAULT '0' COMMENT '就诊状态（0未就诊 1已分诊 2就诊中 3已就诊 4已取消）',
+  `queue_number` varchar(20) DEFAULT NULL COMMENT '排队号码',
+  `call_time` datetime DEFAULT NULL COMMENT '叫号时间',
+  `dept_id` bigint(20) DEFAULT NULL COMMENT '科室ID',
+  `doctor_id` bigint(20) DEFAULT NULL COMMENT '医生ID',
+  `create_by` varchar(64) DEFAULT '' COMMENT '创建者',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) DEFAULT '' COMMENT '更新者',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(500) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`patient_id`),
+  INDEX `idx_patient_name` (`patient_name`),
+  INDEX `idx_id_card` (`id_card`),
+  INDEX `idx_phone` (`phone`),
+  INDEX `idx_status` (`status`),
+  INDEX `idx_queue_number` (`queue_number`),
+  INDEX `idx_dept_id` (`dept_id`),
+  INDEX `idx_doctor_id` (`doctor_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='患者信息表';
+
+-- 叫号队列信息表
+CREATE TABLE `hospital_queue_info` (
+  `queue_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '队列ID',
+  `queue_name` varchar(50) NOT NULL COMMENT '队列名称',
+  `dept_id` bigint(20) DEFAULT NULL COMMENT '科室ID',
+  `dept_name` varchar(50) DEFAULT NULL COMMENT '科室名称',
+  `current_number` varchar(20) DEFAULT NULL COMMENT '当前叫号',
+  `max_number` varchar(20) DEFAULT NULL COMMENT '最大号码',
+  `status` char(1) DEFAULT '0' COMMENT '队列状态（0正常 1暂停 2关闭）',
+  `start_time` datetime DEFAULT NULL COMMENT '开始时间',
+  `end_time` datetime DEFAULT NULL COMMENT '结束时间',
+  `create_by` varchar(64) DEFAULT '' COMMENT '创建者',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) DEFAULT '' COMMENT '更新者',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(500) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`queue_id`),
+  INDEX `idx_queue_name` (`queue_name`),
+  INDEX `idx_dept_id` (`dept_id`),
+  INDEX `idx_status` (`status`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='叫号队列信息表';

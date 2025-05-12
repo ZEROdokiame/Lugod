@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.hospital.mapper.PatientMapper">
+    
+    <resultMap type="com.ruoyi.hospital.domain.Patient" id="PatientResult">
+        <id property="patientId" column="patient_id"/>
+        <result property="patientName" column="patient_name"/>
+        <result property="gender" column="gender"/>
+        <result property="age" column="age"/>
+        <result property="idCard" column="id_card"/>
+        <result property="phone" column="phone"/>
+        <result property="address" column="address"/>
+        <result property="emergencyContact" column="emergency_contact"/>
+        <result property="emergencyPhone" column="emergency_phone"/>
+        <result property="status" column="status"/>
+        <result property="queueNumber" column="queue_number"/>
+        <result property="callTime" column="call_time"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="doctorId" column="doctor_id"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectPatientVo">
+        select p.patient_id, p.patient_name, p.gender, p.age, p.id_card, p.phone, p.address, p.emergency_contact, 
+        p.emergency_phone, p.status, p.queue_number, p.call_time, p.dept_id, p.doctor_id, p.create_by, 
+        p.create_time, p.update_by, p.update_time, p.remark
+        from hospital_patient p
+    </sql>
+
+    <select id="selectPatientList" parameterType="com.ruoyi.hospital.domain.Patient" resultMap="PatientResult">
+        <include refid="selectPatientVo"/>
+        <where>
+            <if test="patientName != null and patientName != ''">
+                AND patient_name like concat('%', #{patientName}, '%')
+            </if>
+            <if test="gender != null and gender != ''">
+                AND gender = #{gender}
+            </if>
+            <if test="idCard != null and idCard != ''">
+                AND id_card like concat('%', #{idCard}, '%')
+            </if>
+            <if test="phone != null and phone != ''">
+                AND phone like concat('%', #{phone}, '%')
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+            <if test="deptId != null">
+                AND dept_id = #{deptId}
+            </if>
+            <if test="doctorId != null">
+                AND doctor_id = #{doctorId}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+    
+    <select id="selectPatientByPatientId" parameterType="Long" resultMap="PatientResult">
+        <include refid="selectPatientVo"/>
+        where patient_id = #{patientId}
+    </select>
+        
+    <insert id="insertPatient" parameterType="com.ruoyi.hospital.domain.Patient" useGeneratedKeys="true" keyProperty="patientId">
+        insert into hospital_patient
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="patientName != null">patient_name,</if>
+            <if test="gender != null">gender,</if>
+            <if test="age != null">age,</if>
+            <if test="idCard != null">id_card,</if>
+            <if test="phone != null">phone,</if>
+            <if test="address != null">address,</if>
+            <if test="emergencyContact != null">emergency_contact,</if>
+            <if test="emergencyPhone != null">emergency_phone,</if>
+            <if test="status != null">status,</if>
+            <if test="queueNumber != null">queue_number,</if>
+            <if test="callTime != null">call_time,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="doctorId != null">doctor_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="patientName != null">#{patientName},</if>
+            <if test="gender != null">#{gender},</if>
+            <if test="age != null">#{age},</if>
+            <if test="idCard != null">#{idCard},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="address != null">#{address},</if>
+            <if test="emergencyContact != null">#{emergencyContact},</if>
+            <if test="emergencyPhone != null">#{emergencyPhone},</if>
+            <if test="status != null">#{status},</if>
+            <if test="queueNumber != null">#{queueNumber},</if>
+            <if test="callTime != null">#{callTime},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="doctorId != null">#{doctorId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePatient" parameterType="com.ruoyi.hospital.domain.Patient">
+        update hospital_patient
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="patientName != null">patient_name = #{patientName},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="age != null">age = #{age},</if>
+            <if test="idCard != null">id_card = #{idCard},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="emergencyContact != null">emergency_contact = #{emergencyContact},</if>
+            <if test="emergencyPhone != null">emergency_phone = #{emergencyPhone},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="queueNumber != null">queue_number = #{queueNumber},</if>
+            <if test="callTime != null">call_time = #{callTime},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="doctorId != null">doctor_id = #{doctorId},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where patient_id = #{patientId}
+    </update>
+
+    <delete id="deletePatientByPatientId" parameterType="Long">
+        delete from hospital_patient where patient_id = #{patientId}
+    </delete>
+
+    <delete id="deletePatientByPatientIds" parameterType="String">
+        delete from hospital_patient where patient_id in 
+        <foreach item="patientId" collection="array" open="(" separator="," close=")">
+            #{patientId}
+        </foreach>
+    </delete>
+    
+    <select id="selectPatientStatusStats" resultType="java.util.Map">
+        SELECT 
+            status, 
+            COUNT(*) as count 
+        FROM 
+            hospital_patient 
+        GROUP BY 
+            status
+    </select>
+</mapper>
