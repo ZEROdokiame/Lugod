@@ -15,6 +15,9 @@
 请使用JDK17 Nacos2.3.1运行
 
 账号admin 123456
+<p align="center">
+	<img src="https://github.com/user-attachments/assets/165e8b46-b24a-4335-b6ae-c35cb202559a">
+</p>
 
 目前集成的第一个业务需求为医院大屏叫号系统，逐步完善中
 
