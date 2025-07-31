@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.ruoyi.hospital.mapper.PatientMapper;
 import com.ruoyi.hospital.domain.Patient;
 import com.ruoyi.hospital.service.IPatientService;
@@ -53,6 +54,7 @@ public class PatientServiceImpl implements IPatientService
      * @return 结果
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int insertPatient(Patient patient)
     {
         return patientMapper.insertPatient(patient);

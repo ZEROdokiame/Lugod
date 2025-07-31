@@ -1,3 +1,4 @@
+import axios from 'axios'
 import request from '@/utils/request'
 
 // 查询患者列表
@@ -59,3 +60,38 @@ export function getPatientStatusStats() {
     method: 'get'
   })
 }
+
+// 创建不使用baseURL的axios实例
+const hospitalRequest = axios.create({
+  timeout: 10000
+})
+
+// 请求拦截器
+hospitalRequest.interceptors.request.use(config => {
+  // 设置Content-Type
+  config.headers['Content-Type'] = 'application/json;charset=utf-8'
+  
+  // 设置token
+  const token = localStorage.getItem('token') // 或其他获取token的方式
+  if (token) {
+    config.headers['Authorization'] = 'Bearer ' + token
+  }
+  
+  // 构造完整URL
+  if (!config.url.startsWith('http')) {
+    config.url = '/hospital' + (config.url.startsWith('/') ? config.url : '/' + config.url)
+  }
+  
+  return config
+}, error => {
+  console.log(error)
+  Promise.reject(error)
+})
+
+// 响应拦截器
+hospitalRequest.interceptors.response.use(res => {
+  return res.data
+}, error => {
+  console.log(error)
+  Promise.reject(error)
+})

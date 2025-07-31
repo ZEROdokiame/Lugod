@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.ruoyi.common.security.annotation.EnableCustomConfig;
 import com.ruoyi.common.security.annotation.EnableRyFeignClients;
+import org.mybatis.spring.annotation.MapperScan;
 /**
  * 医院系统
  *
@@ -12,6 +13,7 @@ import com.ruoyi.common.security.annotation.EnableRyFeignClients;
 @EnableCustomConfig
 @EnableRyFeignClients
 @SpringBootApplication
+@MapperScan("com.ruoyi.hospital.mapper")
 public class LugodHospitalApplication {
     public static void main(String[] args) {
 

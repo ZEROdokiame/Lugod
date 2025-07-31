@@ -24,6 +24,9 @@ import com.ruoyi.common.security.annotation.RequiresPermissions;
 import com.ruoyi.hospital.domain.Patient;
 import com.ruoyi.hospital.service.IPatientService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * 患者信息Controller
  * 
@@ -33,6 +36,8 @@ import com.ruoyi.hospital.service.IPatientService;
 @RequestMapping("/patient")
 public class PatientController extends BaseController
 {
+    private static final Logger log = LoggerFactory.getLogger(PatientController.class);
+
     @Autowired
     private IPatientService patientService;
 
@@ -43,9 +48,12 @@ public class PatientController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(Patient patient)
     {
+        log.info("======开始查询患者信息列表======");
         startPage();
         List<Patient> list = patientService.selectPatientList(patient);
-        return getDataTable(list);
+        TableDataInfo dataTable = getDataTable(list);
+        log.info("======患者信息列表查询完成，共返回 {} 条记录======", list.size());
+        return dataTable;
     }
 
     /**
@@ -56,9 +64,11 @@ public class PatientController extends BaseController
     @PostMapping("/export")
     public void export(HttpServletResponse response, Patient patient)
     {
+        log.info("======开始导出患者信息列表======");
         List<Patient> list = patientService.selectPatientList(patient);
         ExcelUtil<Patient> util = new ExcelUtil<Patient>(Patient.class);
         util.exportExcel(response, list, "患者信息数据");
+        log.info("======患者信息列表导出完成，共导出 {} 条记录======", list.size());
     }
 
     /**
@@ -68,7 +78,10 @@ public class PatientController extends BaseController
     @GetMapping(value = "/{patientId}")
     public AjaxResult getInfo(@PathVariable("patientId") Long patientId)
     {
-        return success(patientService.selectPatientByPatientId(patientId));
+        log.info("======开始查询患者详细信息，患者ID：{}======", patientId);
+        AjaxResult result = success(patientService.selectPatientByPatientId(patientId));
+        log.info("======患者详细信息查询完成======");
+        return result;
     }
 
     /**
@@ -79,7 +92,10 @@ public class PatientController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody Patient patient)
     {
-        return toAjax(patientService.insertPatient(patient));
+        log.info("======开始新增患者信息======");
+        int rows = patientService.insertPatient(patient);
+        log.info("======患者信息新增完成，受影响的行数：{}======", rows);
+        return toAjax(rows);
     }
 
     /**
@@ -90,7 +106,10 @@ public class PatientController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody Patient patient)
     {
-        return toAjax(patientService.updatePatient(patient));
+        log.info("======开始修改患者信息，患者ID：{}======", patient.getPatientId());
+        int rows = patientService.updatePatient(patient);
+        log.info("======患者信息修改完成，受影响的行数：{}======", rows);
+        return toAjax(rows);
     }
 
     /**
@@ -101,7 +120,10 @@ public class PatientController extends BaseController
     @DeleteMapping("/{patientIds}")
     public AjaxResult remove(@PathVariable Long[] patientIds)
     {
-        return toAjax(patientService.deletePatientByPatientIds(patientIds));
+        log.info("======开始删除患者信息，患者ID：{}======", (Object)patientIds);
+        int rows = patientService.deletePatientByPatientIds(patientIds);
+        log.info("======患者信息删除完成，受影响的行数：{}======", rows);
+        return toAjax(rows);
     }
     
     /**
@@ -111,8 +133,9 @@ public class PatientController extends BaseController
     @GetMapping("/statusStats")
     public AjaxResult getStatusStats()
     {
-        System.out.println("====== 患者状态统计接口被调用 ======");
+        log.info("======开始统计患者状态信息======");
         Map<String, Long> statsMap = patientService.getPatientStatusStats();
+        log.info("======患者状态统计完成======");
         return success(statsMap);
     }
 
