@@ -153,4 +153,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         GROUP BY 
             status
     </select>
+
+    <!-- 查询最大排队号 -->
+    <select id="getMaxQueueNumber" resultType="java.lang.Integer">
+        SELECT COALESCE(
+            MAX(CAST(SUBSTRING(queue_number, LENGTH(#{prefix}) + 1) AS SIGNED)),
+            0
+        )
+        FROM hospital_patient
+        WHERE queue_number LIKE CONCAT(#{prefix}, '%')
+    </select>
 </mapper>

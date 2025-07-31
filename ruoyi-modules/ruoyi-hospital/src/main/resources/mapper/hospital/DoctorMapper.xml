@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.hospital.mapper.DoctorMapper">
+
+    <resultMap type="com.ruoyi.hospital.domain.Doctor" id="DoctorResult">
+        <id property="doctorId" column="doctor_id"/>
+        <result property="doctorName" column="doctor_name"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="title" column="title"/>
+        <result property="phone" column="phone"/>
+        <result property="gender" column="gender"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectDoctorVo">
+        select d.doctor_id, d.doctor_name, d.dept_id, dept.dept_name, d.title, d.phone, d.gender,
+        d.status, d.create_by, d.create_time, d.update_by, d.update_time, d.remark
+        from hospital_doctor d
+        left join hospital_dept dept on d.dept_id = dept.dept_id
+    </sql>
+
+    <select id="selectDoctorsByDeptId" parameterType="Long" resultMap="DoctorResult">
+        <include refid="selectDoctorVo"/>
+        where d.dept_id = #{deptId} and d.status = '0'
+        order by d.create_time
+    </select>
+
+    <select id="selectDoctorById" parameterType="Long" resultMap="DoctorResult">
+        <include refid="selectDoctorVo"/>
+        where d.doctor_id = #{doctorId}
+    </select>
+
+    <insert id="insertDoctor" parameterType="com.ruoyi.hospital.domain.Doctor" useGeneratedKeys="true" keyProperty="doctorId">
+        insert into hospital_doctor
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="doctorName != null">doctor_name,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="deptName != null">dept_name,</if>
+            <if test="title != null">title,</if>
+            <if test="phone != null">phone,</if>
+            <if test="gender != null">gender,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="doctorName != null">#{doctorName},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="deptName != null">#{deptName},</if>
+            <if test="title != null">#{title},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="gender != null">#{gender},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDoctor" parameterType="com.ruoyi.hospital.domain.Doctor">
+        update hospital_doctor
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="doctorName != null">doctor_name = #{doctorName},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="deptName != null">dept_name = #{deptName},</if>
+            <if test="title != null">title = #{title},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where doctor_id = #{doctorId}
+    </update>
+
+    <delete id="deleteDoctorById" parameterType="Long">
+        delete from hospital_doctor where doctor_id = #{doctorId}
+    </delete>
+
+    <delete id="deleteDoctorByIds" parameterType="String">
+        delete from hospital_doctor where doctor_id in
+        <foreach item="doctorId" collection="array" open="(" separator="," close=")">
+            #{doctorId}
+        </foreach>
+    </delete>
+</mapper>

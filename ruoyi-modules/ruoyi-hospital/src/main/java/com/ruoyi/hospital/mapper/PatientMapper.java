@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.ruoyi.hospital.domain.Patient;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 患者信息Mapper接口
@@ -68,4 +69,11 @@ public interface PatientMapper
      * @return 患者状态统计数据
      */
     public List<Map<String, Object>> selectPatientStatusStats();
+
+    /**
+     * 获取指定前缀的最大排队号
+     * @param prefix 排队号前缀（科室编号+日期）
+     * @return 最大序号
+     */
+    public int getMaxQueueNumber(@Param("prefix") String prefix);
 }

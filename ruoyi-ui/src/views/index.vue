@@ -144,6 +144,13 @@
             <span><i class="el-icon-notebook-2"></i> 更新日志</span>
           </div>
           <el-collapse accordion>
+              <el-collapse-item title="v1.0.1 - 2025.07.31">
+                <ol>
+                  <li><i class="el-icon-check"></i> 完善医院管理相关功能</li>
+                  <li><i class="el-icon-check"></i> 添加后台日志</li>
+                  <li><i class="el-icon-check"></i> 新增大屏叫号页面</li>
+                </ol>
+              </el-collapse-item>
             <el-collapse-item title="v1.0.0 - 2025.05.09">
               <ol>
                 <li><i class="el-icon-check"></i> 全新UI设计与动画</li>

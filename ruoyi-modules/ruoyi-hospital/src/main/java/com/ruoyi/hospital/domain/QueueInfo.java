@@ -47,7 +47,11 @@ public class QueueInfo extends BaseEntity {
     /** 结束时间 */
     @Excel(name = "结束时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
-    
+
+    /** 排队号码 */
+    @Excel(name = "排队号码")
+    private String queueNumber;
+
     /** 备注 */
     private String remark;
 }

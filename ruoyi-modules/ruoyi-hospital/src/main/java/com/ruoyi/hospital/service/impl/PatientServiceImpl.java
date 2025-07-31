@@ -5,12 +5,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.ruoyi.common.core.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.ruoyi.hospital.mapper.PatientMapper;
 import com.ruoyi.hospital.domain.Patient;
 import com.ruoyi.hospital.service.IPatientService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 患者信息Service业务层处理
@@ -18,8 +21,9 @@ import com.ruoyi.hospital.service.IPatientService;
  * @author ruoyi
  */
 @Service
-public class PatientServiceImpl implements IPatientService 
-{
+public class PatientServiceImpl implements IPatientService {
+    private static final Logger log = LoggerFactory.getLogger(PatientServiceImpl.class);
+
     @Autowired
     private PatientMapper patientMapper;
 
@@ -67,9 +71,37 @@ public class PatientServiceImpl implements IPatientService
      * @return 结果
      */
     @Override
-    public int updatePatient(Patient patient)
-    {
-        return patientMapper.updatePatient(patient);
+    public int updatePatient(Patient patient) {
+        log.info("======开始修改患者信息======");
+
+        // 如果是分诊操作（设置了科室），生成排队号
+        if (patient.getDeptId() != null) {
+            // 生成当天该科室的排队号
+            String queueNumber = generateQueueNumber(patient.getDeptId());
+            patient.setQueueNumber(queueNumber);
+            // 设置状态为等待叫号
+            patient.setStatus("0");
+            log.info("======为患者分配排队号：{}======", queueNumber);
+        }
+
+        patient.setUpdateTime(DateUtils.getNowDate());
+        int rows = patientMapper.updatePatient(patient);
+        log.info("======患者信息修改完成，受影响的行数：{}======", rows);
+        return rows;
+    }
+
+    /**
+     * 生成排队号
+     * 格式：科室编号(2位) + 日期(6位) + 序号(3位)
+     */
+    private String generateQueueNumber(Long deptId) {
+        // 获取当前日期，格式：MMDDYY
+        String dateStr = DateUtils.dateTimeNow("MMddyy");
+        // 查询当天该科室最大序号
+        String prefix = String.format("%02d%s", deptId, dateStr);
+        int maxNum = patientMapper.getMaxQueueNumber(prefix);
+        // 生成新的排队号
+        return String.format("%s%03d", prefix, maxNum + 1);
     }
 
     /**

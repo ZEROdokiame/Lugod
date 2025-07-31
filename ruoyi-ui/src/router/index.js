@@ -161,6 +161,38 @@ export const dynamicRoutes = [
         meta: { title: '修改生成配置', activeMenu: '/tool/gen' }
       }
     ]
+  },
+  {
+    path: '/hospital',
+    component: Layout,
+    name: 'Hospital',
+    meta: { title: '医院管理', icon: 'hospital', noCache: false },
+    children: [
+      {
+        path: 'patient',
+        component: () => import('@/views/hospital/patient/index'),
+        name: 'Patient',
+        meta: { title: '患者管理', icon: 'user', noCache: false }
+      },
+      {
+        path: 'queue',
+        component: () => import('@/views/hospital/queue/index'),
+        name: 'Queue',
+        meta: { title: '叫号队列', icon: 'list', noCache: false }
+      },
+      {
+        path: 'doctor',
+        component: () => import('@/views/hospital/doctor/index'),
+        name: 'Doctor',
+        meta: { title: '医生工作台', icon: 'doctor', noCache: false }
+      },
+      {
+        path: 'display',
+        component: () => import('@/views/hospital/display/index'),
+        name: 'Display',
+        meta: { title: '叫号显示', icon: 'screen', noCache: false }
+      }
+    ]
   }
 ]
 

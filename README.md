@@ -1,7 +1,7 @@
 <p align="center">
 	<img alt="路神logo" src="ruoyi-ui/src/assets/logo/lugod-logo.svg" width="200" height="200">
 </p>
-<h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">路神后台管理框架 v1.0.0</h1>
+<h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">路神后台管理框架 v1.0.1</h1>
 <h4 align="center">基于 Vue/Element UI 和 Spring Boot/Spring Cloud & Alibaba 前后端分离的分布式微服务架构</h4>
 <p align="center">
 	<a href="https://github.com/ZEROdokiame/Lugod"><img src="https://img.shields.io/badge/Lugod-v1.0.0-brightgreen.svg"></a>
@@ -10,7 +10,11 @@
 
 ## 平台简介
 
-路神管理系统是一套基于开源框架二次开发的后台管理系统，适用于个人和企业使用。
+路神管理系统是一套基于Ruoyi开源框架二次开发的后台管理系统，用于个人学习探索用。
+
+目前集成的第一个业务需求为医院大屏叫号系统，逐步完善中
+
+第二个业务需求应该为电商相关，用于学习应对高并发
 
 * 采用前后端分离的模式，前端基于 Vue 和 Element UI。
 * 后端采用Spring Boot、Spring Cloud & Alibaba。

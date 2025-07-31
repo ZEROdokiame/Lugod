@@ -160,7 +160,7 @@
             </template>
           </el-table-column>
         </el-table>
-        
+
         <pagination
           v-show="total>0"
           :total="total"
@@ -256,7 +256,7 @@
           <el-input v-model="triageForm.patientName" disabled />
         </el-form-item>
         <el-form-item label="科室" prop="deptId">
-          <el-select v-model="triageForm.deptId" placeholder="请选择科室">
+          <el-select v-model="triageForm.deptId" placeholder="请选择科室" @change="handleDeptChange">
             <el-option
               v-for="dept in deptOptions"
               :key="dept.deptId"
@@ -269,9 +269,9 @@
           <el-select v-model="triageForm.doctorId" placeholder="请选择医生">
             <el-option
               v-for="doctor in doctorOptions"
-              :key="doctor.userId"
-              :label="doctor.userName"
-              :value="doctor.userId"
+              :key="doctor.doctorId"
+              :label="doctor.doctorName"
+              :value="doctor.doctorId"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -286,6 +286,8 @@
 
 <script>
 import { listPatient, getPatient, delPatient, addPatient, updatePatient, exportPatient, getPatientStatusStats } from "@/api/hospital/patient";
+import { listAllHospitalDept } from "@/api/hospital/hospitalDept";
+import { listDoctorsByDept, callPatient } from "@/api/hospital/doctor";
 
 export default {
   name: "Patient",
@@ -509,28 +511,11 @@ export default {
           doctorId: null
         };
         this.triageOpen = true;
-        // 获取科室和医生列表（模拟数据，实际应从后端获取）
-        this.deptOptions = [
-          { deptId: 1, deptName: '内科' },
-          { deptId: 2, deptName: '外科' },
-          { deptId: 3, deptName: '儿科' },
-          { deptId: 4, deptName: '妇科' },
-          { deptId: 5, deptName: '眼科' }
-        ];
-        
-        this.doctorOptions = [
-          { userId: 1, userName: '张医生' },
-          { userId: 2, userName: '李医生' },
-          { userId: 3, userName: '王医生' }
-        ];
+        // 获取科室和医生列表
+        this.getDepts();
       } else if (command === 'call') {
         this.$modal.confirm('确认叫号患者 "' + row.patientName + '" 吗？').then(() => {
-          const data = {
-            patientId: row.patientId,
-            status: '2',  // 就诊中
-            callTime: new Date()
-          };
-          updatePatient(data).then(() => {
+          callPatient(row.patientId).then(() => {
             this.$modal.msgSuccess("叫号成功");
             this.getList();
             this.getStatusStats();
@@ -562,6 +547,31 @@ export default {
         });
       }
     },
+
+    /** 获取科室列表 */
+    getDepts() {
+      listAllHospitalDept().then(response => {
+        this.deptOptions = response.data;
+      });
+    },
+
+    /** 根据科室获取医生列表 */
+    getDoctorsByDept(deptId) {
+      if (!deptId) {
+        this.doctorOptions = [];
+        return;
+      }
+      listDoctorsByDept(deptId).then(response => {
+        this.doctorOptions = response.data;
+      });
+    },
+
+    /** 科室选择变化时触发 */
+    handleDeptChange(deptId) {
+      this.triageForm.doctorId = null;
+      this.getDoctorsByDept(deptId);
+    },
+
     /** 提交分诊表单 */
     submitTriageForm() {
       this.$refs["triageForm"].validate(valid => {
