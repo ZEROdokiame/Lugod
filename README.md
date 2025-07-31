@@ -16,7 +16,7 @@
 
 账号admin 123456
 <p align="center">
-	<img src="https://github.com/user-attachments/assets/165e8b46-b24a-4335-b6ae-c35cb202559a">
+	<img src="https://github.com/user-attachments/assets/90bbe135-2018-4b89-8631-c52211f79cf9">
 </p>
 
 目前集成的第一个业务需求为医院大屏叫号系统，逐步完善中
