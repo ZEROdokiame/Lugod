@@ -97,7 +97,9 @@ com.ruoyi
         </td>
     </tr>
 </table>
-
+<p align="center">
+	<img src="https://github.com/user-attachments/assets/b2aaa378-f86a-4075-97d4-7fb114d1d50f">
+</p>
 ## 内置功能
 
 1.  用户管理：用户是系统操作者，该功能主要完成系统用户配置。
