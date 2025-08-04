@@ -1,10 +1,10 @@
 <p align="center">
 	<img alt="路神logo" src="ruoyi-ui/src/assets/logo/lugod-logo.svg" width="200" height="200">
 </p>
-<h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">路神后台管理框架 v1.0.1</h1>
+<h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">路神后台管理框架 v1.0.2</h1>
 <h4 align="center">基于 Vue/Element UI 和 Spring Boot/Spring Cloud & Alibaba 前后端分离的分布式微服务架构</h4>
 <p align="center">
-	<a href="https://github.com/ZEROdokiame/Lugod"><img src="https://img.shields.io/badge/Lugod-v1.0.0-brightgreen.svg"></a>
+	<a href="https://github.com/ZEROdokiame/Lugod"><img src="https://img.shields.io/badge/Lugod-v1.0.2-brightgreen.svg"></a>
 	<a href="https://github.com/ZEROdokiame/Lugod/blob/master/LICENSE"><img src="https://img.shields.io/github/license/mashape/apistatus.svg"></a>
 </p>
 
