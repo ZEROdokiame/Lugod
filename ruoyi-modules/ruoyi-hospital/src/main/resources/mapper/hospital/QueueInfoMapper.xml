@@ -12,6 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="currentNumber" column="current_number"/>
         <result property="maxNumber" column="max_number"/>
         <result property="queueNumber" column="queue_number"/>
+        <result property="waitingCount" column="waiting_count"/>
         <result property="status" column="status"/>
         <result property="startTime" column="start_time"/>
         <result property="endTime" column="end_time"/>
@@ -23,27 +24,40 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectQueueInfoVo">
-        select q.queue_id, q.queue_name, q.dept_id, q.dept_name,
-        q.current_number, q.max_number, q.queue_number, q.status,
-        q.start_time, q.end_time, q.create_by, q.create_time,
-        q.update_by, q.update_time, q.remark
+        select q.queue_id, q.queue_name, q.dept_id,
+        COALESCE(d.dept_name, q.dept_name) as dept_name,
+        q.current_number, q.max_number, q.queue_number,
+        COALESCE((
+            SELECT COUNT(*)
+            FROM hospital_patient p
+            WHERE p.dept_id = q.dept_id
+            AND p.status = '0'
+            AND DATE(p.create_time) = CURDATE()
+            AND p.queue_number IS NOT NULL
+        ), 0) as waiting_count,
+        q.status, q.start_time, q.end_time,
+        q.create_by, q.create_time, q.update_by, q.update_time, q.remark
         from hospital_queue_info q
+        left join hospital_dept d on q.dept_id = d.dept_id
     </sql>
 
     <select id="selectQueueList" parameterType="com.ruoyi.hospital.domain.QueueInfo" resultMap="QueueInfoResult">
         <include refid="selectQueueInfoVo"/>
         <where>
             <if test="deptId != null">
-                AND dept_id = #{deptId}
+                AND q.dept_id = #{deptId}
             </if>
             <if test="status != null and status != ''">
-                AND status = #{status}
+                AND q.status = #{status}
             </if>
             <if test="queueNumber != null and queueNumber != ''">
-                AND queue_number = #{queueNumber}
+                AND q.queue_number = #{queueNumber}
+            </if>
+            <if test="queueName != null and queueName != ''">
+                AND q.queue_name like concat('%', #{queueName}, '%')
             </if>
         </where>
-        order by queue_number asc
+        order by q.queue_number asc
     </select>
 
     <insert id="insertQueueInfo" parameterType="com.ruoyi.hospital.domain.QueueInfo" useGeneratedKeys="true" keyProperty="queueId">

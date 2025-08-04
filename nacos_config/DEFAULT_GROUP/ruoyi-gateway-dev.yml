@@ -18,6 +18,20 @@ spring:
           filters:
             - StripPrefix=1
 
+# SpringDoc配置
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    config-url: /v3/api-docs/swagger-config
+    urls-primary-name: default
+    urls:
+      - name: '网关服务'
+        url: /v3/api-docs
+  show-actuator: true
+
 security:
   # 不校验白名单
   ignore:
@@ -26,4 +40,11 @@ security:
       - /auth/login
       - /auth/register
       - /*/v2/api-docs
+      - /*/v3/api-docs
+      - /v3/api-docs
+      - /v3/api-docs/**
+      - /swagger-ui/**
+      - /swagger-ui.html
+      - /swagger-resources/**
+      - /webjars/**
       - /csrf

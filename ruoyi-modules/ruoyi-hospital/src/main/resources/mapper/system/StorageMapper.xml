@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.hospital.mapper.StorageMapper">
+    
+    <resultMap type="Storage" id="StorageResult">
+        <result property="id"    column="id"    />
+        <result property="medicineName"    column="medicine_name"    />
+        <result property="medicineCode"    column="medicine_code"    />
+        <result property="specification"    column="specification"    />
+        <result property="quantity"    column="quantity"    />
+        <result property="minStock"    column="min_stock"    />
+        <result property="unit"    column="unit"    />
+        <result property="unitPrice"    column="unit_price"    />
+        <result property="imageUrl"    column="image_url"    />
+        <result property="acceptanceStatus"    column="acceptance_status"    />
+        <result property="acceptanceBy"    column="acceptance_by"    />
+        <result property="acceptanceTime"    column="acceptance_time"    />
+        <result property="manufacturer"    column="manufacturer"    />
+        <result property="supplier"    column="supplier"    />
+        <result property="batchNumber"    column="batch_number"    />
+        <result property="productionDate"    column="production_date"    />
+        <result property="expiryDate"    column="expiry_date"    />
+        <result property="storageLocation"    column="storage_location"    />
+        <result property="status"    column="status"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+    <sql id="selectStorageVo">
+        select id, medicine_name, medicine_code, specification, quantity, min_stock, unit, unit_price, image_url, acceptance_status, acceptance_by, acceptance_time, manufacturer, supplier, batch_number, production_date, expiry_date, storage_location, status, remark, create_by, create_time, update_by, update_time, del_flag from storage
+    </sql>
+
+    <select id="selectStorageList" parameterType="Storage" resultMap="StorageResult">
+        <include refid="selectStorageVo"/>
+        <where>  
+            <if test="medicineName != null  and medicineName != ''"> and medicine_name like concat('%', #{medicineName}, '%')</if>
+            <if test="medicineCode != null  and medicineCode != ''"> and medicine_code = #{medicineCode}</if>
+            <if test="specification != null  and specification != ''"> and specification = #{specification}</if>
+            <if test="quantity != null "> and quantity = #{quantity}</if>
+            <if test="minStock != null "> and min_stock = #{minStock}</if>
+            <if test="unit != null  and unit != ''"> and unit = #{unit}</if>
+            <if test="unitPrice != null "> and unit_price = #{unitPrice}</if>
+            <if test="imageUrl != null  and imageUrl != ''"> and image_url = #{imageUrl}</if>
+            <if test="acceptanceStatus != null "> and acceptance_status = #{acceptanceStatus}</if>
+            <if test="acceptanceBy != null  and acceptanceBy != ''"> and acceptance_by = #{acceptanceBy}</if>
+            <if test="acceptanceTime != null "> and acceptance_time = #{acceptanceTime}</if>
+            <if test="manufacturer != null  and manufacturer != ''"> and manufacturer = #{manufacturer}</if>
+            <if test="supplier != null  and supplier != ''"> and supplier = #{supplier}</if>
+            <if test="batchNumber != null  and batchNumber != ''"> and batch_number = #{batchNumber}</if>
+            <if test="productionDate != null "> and production_date = #{productionDate}</if>
+            <if test="expiryDate != null "> and expiry_date = #{expiryDate}</if>
+            <if test="storageLocation != null  and storageLocation != ''"> and storage_location = #{storageLocation}</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectStorageById" parameterType="Long" resultMap="StorageResult">
+        <include refid="selectStorageVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertStorage" parameterType="Storage" useGeneratedKeys="true" keyProperty="id">
+        insert into storage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="medicineName != null and medicineName != ''">medicine_name,</if>
+            <if test="medicineCode != null and medicineCode != ''">medicine_code,</if>
+            <if test="specification != null">specification,</if>
+            <if test="quantity != null">quantity,</if>
+            <if test="minStock != null">min_stock,</if>
+            <if test="unit != null">unit,</if>
+            <if test="unitPrice != null">unit_price,</if>
+            <if test="imageUrl != null">image_url,</if>
+            <if test="acceptanceStatus != null">acceptance_status,</if>
+            <if test="acceptanceBy != null">acceptance_by,</if>
+            <if test="acceptanceTime != null">acceptance_time,</if>
+            <if test="manufacturer != null">manufacturer,</if>
+            <if test="supplier != null">supplier,</if>
+            <if test="batchNumber != null">batch_number,</if>
+            <if test="productionDate != null">production_date,</if>
+            <if test="expiryDate != null">expiry_date,</if>
+            <if test="storageLocation != null">storage_location,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="delFlag != null">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="medicineName != null and medicineName != ''">#{medicineName},</if>
+            <if test="medicineCode != null and medicineCode != ''">#{medicineCode},</if>
+            <if test="specification != null">#{specification},</if>
+            <if test="quantity != null">#{quantity},</if>
+            <if test="minStock != null">#{minStock},</if>
+            <if test="unit != null">#{unit},</if>
+            <if test="unitPrice != null">#{unitPrice},</if>
+            <if test="imageUrl != null">#{imageUrl},</if>
+            <if test="acceptanceStatus != null">#{acceptanceStatus},</if>
+            <if test="acceptanceBy != null">#{acceptanceBy},</if>
+            <if test="acceptanceTime != null">#{acceptanceTime},</if>
+            <if test="manufacturer != null">#{manufacturer},</if>
+            <if test="supplier != null">#{supplier},</if>
+            <if test="batchNumber != null">#{batchNumber},</if>
+            <if test="productionDate != null">#{productionDate},</if>
+            <if test="expiryDate != null">#{expiryDate},</if>
+            <if test="storageLocation != null">#{storageLocation},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStorage" parameterType="Storage">
+        update storage
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="medicineName != null and medicineName != ''">medicine_name = #{medicineName},</if>
+            <if test="medicineCode != null and medicineCode != ''">medicine_code = #{medicineCode},</if>
+            <if test="specification != null">specification = #{specification},</if>
+            <if test="quantity != null">quantity = #{quantity},</if>
+            <if test="minStock != null">min_stock = #{minStock},</if>
+            <if test="unit != null">unit = #{unit},</if>
+            <if test="unitPrice != null">unit_price = #{unitPrice},</if>
+            <if test="imageUrl != null">image_url = #{imageUrl},</if>
+            <if test="acceptanceStatus != null">acceptance_status = #{acceptanceStatus},</if>
+            <if test="acceptanceBy != null">acceptance_by = #{acceptanceBy},</if>
+            <if test="acceptanceTime != null">acceptance_time = #{acceptanceTime},</if>
+            <if test="manufacturer != null">manufacturer = #{manufacturer},</if>
+            <if test="supplier != null">supplier = #{supplier},</if>
+            <if test="batchNumber != null">batch_number = #{batchNumber},</if>
+            <if test="productionDate != null">production_date = #{productionDate},</if>
+            <if test="expiryDate != null">expiry_date = #{expiryDate},</if>
+            <if test="storageLocation != null">storage_location = #{storageLocation},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteStorageById" parameterType="Long">
+        delete from storage where id = #{id}
+    </delete>
+
+    <delete id="deleteStorageByIds" parameterType="String">
+        delete from storage where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -256,13 +256,23 @@
           <el-input v-model="triageForm.patientName" disabled />
         </el-form-item>
         <el-form-item label="科室" prop="deptId">
-          <el-select v-model="triageForm.deptId" placeholder="请选择科室" @change="handleDeptChange">
+          <el-select v-model="triageForm.deptId" placeholder="请选择科室" @change="handleTriageDeptChange">
             <el-option
               v-for="dept in deptOptions"
               :key="dept.deptId"
               :label="dept.deptName"
               :value="dept.deptId"
             ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="叫号队列" prop="queueId">
+          <el-select v-model="triageForm.queueId" placeholder="请选择叫号队列" :disabled="!triageForm.deptId" @change="handleQueueChange">
+            <el-option
+              v-for="queue in queueOptions"
+              :key="queue.queueId"
+              :label="queue.queueName"
+              :value="queue.queueId"
+            />
           </el-select>
         </el-form-item>
         <el-form-item label="医生" prop="doctorId">
@@ -288,6 +298,7 @@
 import { listPatient, getPatient, delPatient, addPatient, updatePatient, exportPatient, getPatientStatusStats } from "@/api/hospital/patient";
 import { listAllHospitalDept } from "@/api/hospital/hospitalDept";
 import { listDoctorsByDept, callPatient } from "@/api/hospital/doctor";
+import { listQueue } from "@/api/hospital/queue";
 
 export default {
   name: "Patient",
@@ -324,6 +335,8 @@ export default {
       ],
       // 部门选项
       deptOptions: [],
+      // 队列选项
+      queueOptions: [],
       // 医生选项
       doctorOptions: [],
       // 分诊表单
@@ -331,12 +344,16 @@ export default {
         patientId: null,
         patientName: '',
         deptId: null,
+        queueId: null,
         doctorId: null
       },
       // 分诊表单验证
       triageRules: {
         deptId: [
           { required: true, message: "请选择科室", trigger: "change" }
+        ],
+        queueId: [
+          { required: true, message: "请选择叫号队列", trigger: "change" }
         ],
         doctorId: [
           { required: true, message: "请选择医生", trigger: "change" }
@@ -566,10 +583,39 @@ export default {
       });
     },
 
+    /** 根据科室获取队列列表 */
+    getQueuesByDept(deptId) {
+      if (!deptId) {
+        this.queueOptions = [];
+        return;
+      }
+      // 使用正确的API调用方式获取指定科室的队列列表
+      listQueue({ deptId: deptId }).then(response => {
+        this.queueOptions = response.rows || [];
+        console.log('获取到的队列数据:', this.queueOptions);
+      }).catch(error => {
+        console.error('获取队列数据失败:', error);
+        this.queueOptions = [];
+      });
+    },
+
     /** 科室选择变化时触发 */
-    handleDeptChange(deptId) {
+    handleTriageDeptChange(deptId) {
+      this.triageForm.queueId = null;
       this.triageForm.doctorId = null;
-      this.getDoctorsByDept(deptId);
+      this.queueOptions = [];
+      this.doctorOptions = [];
+
+      if (deptId) {
+        this.getQueuesByDept(deptId);
+        this.getDoctorsByDept(deptId);
+      }
+    },
+
+    /** 队列选择变化时触发 */
+    handleQueueChange(queueId) {
+      // 队列选择变化时可以执行的逻辑，暂时留空
+      console.log('选择的队列ID：', queueId);
     },
 
     /** 提交分诊表单 */
@@ -580,6 +626,7 @@ export default {
             patientId: this.triageForm.patientId,
             status: '1',  // 已分诊
             deptId: this.triageForm.deptId,
+            queueId: this.triageForm.queueId,
             doctorId: this.triageForm.doctorId
           };
           updatePatient(data).then(() => {

@@ -64,6 +64,10 @@ public class Patient extends BaseEntity {
     /** 科室ID */
     private Long deptId;
 
+    /** 队列ID */
+    @Excel(name = "队列ID")
+    private Long queueId;
+
     /** 医生ID */
     private Long doctorId;
 }

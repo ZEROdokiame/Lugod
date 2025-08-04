@@ -52,6 +52,10 @@ public class QueueInfo extends BaseEntity {
     @Excel(name = "排队号码")
     private String queueNumber;
 
+    /** 等待人数 */
+    @Excel(name = "等待人数")
+    private Integer waitingCount;
+
     /** 备注 */
     private String remark;
 }

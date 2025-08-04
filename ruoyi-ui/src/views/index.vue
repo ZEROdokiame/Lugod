@@ -126,15 +126,15 @@
           </div>
           <div class="contact-item">
             <i class="el-icon-message"></i>
-            <span>邮箱: lugod@example.com</span>
+            <span>邮箱: 20021120lulu@gmail.com</span>
           </div>
           <div class="contact-item">
             <i class="el-icon-chat-line-round"></i>
-            <span>微信: lugod_wechat</span>
+            <span>微信: lllzzzroselady</span>
           </div>
           <div class="contact-item">
             <i class="el-icon-mobile-phone"></i>
-            <span>QQ: 12345678</span>
+            <span>QQ: 1142711635</span>
           </div>
         </el-card>
       </el-col>
@@ -144,6 +144,12 @@
             <span><i class="el-icon-notebook-2"></i> 更新日志</span>
           </div>
           <el-collapse accordion>
+            <el-collapse-item title="v1.0.2 - 2025.08.04">
+              <ol>
+                <li><i class="el-icon-check"></i> 新增了药材库存管理</li>
+                <li><i class="el-icon-check"></i> 更新了完整的UI图标</li>
+              </ol>
+            </el-collapse-item>
               <el-collapse-item title="v1.0.1 - 2025.07.31">
                 <ol>
                   <li><i class="el-icon-check"></i> 完善医院管理相关功能</li>
@@ -212,7 +218,7 @@ export default {
   data() {
     return {
       // 版本号
-      version: "1.0.0",
+      version: "1.0.2",
       showAllLogs: false,
       activeCollapse: "1"
     }
