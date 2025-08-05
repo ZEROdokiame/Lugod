@@ -99,6 +99,24 @@
 
     <el-table v-loading="loading" :data="storageList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="药材图片" align="center" prop="imageUrl" width="100">
+        <template slot-scope="scope">
+          <el-image
+            v-if="scope.row.imageUrl"
+            :src="scope.row.imageUrl"
+            :preview-src-list="[scope.row.imageUrl]"
+            fit="cover"
+            style="width: 60px; height: 60px; border-radius: 4px;"
+          >
+            <div slot="error" class="image-slot">
+              <i class="el-icon-picture-outline"></i>
+            </div>
+          </el-image>
+          <div v-else class="image-slot" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border: 1px dashed #d9d9d9; border-radius: 4px;">
+            <i class="el-icon-picture-outline" style="font-size: 20px; color: #c0c4cc;"></i>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column label="药材编码" align="center" prop="medicineCode" />
       <el-table-column label="药材名称" align="center" prop="medicineName" />
       <el-table-column label="规格" align="center" prop="specification" />
@@ -126,7 +144,7 @@
           <dict-tag :options="dict.type.acceptance_status" :value="scope.row.acceptanceStatus"/>
         </template>
       </el-table-column>
-      <el-table-column label="有效期" align="center" prop="expiryDate" width="180">
+      <el-table-column label="有效期" align="center" prop="expiryDate" width="120">
         <template slot-scope="scope">
           <span v-html="expiredFormat(scope.row)"></span>
         </template>
@@ -136,22 +154,40 @@
           <dict-tag :options="dict.type.storage_status" :value="scope.row.status"/>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="180">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['hospital:storage:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['hospital:storage:remove']"
-          >删除</el-button>
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <!-- 验收按钮单独一行 -->
+            <div v-if="scope.row.acceptanceStatus === 0">
+              <el-button
+                size="small"
+                type="success"
+                icon="el-icon-check"
+                @click="handleAcceptance(scope.row)"
+                v-hasPermi="['hospital:storage:edit']"
+                style="width: 80px;"
+              >验收</el-button>
+            </div>
+            <!-- 修改和删除同一行 -->
+            <div style="display: flex; justify-content: center; gap: 5px;">
+              <el-button
+                size="small"
+                type="text"
+                icon="el-icon-edit"
+                @click="handleUpdate(scope.row)"
+                v-hasPermi="['hospital:storage:edit']"
+                style="width: 60px;"
+              >修改</el-button>
+              <el-button
+                size="small"
+                type="text"
+                icon="el-icon-delete"
+                @click="handleDelete(scope.row)"
+                v-hasPermi="['hospital:storage:remove']"
+                style="width: 60px;"
+              >删除</el-button>
+            </div>
+          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -218,6 +254,8 @@
               <el-input-number v-model="form.unitPrice" :precision="2" :min="0" placeholder="请输入单价" style="width: 100%" />
             </el-form-item>
           </el-col>
+          <!-- 隐藏验收状态选项，只能通过操作列验收 -->
+          <!--
           <el-col :span="12">
             <el-form-item label="验收状态" prop="acceptanceStatus">
               <el-radio-group v-model="form.acceptanceStatus">
@@ -229,6 +267,7 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
+          -->
         </el-row>
         <el-row>
           <el-col :span="12">
@@ -299,6 +338,37 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="药材图片" prop="imageUrl">
+              <el-upload
+                class="upload-demo"
+                :action="uploadImgUrl"
+                :on-success="handleImageSuccess"
+                :on-error="handleImageError"
+                :before-upload="beforeImageUpload"
+                :show-file-list="false"
+                :headers="headers"
+                accept="image/*">
+                <el-image
+                  v-if="form.imageUrl"
+                  :src="form.imageUrl"
+                  fit="cover"
+                  style="width: 120px; height: 120px; border-radius: 6px; cursor: pointer;"
+                >
+                  <div slot="error" class="image-slot">
+                    <i class="el-icon-picture-outline"></i>
+                  </div>
+                </el-image>
+                <div v-else class="upload-image-slot">
+                  <i class="el-icon-plus"></i>
+                  <div>点击上传</div>
+                </div>
+              </el-upload>
+              <div class="upload-tip">支持 jpg、png格式，大小不超过 2MB</div>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-form-item label="库存状态" prop="status">
           <el-radio-group v-model="form.status">
             <el-radio
@@ -319,6 +389,7 @@
 
 <script>
 import { listStorage, getStorage, delStorage, addStorage, updateStorage } from "@/api/hospital/storage";
+import { getToken } from "@/utils/auth";
 
 export default {
   name: "Storage",
@@ -343,6 +414,14 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      // 上传文件服务器地址
+      uploadImgUrl: process.env.VUE_APP_BASE_API + "/file/upload",
+      // 上传的图片服务器地址
+      imgHost: process.env.VUE_APP_BASE_API,
+      // 上传文件的请求头
+      headers: {
+        Authorization: "Bearer " + getToken(),
+      },
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -502,6 +581,58 @@ export default {
       } else {
         return row.expiryDate;
       }
+    },
+    /** 上传图片前的校验 */
+    beforeImageUpload(file) {
+      const isJPG = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif';
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$modal.msgError('上传图片只能是 JPG、PNG、GIF 格式!');
+        return false;
+      }
+      if (!isLt2M) {
+        this.$modal.msgError('上传图片大小不能超过 2MB!');
+        return false;
+      }
+      return true;
+    },
+    /** 图片上传成功回调 */
+    handleImageSuccess(response, file) {
+      console.log('上传响应:', response); // 添加调试日志
+      if (response.code === 200) {
+        this.form.imageUrl = response.data?.url || response.url;
+        this.$modal.msgSuccess("图片上传成功");
+      } else {
+        this.$modal.msgError(response.msg || "图片上传失败");
+      }
+    },
+    /** 图片上传失败回调 */
+    handleImageError(err) {
+      this.$modal.msgError("图片上传失败，请重试");
+      console.error('图片上传失败:', err);
+    },
+    /** 验收按钮操作 */
+    handleAcceptance(row) {
+      this.$modal.confirm('是否确认验收药材"' + row.medicineName + '"？').then(() => {
+        // 构造验收数据
+        const acceptanceData = {
+          id: row.id,
+          acceptanceStatus: 1, // 设置为已验收
+          acceptanceBy: this.$store.state.user.name, // 当前用户作为验收人
+          acceptanceTime: new Date().toISOString().slice(0, 10) // 当前日期作为验收时间
+        };
+
+        // 调用更新接口
+        updateStorage(acceptanceData).then(response => {
+          this.$modal.msgSuccess("验收成功");
+          this.getList(); // 刷新列表
+        }).catch(error => {
+          this.$modal.msgError("验收失败，请重试");
+        });
+      }).catch(() => {
+        // 用户取消验收
+      });
     }
   }
 };
@@ -511,5 +642,48 @@ export default {
 .text-danger {
   color: #f56c6c;
   font-weight: bold;
+}
+
+.upload-image-slot {
+  width: 120px;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #f5f7fa;
+  transition: border-color 0.3s;
+}
+
+.upload-image-slot:hover {
+  border-color: #409eff;
+}
+
+.upload-image-slot i {
+  font-size: 28px;
+  color: #8c939d;
+  margin-bottom: 5px;
+}
+
+.upload-image-slot div {
+  font-size: 14px;
+  color: #8c939d;
+}
+
+.upload-tip {
+  font-size: 12px;
+  color: #909399;
+  margin-top: 5px;
+  line-height: 1.4;
+}
+
+.image-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #c0c4cc;
 }
 </style>

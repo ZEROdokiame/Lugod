@@ -8,7 +8,9 @@
       <div class="list-container">
         <div v-for="(item, index) in iconList" class="icon-item-wrapper" :key="index" @click="selectedIcon(item)">
           <div :class="['icon-item', { active: activeIcon === item }]">
-            <svg-icon :icon-class="item" class-name="icon" style="height: 25px;width: 16px;"/>
+            <!-- 根据图标类型选择不同的显示方式 -->
+            <i v-if="item.startsWith('fa fa-')" :class="item" style="height: 25px; width: 16px; font-size: 16px; display: flex; align-items: center; justify-content: center;"></i>
+            <svg-icon v-else :icon-class="item" class-name="icon" style="height: 25px;width: 16px;"/>
             <span>{{ item }}</span>
           </div>
         </div>

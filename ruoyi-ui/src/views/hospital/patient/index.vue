@@ -130,21 +130,23 @@
               <span>{{ parseTime(scope.row.callTime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+          <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="180">
             <template slot-scope="scope">
               <el-button
-                size="mini"
+                size="small"
                 type="text"
                 icon="el-icon-edit"
                 @click="handleUpdate(scope.row)"
                 v-hasPermi="['hospital:patient:edit']"
+                style="margin-right: 8px;"
               >修改</el-button>
               <el-button
-                size="mini"
+                size="small"
                 type="text"
                 icon="el-icon-delete"
                 @click="handleDelete(scope.row)"
                 v-hasPermi="['hospital:patient:remove']"
+                style="margin-right: 8px;"
               >删除</el-button>
               <el-dropdown @command="(command) => handleCommand(command, scope.row)" v-if="scope.row.status !== '4'">
                 <span class="el-dropdown-link">

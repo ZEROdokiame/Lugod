@@ -7,7 +7,7 @@
           <div class="welcome-header">
             <h1>
               <i class="el-icon-lightning animated-icon"></i>
-              路神の后台管理系统
+              Lugod System Control
               <i class="el-icon-lightning animated-icon"></i>
             </h1>
             <div class="version-tag">
@@ -19,7 +19,7 @@
               <i class="el-icon-s-flag"></i>
               <span class="main-intro">自用的后台管理系统，基于开源框架二次开发。</span>
               <br>
-              <span class="signature">This is Signed BY LUGOD.Follow your heart.</span>
+              <span class="signature">Designed By Lugod.Follow your heart.</span>
             </p>
             <p class="price-tag">
               <el-tag type="danger" effect="dark" size="medium"><i class="el-icon-money"></i> 欢迎用Q币支持</el-tag>
@@ -144,10 +144,12 @@
             <span><i class="el-icon-notebook-2"></i> 更新日志</span>
           </div>
           <el-collapse accordion>
-            <el-collapse-item title="v1.0.2 - 2025.08.04">
+            <el-collapse-item title="v1.0.2 - 2025.08.05">
               <ol>
                 <li><i class="el-icon-check"></i> 新增了药材库存管理</li>
                 <li><i class="el-icon-check"></i> 更新了完整的UI图标</li>
+                <li><i class="el-icon-check"></i> 支持批量导出和删除</li>
+                <li><i class="el-icon-check"></i> 支持药材管理图片上传</li>
               </ol>
             </el-collapse-item>
               <el-collapse-item title="v1.0.1 - 2025.07.31">
