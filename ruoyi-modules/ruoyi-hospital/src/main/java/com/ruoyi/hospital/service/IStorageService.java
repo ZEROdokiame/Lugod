@@ -58,4 +58,22 @@ public interface IStorageService
      * @return 结果
      */
     public int deleteStorageById(Long id);
+
+    /**
+     * 批量导入药材库存数据
+     *
+     * @param storageList 药材库存数据列表
+     * @param updateSupport 是否更新支持，如果已存在，则进行更新数据
+     * @param operName 操作用户
+     * @return 结果信息
+     */
+    public String importStorage(List<Storage> storageList, Boolean updateSupport, String operName);
+
+    /**
+     * 根据药材编码查询药材库存
+     *
+     * @param medicineCode 药材编码
+     * @return 药材库存信息
+     */
+    public Storage selectStorageByMedicineCode(String medicineCode);
 }

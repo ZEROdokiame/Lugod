@@ -64,6 +64,12 @@
       margin-right: 16px;
     }
 
+    // Font Awesome 图标样式 - 与SVG图标保持一致
+    .fa-icon {
+      margin-right: 16px;
+      vertical-align: middle;
+    }
+
     .el-menu {
       border: none;
       height: 100%;
@@ -126,6 +132,11 @@
         .svg-icon {
           margin-left: 20px;
         }
+
+        // 折叠状态下的Font Awesome图标
+        .fa-icon {
+          margin-left: 20px;
+        }
       }
     }
 
@@ -136,6 +147,11 @@
         padding: 0 !important;
 
         .svg-icon {
+          margin-left: 20px;
+        }
+
+        // 折叠状态下的Font Awesome图标
+        .fa-icon {
           margin-left: 20px;
         }
 
@@ -195,6 +211,12 @@
   &>.el-menu {
     .svg-icon {
       margin-right: 16px;
+    }
+
+    // 垂直菜单中的Font Awesome图标
+    .fa-icon {
+      margin-right: 16px;
+      vertical-align: middle;
     }
   }
 

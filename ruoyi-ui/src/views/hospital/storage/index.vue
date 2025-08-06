@@ -94,6 +94,16 @@
           v-hasPermi="['hospital:storage:export']"
         >导出</el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="info"
+          plain
+          icon="el-icon-upload2"
+          size="mini"
+          @click="handleImport"
+          v-hasPermi="['hospital:storage:import']"
+        >导入</el-button>
+      </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -384,6 +394,36 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 药材库存导入对话框 -->
+    <el-dialog :title="upload.title" :visible.sync="upload.open" width="400px" append-to-body>
+      <el-upload
+        ref="upload"
+        :limit="1"
+        accept=".xlsx, .xls"
+        :headers="upload.headers"
+        :action="upload.url + '?updateSupport=' + upload.updateSupport"
+        :disabled="upload.isUploading"
+        :on-progress="handleFileUploadProgress"
+        :on-success="handleFileSuccess"
+        :auto-upload="false"
+        drag
+      >
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <div class="el-upload__tip text-center" slot="tip">
+          <div class="el-upload__tip">
+            <el-checkbox v-model="upload.updateSupport" /> 是否更新已经存在的药材数据
+          </div>
+          <span>仅允许导入xls、xlsx格式文件。</span>
+          <el-link type="primary" :underline="false" style="font-size:12px;vertical-align: baseline;" @click="importTemplate">下载模板</el-link>
+        </div>
+      </el-upload>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitFileForm">确 定</el-button>
+        <el-button @click="upload.open = false">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -450,7 +490,22 @@ export default {
         ],
         unitPrice: [
           { required: true, message: "单价不能为空", trigger: "blur" }
+        ],
+        // 文件上传相关的规则
+        file: [
+          { required: true, message: "请上传药材库存数据文件", trigger: "change" }
         ]
+      },
+      // 文件上传相关的参数
+      upload: {
+        open: false,
+        title: "导入药材库存",
+        url: process.env.VUE_APP_BASE_API + "/hospital/storage/importData",
+        headers: {
+          Authorization: "Bearer " + getToken(),
+        },
+        isUploading: false,
+        updateSupport: false, // 是否支持更新已存在数据
       }
     };
   },
@@ -566,6 +621,10 @@ export default {
         ...this.queryParams
       }, `storage_${new Date().getTime()}.xlsx`)
     },
+    /** 导入按钮操作 */
+    handleImport() {
+      this.upload.open = true;
+    },
     /** 有效期格式化，过期显示红色 */
     expiredFormat(row) {
       if (!row.expiryDate) return '';
@@ -588,7 +647,7 @@ export default {
       const isLt2M = file.size / 1024 / 1024 < 2;
 
       if (!isJPG) {
-        this.$modal.msgError('上传图片只能是 JPG、PNG、GIF 格式!');
+        this.$modal.msgError('上传图片只能是 JPG、PNG格式!');
         return false;
       }
       if (!isLt2M) {
@@ -632,6 +691,41 @@ export default {
         });
       }).catch(() => {
         // 用户取消验收
+      });
+    },
+    /** 文件上传进度 */
+    handleFileUploadProgress(event, file, fileList) {
+      const percent = Math.round((event.loaded / event.total) * 100);
+      this.upload.isUploading = true;
+      this.$modal.msgInfo(`文件上传中... ${percent}%`);
+    },
+    /** 文件上传成功回调 */
+    handleFileSuccess(response, file, fileList) {
+      this.upload.isUploading = false;
+      if (response.code === 200) {
+        this.$modal.msgSuccess("文件上传成功");
+        this.upload.open = false;
+        this.getList(); // 刷新列表
+      } else {
+        this.$modal.msgError(response.msg || "文件上传失败");
+      }
+    },
+    /** 导入模板下载 */
+    importTemplate() {
+      this.download('hospital/storage/exportTemplate', {}, '药材库存导入模板.xlsx');
+    },
+    /** 提交文件表单 */
+    submitFileForm() {
+      // 检查是否选择了文件
+      if (this.$refs.upload.uploadFiles.length === 0) {
+        this.$modal.msgError('请选择要导入的文件');
+        return;
+      }
+
+      this.$modal.confirm('确定要导入选中的文件吗？').then(() => {
+        this.$refs.upload.submit();
+      }).catch(() => {
+        // 用户取消导入
       });
     }
   }

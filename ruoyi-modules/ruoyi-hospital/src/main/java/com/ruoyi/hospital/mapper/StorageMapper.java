@@ -54,8 +54,16 @@ public interface StorageMapper
     /**
      * 批量删除药材库存管理
      * 
-     * @param ids 需要删除的数据主键集合
+     * @param ids 需要删除的药材库存管理主键集合
      * @return 结果
      */
     public int deleteStorageByIds(Long[] ids);
+
+    /**
+     * 根据药材编码查询药材库存
+     *
+     * @param medicineCode 药材编码
+     * @return 药材库存信息
+     */
+    public Storage selectStorageByMedicineCode(String medicineCode);
 }

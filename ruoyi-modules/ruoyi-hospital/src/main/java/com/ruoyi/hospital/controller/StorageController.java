@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import com.ruoyi.common.log.annotation.Log;
 import com.ruoyi.common.log.enums.BusinessType;
 import com.ruoyi.common.security.annotation.RequiresPermissions;
+import com.ruoyi.common.security.utils.SecurityUtils;
 import com.ruoyi.hospital.domain.Storage;
 import com.ruoyi.hospital.service.IStorageService;
 import com.ruoyi.common.core.web.controller.BaseController;
@@ -101,5 +103,32 @@ public class StorageController extends BaseController
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(storageService.deleteStorageByIds(ids));
+    }
+
+    /**
+     * 下载药材库存导入模板
+     */
+    @RequiresPermissions("hospital:storage:import")
+    @Log(title = "药材库存管理", businessType = BusinessType.EXPORT)
+    @PostMapping("/exportTemplate")
+    public void exportTemplate(HttpServletResponse response, Storage storage)
+    {
+        ExcelUtil<Storage> util = new ExcelUtil<Storage>(Storage.class);
+        util.importTemplateExcel(response, "药材库存数据");
+    }
+
+    /**
+     * 批量导入药材库存数据
+     */
+    @RequiresPermissions("hospital:storage:import")
+    @Log(title = "药材库存管理", businessType = BusinessType.IMPORT)
+    @PostMapping("/importData")
+    public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception
+    {
+        ExcelUtil<Storage> util = new ExcelUtil<Storage>(Storage.class);
+        List<Storage> storageList = util.importExcel(file.getInputStream());
+        String operName = SecurityUtils.getUsername();
+        String message = storageService.importStorage(storageList, updateSupport, operName);
+        return success(message);
     }
 }

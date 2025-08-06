@@ -162,4 +162,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+
+    <select id="selectStorageByMedicineCode" parameterType="String" resultMap="StorageResult">
+        <include refid="selectStorageVo"/>
+        where medicine_code = #{medicineCode}
+    </select>
 </mapper>
