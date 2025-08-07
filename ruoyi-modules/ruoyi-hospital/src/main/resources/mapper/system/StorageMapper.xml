@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.hospital.mapper.StorageMapper">
     
-    <resultMap type="Storage" id="StorageResult">
+    <resultMap type="com.ruoyi.hospital.domain.Storage" id="StorageResult">
         <result property="id"    column="id"    />
         <result property="medicineName"    column="medicine_name"    />
         <result property="medicineCode"    column="medicine_code"    />
@@ -36,7 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select id, medicine_name, medicine_code, specification, quantity, min_stock, unit, unit_price, image_url, acceptance_status, acceptance_by, acceptance_time, manufacturer, supplier, batch_number, production_date, expiry_date, storage_location, status, remark, create_by, create_time, update_by, update_time, del_flag from storage
     </sql>
 
-    <select id="selectStorageList" parameterType="Storage" resultMap="StorageResult">
+    <select id="selectStorageList" parameterType="com.ruoyi.hospital.domain.Storage" resultMap="StorageResult">
         <include refid="selectStorageVo"/>
         <where>  
             <if test="medicineName != null  and medicineName != ''"> and medicine_name like concat('%', #{medicineName}, '%')</if>
@@ -65,7 +65,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
 
-    <insert id="insertStorage" parameterType="Storage" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertStorage" parameterType="com.ruoyi.hospital.domain.Storage" useGeneratedKeys="true" keyProperty="id">
         insert into storage
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="medicineName != null and medicineName != ''">medicine_name,</if>
@@ -121,7 +121,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateStorage" parameterType="Storage">
+    <update id="updateStorage" parameterType="com.ruoyi.hospital.domain.Storage">
         update storage
         <trim prefix="SET" suffixOverrides=",">
             <if test="medicineName != null and medicineName != ''">medicine_name = #{medicineName},</if>

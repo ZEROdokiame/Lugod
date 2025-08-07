@@ -144,6 +144,11 @@
             <span><i class="el-icon-notebook-2"></i> 更新日志</span>
           </div>
           <el-collapse accordion>
+            <el-collapse-item title="v1.0.3 - 2025.08.07">
+              <ol>
+                <li><i class="el-icon-check"></i> 正式接入DeepSeekV3作为AI助手</li>
+              </ol>
+            </el-collapse-item>
             <el-collapse-item title="v1.0.2 - 2025.08.05">
               <ol>
                 <li><i class="el-icon-check"></i> 新增了药材库存管理</li>
