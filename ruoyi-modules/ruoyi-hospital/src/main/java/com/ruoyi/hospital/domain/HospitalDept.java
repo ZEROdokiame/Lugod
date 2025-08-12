@@ -1,8 +1,10 @@
 package com.ruoyi.hospital.domain;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import com.ruoyi.common.core.annotation.Excel;
 import com.ruoyi.common.core.web.domain.BaseEntity;
+import lombok.NonNull;
 
 /**
  * 医院科室对象 hospital_dept

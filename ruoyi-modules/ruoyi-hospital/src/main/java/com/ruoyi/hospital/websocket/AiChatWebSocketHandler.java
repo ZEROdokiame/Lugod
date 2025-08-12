@@ -21,51 +21,51 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Component
 public class AiChatWebSocketHandler extends TextWebSocketHandler {
-
+    
     private static final Logger logger = LoggerFactory.getLogger(AiChatWebSocketHandler.class);
-
+    
     @Autowired
     private AiChatService aiChatService;
-
+    
     private final ObjectMapper objectMapper = new ObjectMapper();
-
+    
     // 存储活跃的WebSocket会话
     private final ConcurrentHashMap<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
-
+    
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         String sessionId = session.getId();
         sessions.put(sessionId, session);
         logger.info("WebSocket连接建立，会话ID: {}", sessionId);
-
+        
         // 发送欢迎消息
         AiChatMessage welcomeMessage = new AiChatMessage(
-            "您好！我是您的医疗AI助手，很高兴为您服务。请问有什么健康问题需要咨询吗？",
+            "您好！我是您的医疗AI助手，很高兴为您服务。请问有什么健康问题需要咨询吗？", 
             "ai"
         );
         sendMessage(session, welcomeMessage);
     }
-
+    
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         try {
             String payload = message.getPayload();
             logger.info("收到消息: {}", payload);
-
+            
             // 解析用户消息
             AiChatMessage userMessage = objectMapper.readValue(payload, AiChatMessage.class);
-
+            
             // 验证消息内容
             if (userMessage.getMessage() == null || userMessage.getMessage().trim().isEmpty()) {
                 AiChatMessage errorMessage = new AiChatMessage("请输入有效的问题。", "ai");
                 sendMessage(session, errorMessage);
                 return;
             }
-
+            
             // 发送"正在思考"状态
             AiChatMessage thinkingMessage = new AiChatMessage("正在思考中，请稍等...", "thinking");
             sendMessage(session, thinkingMessage);
-
+            
             // 调用AI服务获取回复
             aiChatService.sendMessage(userMessage.getMessage())
                 .subscribe(
@@ -89,27 +89,27 @@ public class AiChatWebSocketHandler extends TextWebSocketHandler {
                         }
                     }
                 );
-
+                
         } catch (Exception e) {
             logger.error("处理WebSocket消息失败", e);
             AiChatMessage errorMessage = new AiChatMessage("消息处理失败，请重试。", "ai");
             sendMessage(session, errorMessage);
         }
     }
-
+    
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         String sessionId = session.getId();
         sessions.remove(sessionId);
         logger.info("WebSocket连接关闭，会话ID: {}, 状态: {}", sessionId, status);
     }
-
+    
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
         logger.error("WebSocket传输错误，会话ID: {}", session.getId(), exception);
         sessions.remove(session.getId());
     }
-
+    
     /**
      * 发送消息到客户端
      */

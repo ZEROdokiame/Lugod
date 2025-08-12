@@ -160,7 +160,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-webflux</artifactId>
     </dependency>
-    
+
     <!-- JSON处理 -->
     <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
@@ -178,7 +178,7 @@
         <groupId>com.ruoyi</groupId>
         <artifactId>ruoyi-common-swagger</artifactId>
     </dependency>
-    
+
     <!-- MySQL Driver -->
     <dependency>
         <groupId>com.mysql</groupId>
@@ -199,11 +199,12 @@
         <scope>provided</scope>
     </dependency>
 
-    <!-- Spring AI OpenAI (用于DeepSeek API) -->
+    <!-- Spring AI OpenAI (用于DeepSeek API，兼容OpenAI接口) -->
     <dependency>
         <groupId>group.springframework.ai</groupId>
         <artifactId>spring-ai-openai-spring-boot-starter</artifactId>
     </dependency>
+
 </dependencies>
 
 </project>
