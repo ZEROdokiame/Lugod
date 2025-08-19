@@ -18,7 +18,6 @@ import com.ruoyi.common.core.web.domain.BaseEntity;
 @Data
 public class Storage extends BaseEntity
 {
-    private static final long serialVersionUID = 1L;
 
     /** 库存ID */
     private Long id;

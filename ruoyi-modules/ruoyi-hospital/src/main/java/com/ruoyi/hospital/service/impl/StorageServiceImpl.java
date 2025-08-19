@@ -21,7 +21,11 @@ import com.ruoyi.hospital.service.IStorageService;
 public class StorageServiceImpl implements IStorageService 
 {
     @Autowired
-    private StorageMapper storageMapper;
+    private final StorageMapper storageMapper;
+
+    public StorageServiceImpl(StorageMapper storageMapper) {
+        this.storageMapper = storageMapper;
+    }
 
     /**
      * 查询药材库存管理

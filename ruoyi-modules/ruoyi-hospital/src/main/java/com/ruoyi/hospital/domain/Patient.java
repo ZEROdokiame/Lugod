@@ -12,7 +12,6 @@ import com.ruoyi.common.core.web.domain.BaseEntity;
  */
 @Data
 public class Patient extends BaseEntity {
-    private static final long serialVersionUID = 1L;
 
     /** 患者ID */
     private Long patientId;

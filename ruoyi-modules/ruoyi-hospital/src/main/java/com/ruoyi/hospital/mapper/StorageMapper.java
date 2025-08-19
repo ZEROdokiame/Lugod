@@ -17,7 +17,7 @@ public interface StorageMapper
      * @param id 药材库存管理主键
      * @return 药材库存管理
      */
-    public Storage selectStorageById(Long id);
+     Storage selectStorageById(Long id);
 
     /**
      * 查询药材库存管理列表
@@ -25,7 +25,7 @@ public interface StorageMapper
      * @param storage 药材库存管理
      * @return 药材库存管理集合
      */
-    public List<Storage> selectStorageList(Storage storage);
+     List<Storage> selectStorageList(Storage storage);
 
     /**
      * 新增药材库存管理
@@ -33,7 +33,7 @@ public interface StorageMapper
      * @param storage 药材库存管理
      * @return 结果
      */
-    public int insertStorage(Storage storage);
+     int insertStorage(Storage storage);
 
     /**
      * 修改药材库存管理
@@ -41,7 +41,7 @@ public interface StorageMapper
      * @param storage 药材库存管理
      * @return 结果
      */
-    public int updateStorage(Storage storage);
+     int updateStorage(Storage storage);
 
     /**
      * 删除药材库存管理
@@ -49,7 +49,7 @@ public interface StorageMapper
      * @param id 药材库存管理主键
      * @return 结果
      */
-    public int deleteStorageById(Long id);
+     int deleteStorageById(Long id);
 
     /**
      * 批量删除药材库存管理
@@ -57,7 +57,7 @@ public interface StorageMapper
      * @param ids 需要删除的药材库存管理主键集合
      * @return 结果
      */
-    public int deleteStorageByIds(Long[] ids);
+     int deleteStorageByIds(Long[] ids);
 
     /**
      * 根据药材编码查询药材库存
@@ -65,5 +65,5 @@ public interface StorageMapper
      * @param medicineCode 药材编码
      * @return 药材库存信息
      */
-    public Storage selectStorageByMedicineCode(String medicineCode);
+     Storage selectStorageByMedicineCode(String medicineCode);
 }

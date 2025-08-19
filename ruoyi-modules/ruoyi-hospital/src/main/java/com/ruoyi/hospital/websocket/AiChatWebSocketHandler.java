@@ -3,6 +3,7 @@ package com.ruoyi.hospital.websocket;
 import com.ruoyi.hospital.domain.AiChatMessage;
 import com.ruoyi.hospital.service.AiChatService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Lugod
  */
 @Component
+@Slf4j
 public class AiChatWebSocketHandler extends TextWebSocketHandler {
-    
-    private static final Logger logger = LoggerFactory.getLogger(AiChatWebSocketHandler.class);
+
     
     @Autowired
     private AiChatService aiChatService;
@@ -31,12 +32,12 @@ public class AiChatWebSocketHandler extends TextWebSocketHandler {
     
     // 存储活跃的WebSocket会话
     private final ConcurrentHashMap<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
-    
+
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         String sessionId = session.getId();
         sessions.put(sessionId, session);
-        logger.info("WebSocket连接建立，会话ID: {}", sessionId);
+        log.info("WebSocket连接建立，会话ID: {}", sessionId);
         
         // 发送欢迎消息
         AiChatMessage welcomeMessage = new AiChatMessage(
@@ -50,7 +51,7 @@ public class AiChatWebSocketHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         try {
             String payload = message.getPayload();
-            logger.info("收到消息: {}", payload);
+            log.info("收到消息: {}", payload);
             
             // 解析用户消息
             AiChatMessage userMessage = objectMapper.readValue(payload, AiChatMessage.class);
@@ -74,24 +75,24 @@ public class AiChatWebSocketHandler extends TextWebSocketHandler {
                             AiChatMessage aiMessage = new AiChatMessage(aiReply, "ai");
                             sendMessage(session, aiMessage);
                         } catch (Exception e) {
-                            logger.error("发送AI回复失败", e);
+                            log.error("发送AI回复失败", e);
                         }
                     },
                     error -> {
-                        logger.error("AI服务调用失败", error);
+                        log.error("AI服务调用失败", error);
                         try {
                             AiChatMessage errorMessage = new AiChatMessage(
                                 "抱歉，AI服务暂时不可用，请稍后重试。", "ai"
                             );
                             sendMessage(session, errorMessage);
                         } catch (Exception e) {
-                            logger.error("发送错误消息失败", e);
+                            log.error("发送错误消息失败", e);
                         }
                     }
                 );
                 
         } catch (Exception e) {
-            logger.error("处理WebSocket消息失败", e);
+            log.error("处理WebSocket消息失败", e);
             AiChatMessage errorMessage = new AiChatMessage("消息处理失败，请重试。", "ai");
             sendMessage(session, errorMessage);
         }
@@ -101,12 +102,12 @@ public class AiChatWebSocketHandler extends TextWebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         String sessionId = session.getId();
         sessions.remove(sessionId);
-        logger.info("WebSocket连接关闭，会话ID: {}, 状态: {}", sessionId, status);
+        log.info("WebSocket连接关闭，会话ID: {}, 状态: {}", sessionId, status);
     }
     
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
-        logger.error("WebSocket传输错误，会话ID: {}", session.getId(), exception);
+        log.error("WebSocket传输错误，会话ID: {}", session.getId(), exception);
         sessions.remove(session.getId());
     }
     
@@ -120,7 +121,7 @@ public class AiChatWebSocketHandler extends TextWebSocketHandler {
                 session.sendMessage(new TextMessage(messageJson));
             }
         } catch (Exception e) {
-            logger.error("发送WebSocket消息失败", e);
+            log.error("发送WebSocket消息失败", e);
         }
     }
 }

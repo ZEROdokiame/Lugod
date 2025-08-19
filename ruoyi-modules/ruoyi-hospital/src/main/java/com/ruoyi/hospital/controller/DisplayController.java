@@ -1,6 +1,8 @@
 package com.ruoyi.hospital.controller;
 
 import java.util.*;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.core.web.controller.BaseController;
@@ -9,22 +11,25 @@ import com.ruoyi.hospital.domain.QueueInfo;
 import com.ruoyi.hospital.domain.Patient;
 import com.ruoyi.hospital.service.IQueueService;
 import com.ruoyi.hospital.service.IPatientService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * 叫号显示大屏Controller
  */
 @RestController
+@Slf4j
 @RequestMapping("/display")
 public class DisplayController extends BaseController {
-    private static final Logger log = LoggerFactory.getLogger(DisplayController.class);
 
     @Autowired
-    private IQueueService queueService;
+    private final IQueueService queueService;
 
     @Autowired
-    private IPatientService patientService;
+    private final IPatientService patientService;
+
+    public DisplayController(IQueueService queueService, IPatientService patientService) {
+        this.queueService = queueService;
+        this.patientService = patientService;
+    }
 
     /**
      * 获取所有科室叫号状态

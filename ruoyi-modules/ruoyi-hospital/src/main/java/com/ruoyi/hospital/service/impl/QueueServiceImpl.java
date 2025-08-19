@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.ruoyi.common.core.utils.DateUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,14 +23,19 @@ import org.slf4j.LoggerFactory;
  * @author lugod
  */
 @Service
+@Slf4j
 public class QueueServiceImpl implements IQueueService {
-    private static final Logger log = LoggerFactory.getLogger(QueueServiceImpl.class);
 
     @Autowired
-    private QueueInfoMapper queueInfoMapper;
+    private final QueueInfoMapper queueInfoMapper;
 
     @Autowired
-    private PatientMapper patientMapper;
+    private final PatientMapper patientMapper;
+
+    public QueueServiceImpl(QueueInfoMapper queueInfoMapper, PatientMapper patientMapper) {
+        this.queueInfoMapper = queueInfoMapper;
+        this.patientMapper = patientMapper;
+    }
 
     /**
      * 查询队列信息列表

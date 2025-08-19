@@ -4,12 +4,12 @@ import com.ruoyi.common.core.web.controller.BaseController;
 import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.hospital.domain.AiChatMessage;
 import com.ruoyi.hospital.service.AiChatService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 /**
  * AI聊天控制器
@@ -18,13 +18,17 @@ import org.slf4j.LoggerFactory;
  */
 @Tag(name = "AI聊天接口", description = "AI医疗助手聊天接口")
 @RestController
+@Slf4j
 @RequestMapping("/hospital/ai-chat")
 public class AiChatController extends BaseController {
 
-    private static final Logger logger = LoggerFactory.getLogger(AiChatController.class);
 
     @Autowired
-    private AiChatService aiChatService;
+    private final AiChatService aiChatService;
+
+    public AiChatController(AiChatService aiChatService) {
+        this.aiChatService = aiChatService;
+    }
 
     /**
      * 发送消息到AI（HTTP接口，用于测试或非WebSocket场景）

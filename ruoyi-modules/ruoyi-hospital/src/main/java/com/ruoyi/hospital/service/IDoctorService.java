@@ -10,7 +10,7 @@ public interface IDoctorService {
      * @param deptId 科室ID
      * @return 医生列表
      */
-    public List<Doctor> selectDoctorsByDeptId(Long deptId);
+     List<Doctor> selectDoctorsByDeptId(Long deptId);
 
     /**
      * 查询医生信息
@@ -18,7 +18,7 @@ public interface IDoctorService {
      * @param doctorId 医生ID
      * @return 医生信息
      */
-    public Doctor selectDoctorById(Long doctorId);
+     Doctor selectDoctorById(Long doctorId);
 
     /**
      * 新增医生信息
@@ -26,7 +26,7 @@ public interface IDoctorService {
      * @param doctor 医生信息
      * @return 结果
      */
-    public int insertDoctor(Doctor doctor);
+     int insertDoctor(Doctor doctor);
 
     /**
      * 修改医生信息
@@ -34,7 +34,7 @@ public interface IDoctorService {
      * @param doctor 医生信息
      * @return 结果
      */
-    public int updateDoctor(Doctor doctor);
+     int updateDoctor(Doctor doctor);
 
     /**
      * 批量删除医生信息
@@ -42,7 +42,7 @@ public interface IDoctorService {
      * @param doctorIds 需要删除的医生ID数组
      * @return 结果
      */
-    public int deleteDoctorByIds(Long[] doctorIds);
+     int deleteDoctorByIds(Long[] doctorIds);
 
     /**
      * 删除医生信息
@@ -50,5 +50,5 @@ public interface IDoctorService {
      * @param doctorId 医生ID
      * @return 结果
      */
-    public int deleteDoctorById(Long doctorId);
+     int deleteDoctorById(Long doctorId);
 }

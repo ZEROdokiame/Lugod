@@ -35,7 +35,11 @@ import com.ruoyi.common.core.web.page.TableDataInfo;
 public class StorageController extends BaseController
 {
     @Autowired
-    private IStorageService storageService;
+    private final IStorageService storageService;
+
+    public StorageController(IStorageService storageService) {
+        this.storageService = storageService;
+    }
 
     /**
      * 查询药材库存管理列表

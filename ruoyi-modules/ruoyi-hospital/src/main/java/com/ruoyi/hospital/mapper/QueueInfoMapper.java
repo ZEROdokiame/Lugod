@@ -18,7 +18,7 @@ public interface QueueInfoMapper
      * @param queueInfo 队列信息
      * @return 队列信息集合
      */
-    public List<QueueInfo> selectQueueList(QueueInfo queueInfo);
+     List<QueueInfo> selectQueueList(QueueInfo queueInfo);
 
     /**
      * 新增队列信息
@@ -26,7 +26,7 @@ public interface QueueInfoMapper
      * @param queueInfo 队列信息
      * @return 结果
      */
-    public int insertQueueInfo(QueueInfo queueInfo);
+     int insertQueueInfo(QueueInfo queueInfo);
 
     /**
      * 修改队列信息
@@ -34,7 +34,7 @@ public interface QueueInfoMapper
      * @param queueInfo 队列信息
      * @return 结果
      */
-    public int updateQueueInfo(QueueInfo queueInfo);
+     int updateQueueInfo(QueueInfo queueInfo);
 
     /**
      * 删除队列信息
@@ -42,7 +42,7 @@ public interface QueueInfoMapper
      * @param queueId 队列信息主键
      * @return 结果
      */
-    public int deleteQueueInfoById(Long queueId);
+     int deleteQueueInfoById(Long queueId);
 
     /**
      * 批量删除队列信息
@@ -50,7 +50,7 @@ public interface QueueInfoMapper
      * @param queueIds 需要删除的数据主键集合
      * @return 结果
      */
-    public int deleteQueueInfoByIds(Long[] queueIds);
+     int deleteQueueInfoByIds(Long[] queueIds);
 
     /**
      * 查询队列信息
@@ -58,5 +58,5 @@ public interface QueueInfoMapper
      * @param queueId 队列信息主键
      * @return 队列信息
      */
-    public QueueInfo selectQueueById(Long queueId);
+     QueueInfo selectQueueById(Long queueId);
 }

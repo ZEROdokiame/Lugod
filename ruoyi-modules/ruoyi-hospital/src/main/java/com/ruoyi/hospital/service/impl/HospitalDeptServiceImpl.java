@@ -13,7 +13,11 @@ import com.ruoyi.hospital.service.IHospitalDeptService;
 @Service
 public class HospitalDeptServiceImpl implements IHospitalDeptService {
     @Autowired
-    private HospitalDeptMapper hospitalDeptMapper;
+    private final HospitalDeptMapper hospitalDeptMapper;
+
+    public HospitalDeptServiceImpl(HospitalDeptMapper hospitalDeptMapper) {
+        this.hospitalDeptMapper = hospitalDeptMapper;
+    }
 
     @Override
     public List<HospitalDept> selectHospitalDeptList(HospitalDept hospitalDept) {

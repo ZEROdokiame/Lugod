@@ -17,7 +17,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 @RequestMapping("/dept")
 public class HospitalDeptController extends BaseController {
     @Autowired
-    private IHospitalDeptService hospitalDeptService;
+    private final IHospitalDeptService hospitalDeptService;
+
+    public HospitalDeptController(IHospitalDeptService hospitalDeptService) {
+        this.hospitalDeptService = hospitalDeptService;
+    }
 
     /**
      * 获取科室列表

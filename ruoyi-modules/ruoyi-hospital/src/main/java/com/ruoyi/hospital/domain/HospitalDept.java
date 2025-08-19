@@ -11,7 +11,6 @@ import lombok.NonNull;
  */
 @Data
 public class HospitalDept extends BaseEntity {
-    private static final long serialVersionUID = 1L;
 
     /** 科室ID */
     private Long deptId;

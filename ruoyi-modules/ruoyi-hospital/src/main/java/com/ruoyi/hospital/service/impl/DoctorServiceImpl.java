@@ -10,7 +10,11 @@ import com.ruoyi.hospital.service.IDoctorService;
 @Service
 public class DoctorServiceImpl implements IDoctorService {
     @Autowired
-    private DoctorMapper doctorMapper;
+    private final DoctorMapper doctorMapper;
+
+    public DoctorServiceImpl(DoctorMapper doctorMapper) {
+        this.doctorMapper = doctorMapper;
+    }
 
     @Override
     public List<Doctor> selectDoctorsByDeptId(Long deptId) {

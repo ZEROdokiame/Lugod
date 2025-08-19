@@ -12,8 +12,6 @@ import com.ruoyi.common.core.web.domain.BaseEntity;
  */
 @Data
 public class QueueInfo extends BaseEntity {
-    private static final long serialVersionUID = 1L;
-
     /** 队列ID */
     private Long queueId;
 

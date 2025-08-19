@@ -19,10 +19,15 @@ import com.ruoyi.hospital.service.IDoctorService;
 @RequestMapping("/doctor")
 public class DoctorController extends BaseController {
     @Autowired
-    private IPatientService patientService;
+    private final IPatientService patientService;
 
     @Autowired
-    private IDoctorService doctorService;
+    private final IDoctorService doctorService;
+
+    public DoctorController(IPatientService patientService, IDoctorService doctorService) {
+        this.patientService = patientService;
+        this.doctorService = doctorService;
+    }
 
     /**
      * 获取医生待诊患者列表

@@ -1,6 +1,8 @@
 package com.ruoyi.hospital.controller;
 
 import java.util.List;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.core.web.controller.BaseController;
@@ -8,8 +10,6 @@ import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.common.core.web.page.TableDataInfo;
 import com.ruoyi.hospital.domain.QueueInfo;
 import com.ruoyi.hospital.service.IQueueService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * 叫号队列Controller
@@ -17,13 +17,17 @@ import org.slf4j.LoggerFactory;
  * @author lugod
  */
 @RestController
+@Slf4j
 @RequestMapping("/queue")
 public class QueueController extends BaseController
 {
-    private static final Logger log = LoggerFactory.getLogger(QueueController.class);
 
     @Autowired
-    private IQueueService queueService;
+    private final IQueueService queueService;
+
+    public QueueController(IQueueService queueService) {
+        this.queueService = queueService;
+    }
 
     /**
      * 查询队列列表
